@@ -35,11 +35,13 @@
 
 <script type="text/ecmascript-6">
 import { ebookMixin } from '@/utils/mixin'
+import { FONT_SIZE_LIST } from '@/utils/book'
 
 export default {
   mixins: [ebookMixin],
   data () {
     return {
+      fontSizeList: FONT_SIZE_LIST,
       styleLeft: {},
       styleRight: {}
     }
@@ -54,6 +56,14 @@ export default {
     }
   },
   methods: {
+    setFontSize (fontSize) {
+      this.setDefaultFontSize(fontSize)
+      this.currentBook.rendition.themes.fontSize(fontSize)
+    },
+    showFontFamilySetting () {
+      this.setFontFamilyVisible(true)
+      console.log(this.fontFamilyVisible)
+    },
     genStyle () {
       const left = this.$refs.left.getBoundingClientRect().width
       const right = this.$refs.left.getBoundingClientRect().width
@@ -86,6 +96,7 @@ export default {
     width: 100%;
     height: px2rem(90);
     box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, .15);
+    background: white;
     .setting-font-size {
       flex: 2;
       display: flex;

@@ -46,6 +46,12 @@ export const mixin = {
 在vue组件中即可使用vuex中的mapGetters和mapActions封装
 mixins: [mixin],
 ```
+### 组件解偶
+> vuex中混写变量和方法的使用
+1.在modules/xxx.js下定义state中的变量，定义mutations中的同步set方法
+2.在store/actions.js中定义action中的异步方法
+3.在store/getters.js中定义state变量的简化
+4.在utils/mixin.js中computed的...mapGetters和...mapGetters中限定加入混写的变量名和方法名
 
 # 静态资源服务器搭建
 - Nginx 下载
@@ -69,8 +75,7 @@ server {
 }
 ```
 
-# 阅读器
-## epubjs
+# epubjs阅读器
 ```javascript
 this.book = new Epub(url)
 
@@ -87,4 +92,29 @@ this.rendition.display()
 
 event.preventDefault() // 禁用默认方法调用        event.stopPropagation() // 禁止事件传播
 
-## 字体设置
+## 字体大小设置
+使用`this.book.rendition.theme.fontSize(fontSize)`进行epub字体大小设置
+
+## 字体样式设置
+### 字体框选中
+```
+setFontFamily (font) {
+  this.setDefaultFontFamily(font).then(() => {
+    this.switchTheme()
+    })
+  }
+```
+
+### 切换文件中的字体
+因为epubjs使用iframe来加载epub文件，无法拉取到项目中设置的字体文件
+所以需要在epub对象挂载完成时向阅读器dom传入字体文件。`this.rendition.hooks.content`表示阅读器渲染完毕的上下文，使用
+```
+content.register(contents => {
+  contents.addStylesheet('样式文件URL')
+})
+```
+传入的contents对象用来管理资源
+
+> 中文字体切换存在bug
+
+
