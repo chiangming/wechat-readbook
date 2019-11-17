@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 const Discovery = () =>
   import('../views/discovery/Discovery.vue')
 const Book = () =>
-  import('../views/book/Book.vue')
+  import('../views/book/index.vue')
 const Story = () =>
   import('../views/story/Story.vue')
 const Profile = () =>
@@ -24,7 +24,12 @@ const routes = [{
 {
   path: '/book',
   name: 'book',
-  component: Book
+  component: Book,
+  children: [{
+    path: ':fileName',
+    component: () =>
+        import('@components/ebook/EbookReader.vue')
+  }]
 },
 {
   path: '/story',

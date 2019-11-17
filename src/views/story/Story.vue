@@ -7,19 +7,19 @@
 
 <script>
 export default {
-  name: "Story",
-  data() {
+  name: 'Story',
+  data () {
     return {
-      message: "story",
-      btn: "按钮"
-    };
+      message: 'story',
+      btn: '按钮'
+    }
   },
   methods: {
-    btnClick() {
-      console.log("btn click~");
+    btnClick () {
+      console.log('btn click~')
     }
   }
-};
+}
 </script>
 
 <style scoped>

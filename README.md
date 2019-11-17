@@ -29,6 +29,23 @@
 > css
 > ` font-size: 1rem;`
 
+## vuex+mixin封装属性和方法
+```
+import { mapGetters, mapActions } from 'vuex'
+
+export const mixin = {
+  computed: {
+    ...mapGetters([……])
+
+  },
+  methods: {
+    ...mapActions([……])
+  }
+}
+
+在vue组件中即可使用vuex中的mapGetters和mapActions封装
+mixins: [mixin],
+```
 
 # 静态资源服务器搭建
 - Nginx 下载
@@ -52,3 +69,22 @@ server {
 }
 ```
 
+# 阅读器
+## epubjs
+```javascript
+this.book = new Epub(url)
+
+this.rendition = this.book.renderTo('read', {
+  width: innerWidth,
+  height: innerHeight,
+  method: 'default'
+})
+
+this.rendition.display()
+```
+
+## 书签手势
+
+event.preventDefault() // 禁用默认方法调用        event.stopPropagation() // 禁止事件传播
+
+## 字体设置
