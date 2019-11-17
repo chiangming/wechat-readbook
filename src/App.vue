@@ -1,32 +1,40 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <span class="text">111111</span>
+    <router-view></router-view>
+    <main-tab-bar />
   </div>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import MainTabBar from './components/tabbar/MainTabBar'
 
-#nav {
-  padding: 30px;
-}
+document.addEventListener('DOMContentLoaded', () => {
+  let fontSize = window.innerWidth / 10
+  fontSize = fontSize > 50 ? 50 : fontSize
+  const html = document.querySelector('html')
+  html.style.fontSize = fontSize + 'px'
+})
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+export default {
+  name: 'App',
+  data () {
+    return {
+      message: 'hello',
+      btn: '按钮'
+    }
+  },
+  components: {
+    MainTabBar
+  },
+  methods: {
+    btnClick () {
+      console.log('btn click~')
+    }
+  }
 }
+</script>
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+<style scoped>
+
 </style>
