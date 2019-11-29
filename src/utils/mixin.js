@@ -1,5 +1,7 @@
 import { mapGetters, mapActions } from 'vuex'
-import { FONT_SIZE_LIST, FONT_FAMILY } from './book'
+import { FONT_SIZE_LIST, FONT_FAMILY, themeList, getReadTimeByMinute } from './book'
+import * as Utils from './utils'
+import * as Storage from './localStorage'
 
 export const ebookMixin = {
   data () {
@@ -15,11 +17,13 @@ export const ebookMixin = {
       'settingVisible',
       'defaultFontSize',
       'defaultFontFamily',
+      'defaultFontName',
       'fontFamilyVisible',
       'defaultTheme',
       'bookAvailable',
       'progress',
       'section',
+      'locationLength',
       'isPaginating',
       'currentBook',
       'navigation',
@@ -29,7 +33,20 @@ export const ebookMixin = {
       'pagelist',
       'offsetY',
       'isBookmark'
-    ])
+    ]),
+    themeList () {
+      return themeList(this)
+    },
+    getSectionName () {
+      if (this.section != null) {
+        const sectionInfo = this.currentBook.section(this.section)
+        if (sectionInfo && sectionInfo.href && this.currentBook && this.currentBook.navigation) {
+          // return this.currentBook.navigation.get(section.href).label
+          return this.navigation[this.section].label
+        }
+      }
+      return '章节名'
+    }
 
   },
   methods: {
@@ -44,8 +61,10 @@ export const ebookMixin = {
       'setBookAvailable',
       'setProgress',
       'setSection',
+      'setLocationLength',
       'setIsPaginating',
       'setCurrentBook',
+      'setCurrentLocation',
       'setNavigation',
       'setCover',
       'setMetadata',
@@ -80,6 +99,27 @@ export const ebookMixin = {
         this.currentBook.rendition.themes.register(theme.name, theme.style)
       })
     },
+    setGlobalTheme (theme) {
+      Utils.removeAllCss()
+      switch (theme) {
+        case 'Default':
+          Utils.addCss(`${process.env.VUE_APP_THEME_URL}/theme_default.css`)
+          break
+        case 'Eye':
+          Utils.addCss(`${process.env.VUE_APP_THEME_URL}/theme_eye.css`)
+          break
+        case 'Gold':
+          Utils.addCss(`${process.env.VUE_APP_THEME_URL}/theme_gold.css`)
+          break
+        case 'Night':
+          Utils.addCss(`${process.env.VUE_APP_THEME_URL}/theme_night.css`)
+          break
+        default:
+          this.setDefaultTheme('Default')
+          Utils.addCss(`${process.env.VUE_APP_THEME_URL}/theme_default.css`)
+          break
+      }
+    },
     switchTheme () {
       const rules = this.themeList.filter(theme => theme.name === this.defaultTheme)[0]
       if (this.defaultFontFamily && this.defaultFontFamily !== '默认字体') {
@@ -106,12 +146,15 @@ export const ebookMixin = {
     },
     setFontFamily (font) {
       this.setDefaultFontFamily(font).then(() => {
-        console.log('设置成功', font)
         // this.switchTheme()
-        // Storage.saveFontFamily(this.fileName, font)
+        Storage.saveFontFamily(this.fileName, font)
       })
-      this.currentBook.rendition.themes.font(font)
-      console.log(this.currentBook.rendition.themes.font(font))
+      if (font === '默认字体') {
+        this.currentBook.rendition.themes.font('Times New Roman')
+      } else {
+        this.currentBook.rendition.themes.font(font)
+        console.log('设置成功', font)
+      }
     },
     displaySection (cb) {
       const section = this.currentBook.section(this.section)
@@ -149,7 +192,7 @@ export const ebookMixin = {
     },
     refreshLocation () {
       const currentLocation = this.currentBook.rendition.currentLocation()
-      if (currentLocation.start && currentLocation.start.index) {
+      if (currentLocation.start && currentLocation.start.index && currentLocation.start.index >= 0) {
         this.setSection(currentLocation.start.index)
         const progress = this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)
         this.setProgress(Math.floor(progress * 100))
@@ -175,6 +218,9 @@ export const ebookMixin = {
         }
         Storage.saveLocation(this.fileName, cfistart)
       }
+    },
+    getReadTime () {
+      return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
     }
   }
 }

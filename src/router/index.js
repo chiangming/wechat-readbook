@@ -6,7 +6,7 @@ const Discovery = () =>
 const Book = () =>
   import('../views/book/index.vue')
 const Story = () =>
-  import('../views/story/Story.vue')
+  import('../views/story/index.vue')
 const Profile = () =>
   import('../views/profile/Profile.vue')
 

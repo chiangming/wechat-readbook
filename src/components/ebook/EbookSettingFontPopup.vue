@@ -5,12 +5,12 @@
         <div class="ebook-popup-title-icon" @click="hideFontFamilySetting">
           <span class="icon-down2"></span>
         </div>
-        <span class="ebook-popup-title-text"></span>
+        <span class="ebook-popup-title-text">{{$t('book.selectFont')}}</span>
       </div>
       <div class="ebook-popup-list-wrapper">
         <div class="ebook-popup-item" v-for="(item, index) in fontFamily" :key="index"
-             @click="setFontFamily(item.font)">
-          <div class="ebook-popup-item-text" :class="{'selected': isSelected(item)}">{{item.font}}</div>
+             @click="setFontFamily(item.font,item.fontName)">
+          <div class="ebook-popup-item-text" :class="{'selected': isSelected(item)}">{{item.fontName}}</div>
           <div class="ebook-popup-item-check" v-if="isSelected(item)">
             <span class="icon-check"></span>
           </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { ebookMixin } from '@/utils/mixin'
+import { ebookMixin } from '../../utils/mixin'
 
 export default {
   mixins: [ebookMixin],

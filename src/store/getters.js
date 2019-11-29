@@ -4,6 +4,7 @@ const getters = {
   settingVisible: state => state.book.settingVisible,
   defaultFontSize: state => state.book.defaultFontSize,
   defaultFontFamily: state => state.book.defaultFontFamily,
+  defaultFontName: state => state.book.defaultFontName,
   fontFamilyVisible: state => state.book.fontFamilyVisible,
   defaultTheme: state => state.book.defaultTheme,
   bookAvailable: state => state.book.bookAvailable,
@@ -18,7 +19,7 @@ const getters = {
   pagelist: state => state.book.pagelist,
   offsetY: state => state.book.offsetY,
   isBookmark: state => state.book.isBookmark,
-  speakingIconBottom: state => state.book.speakingIconBottom
+  locationLength: state => state.book.locationLength
 }
 
 export default getters

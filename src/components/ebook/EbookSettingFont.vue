@@ -23,7 +23,7 @@
       </div>
       <div class="setting-font-family" @click.stop="showFontFamilySetting">
         <div class="setting-font-family-text-wrapper">
-          <span class="setting-font-family-text">{{defaultFontFamily}}</span>
+          <span class="setting-font-family-text">{{defaultFontName}}</span>
         </div>
         <div class="setting-font-family-icon-wrapper">
           <span class="icon-forward"></span>
@@ -36,6 +36,7 @@
 <script type="text/ecmascript-6">
 import { ebookMixin } from '@/utils/mixin'
 import { FONT_SIZE_LIST } from '@/utils/book'
+import { saveFontSize } from '../../utils/localStorage'
 
 export default {
   mixins: [ebookMixin],
@@ -58,11 +59,11 @@ export default {
   methods: {
     setFontSize (fontSize) {
       this.setDefaultFontSize(fontSize)
+      saveFontSize(this.fileName, fontSize)
       this.currentBook.rendition.themes.fontSize(fontSize)
     },
     showFontFamilySetting () {
       this.setFontFamilyVisible(true)
-      console.log(this.fontFamilyVisible)
     },
     genStyle () {
       const left = this.$refs.left.getBoundingClientRect().width

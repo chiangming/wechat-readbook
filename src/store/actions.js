@@ -29,6 +29,9 @@ const actions = {
   setSection: ({ commit }, section) => {
     return commit('SET_SECTION', section)
   },
+  setLocationLength: ({ commit }, length) => {
+    return commit('SET_LOCATION_LENGTH', length)
+  },
   setIsPaginating: ({ commit }, isPaginating) => {
     return commit('SET_IS_PAGINATING', isPaginating)
   },
