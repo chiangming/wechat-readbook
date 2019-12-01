@@ -21,8 +21,7 @@
     <ebook-setting-font-popup></ebook-setting-font-popup>
     <ebook-setting-theme></ebook-setting-theme>
     <ebook-setting-progress></ebook-setting-progress>
-       <!-- <ebook-slide></ebook-slide>
-    <ebook-speaking-icon></ebook-speaking-icon> -->
+    <ebook-catalog></ebook-catalog>
   </div>
 </template>
 
@@ -31,9 +30,7 @@ import EbookSettingFont from './EbookSettingFont'
 import EbookSettingFontPopup from './EbookSettingFontPopup'
 import EbookSettingTheme from './EbookSettingTheme'
 import EbookSettingProgress from './EbookSettingProgress'
-// import EbookSpeakingIcon from './EbookSpeakingIcon'
-
-// import EbookSlide from './EbookSlide'
+import EbookCatalog from './EbookCatalog'
 import { ebookMixin } from '@/utils/mixin'
 
 export default {
@@ -41,11 +38,9 @@ export default {
   components: {
     EbookSettingProgress,
     EbookSettingFontPopup,
-    // EbookSlide,
-    // EbookSettingProgress,
+    EbookCatalog,
     EbookSettingFont,
     EbookSettingTheme
-    // EbookSpeakingIcon
   },
   methods: {
     showSetting (key) {

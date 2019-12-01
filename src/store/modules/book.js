@@ -21,6 +21,7 @@ const book = {
     metadata: null,
     paginate: '',
     pagelist: null,
+    offsetX: 0,
     offsetY: 0,
     isBookmark: null,
     fontFamily: FONT_FAMILY
@@ -85,6 +86,9 @@ const book = {
     },
     'SET_PAGELIST': (state, pagelist) => {
       state.pagelist = pagelist
+    },
+    'SET_OFFSETX': (state, offsetX) => {
+      state.offsetX = offsetX
     },
     'SET_OFFSETY': (state, offsetY) => {
       state.offsetY = offsetY

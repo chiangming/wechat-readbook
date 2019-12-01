@@ -17,6 +17,7 @@ const getters = {
   metadata: state => state.book.metadata,
   paginate: state => state.book.paginate,
   pagelist: state => state.book.pagelist,
+  offsetX: state => state.book.offsetX,
   offsetY: state => state.book.offsetY,
   isBookmark: state => state.book.isBookmark,
   locationLength: state => state.book.locationLength

@@ -38,14 +38,15 @@ export const ebookMixin = {
       return themeList(this)
     },
     getSectionName () {
-      if (this.section != null) {
-        const sectionInfo = this.currentBook.section(this.section)
-        if (sectionInfo && sectionInfo.href && this.currentBook && this.currentBook.navigation) {
-          // return this.currentBook.navigation.get(section.href).label
-          return this.navigation[this.section].label
-        }
-      }
-      return '章节名'
+      // if (this.section !== null || this.section !== undefined) {
+      //   const sectionInfo = this.currentBook.section(this.section)
+      //   if (sectionInfo && sectionInfo.href && this.currentBook && this.currentBook.navigation) {
+      //     // return this.currentBook.navigation.get(sectionInfo.href).label
+      //     return this.navigation[this.section].label
+      //   }
+      // }
+      // return '章节名'
+      return this.section ? this.navigation[this.section].label : '章节名'
     }
 
   },
@@ -70,6 +71,7 @@ export const ebookMixin = {
       'setMetadata',
       'setPaginate',
       'setPagelist',
+      'setOffsetX',
       'setOffsetY',
       'setIsBookmark'
     ]),
@@ -192,6 +194,7 @@ export const ebookMixin = {
     },
     refreshLocation () {
       const currentLocation = this.currentBook.rendition.currentLocation()
+      console.log(currentLocation)
       if (currentLocation.start && currentLocation.start.index && currentLocation.start.index >= 0) {
         this.setSection(currentLocation.start.index)
         const progress = this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)

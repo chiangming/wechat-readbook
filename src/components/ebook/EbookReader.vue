@@ -1,12 +1,12 @@
 <template>
   <div class="ebook-reader">
-     <!-- <div class="ebook-reader-mask"
-         @touchmove="move"
+     <div class="ebook-reader-mask"
+          @touchmove="move"
          @touchend="moveEnd"
          @mousedown.left="onMouseEnter"
          @mousemove.left="onMouseMove"
          @mouseup.left="onMouseEnd"
-         @click="onMaskClick"></div> -->
+         @click="onMaskClick"></div>
     <div class="read-wrapper">
       <div id="read"></div>
     </div>
@@ -40,6 +40,8 @@ export default {
   methods: {
     move (e) {
       console.log('move', e)
+      console.log('fosy', this.firstOffsetY)
+      console.log('fosx', this.firstOffsetX)
       let offsetY = 0
       if (this.firstOffsetY) {
         offsetY = e.changedTouches[0].clientY - this.firstOffsetY
@@ -47,8 +49,23 @@ export default {
       } else {
         this.firstOffsetY = e.changedTouches[0].clientY
       }
+
+      let offsetX = 0
+      if (this.firstOffsetX) {
+        offsetX = e.changedTouches[0].clientX - this.firstOffsetX
+        this.$store.commit('SET_OFFSETX', offsetX)
+      } else {
+        this.firstOffsetX = e.changedTouches[0].clientX
+      }
       e.preventDefault()
       e.stopPropagation()
+    },
+    moveEnd (e) {
+      console.log('moveEnd', e)
+      this.$store.dispatch('setOffsetX', 0)
+      this.$store.dispatch('setOffsetY', 0)
+      this.firstOffsetX = 0
+      this.firstOffsetY = 0
     },
     onMouseEnter (e) {
       console.log('onMouseEnter', e)
@@ -69,6 +86,13 @@ export default {
         } else {
           this.firstOffsetY = e.clientY
         }
+        let offsetX = 0
+        if (this.firstOffsetX) {
+          offsetY = e.clientX - this.firstOffsetX
+          this.$store.commit('SET_OFFSETX', offsetX)
+        } else {
+          this.firstOffsetX = e.clientX
+        }
       }
       e.preventDefault()
       e.stopPropagation()
@@ -76,7 +100,9 @@ export default {
     onMouseEnd (e) {
       console.log('onMouseEnd', e)
       if (this.mouseMove === 2) {
+        this.$store.dispatch('setOffsetX', 0)
         this.$store.dispatch('setOffsetY', 0)
+        this.firstOffsetX = 0
         this.firstOffsetY = 0
         this.mouseMove = 3
       }
@@ -87,11 +113,6 @@ export default {
       }
       e.preventDefault()
       e.stopPropagation()
-    },
-    moveEnd (e) {
-      console.log('moveEnd', e)
-      this.$store.dispatch('setOffsetY', 0)
-      this.firstOffsetY = 0
     },
     onMaskClick (e) {
       console.log('onMaskClick', e)
@@ -225,13 +246,14 @@ export default {
           })
         })
       }
+      // 拆解响应中的树状结构转换成一维数组
       this.book.loaded.navigation.then(nav => {
         console.log(nav)
         const navItem = (function flatten (arr) {
           return [].concat(...arr.map(v => [v, ...flatten(v.subitems)]))
         })(nav.toc)
 
-        function find (item, v = 0) {
+        function find (item, v = 0) { // v: level
           const parent = navItem.filter(it => it.id === item.parent)[0]
           return !item.parent ? v : (parent ? find(parent, ++v) : v)
         }

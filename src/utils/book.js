@@ -104,9 +104,5 @@ export function themeList (vue) {
 }
 
 export function getReadTimeByMinute (fileName) {
-  if (!getReadTime(fileName)) {
-    return 0
-  } else {
-    return Math.ceil(getReadTime(fileName) / 60)
-  }
+  return getReadTime(fileName) ? Math.ceil(getReadTime(fileName)) : 0
 }

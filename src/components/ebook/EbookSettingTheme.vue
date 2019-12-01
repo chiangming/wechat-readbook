@@ -7,9 +7,9 @@
           <div class="preview"
                :class="{'selected': item.name === defaultTheme}"
                :style="{background: item.style.body.background}"></div>
-          <div class="text"
-               :class="{'selected': item.name === defaultTheme}">{{item.alias}}
-          </div>
+<!--          <div class="text"-->
+<!--               :class="{'selected': item.name === defaultTheme}">{{item.alias}}-->
+<!--          </div>-->
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@ export default {
     left: 0;
     z-index: 190;
     width: 100%;
-    height: px2rem(90);
+    height: px2rem(45);
     box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, .15);
     .setting-theme {
       height: 100%;

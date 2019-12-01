@@ -177,7 +177,37 @@ this.currentBook.rendition.display(section.href).then(() => {
   this.refreshLocation()
 })
 ```
+### 阅读时间
+vue文件mounted下执行定时任务 `this.task = setInterval(() => {……}, 1000)`     
+在beforeDestroy下清除记时任务  `clearInterval(this.task)`
 
+## 目录设计
+1. 使用蒙版组件覆盖阅读器`$toheight:px2rem(48*2);height: calc(100% - #{$toheight});`
+2. 使用动态组件`<component :is="cid"/>`来实现组件动态切换
+3. 拆解目录 epub api获取到的目录列表是多级树状目录,需要将其转换成一维数组列表`[].concat(...[a,b])`
+```js
+function flatten (arr) {
+  return [].concat(...arr.map(v => [v, ...flatten(v.subitems)]))
+}
+```
+### 目录Scroll
+
+### 全文搜索
+参考https://github.com/futurepress/epub.js/wiki/Tips-and-Tricks-%28v0.3%29
+```js
+function doSearch(q) {
+    return Promise.all(
+        book.spine.spineItems.map(item => item.load(book.load.bind(book)).then(item.find.bind(item, q)).finally(item.unload.bind(item)))
+    ).then(results => Promise.resolve([].concat.apply([], results))); //二维数组降维
+};
+```
+搜索文本高亮
+```js
+book.rendition.annotations.highlight()
+```
+
+### 书签下拉
+1. 通过offsetY的watch监听重置vue组件位置
 
 
 # 故事模块
