@@ -2,6 +2,7 @@
   <div class="ebook-reader">
      <div class="ebook-reader-mask"
           @touchmove="move"
+          @touchstart="moveStart"
          @touchend="moveEnd"
          @mousedown.left="onMouseEnter"
          @mousemove.left="onMouseMove"
@@ -38,10 +39,17 @@ export default {
     }
   },
   methods: {
+    moveStart (e) {
+      // e.preventDefault()
+      e.stopPropagation()
+      console.log('moveStart')
+      this.touchStartX = e.changedTouches[0].clientX
+      this.touchStartTime = e.timeStamp
+    },
     move (e) {
-      console.log('move', e)
-      console.log('fosy', this.firstOffsetY)
-      console.log('fosx', this.firstOffsetX)
+      console.log('move')
+      // console.log('fosy', this.firstOffsetY)
+      // console.log('fosx', this.firstOffsetX)
       let offsetY = 0
       if (this.firstOffsetY) {
         offsetY = e.changedTouches[0].clientY - this.firstOffsetY
@@ -61,21 +69,39 @@ export default {
       e.stopPropagation()
     },
     moveEnd (e) {
-      console.log('moveEnd', e)
+      console.log('moveEnd')
       this.$store.dispatch('setOffsetX', 0)
       this.$store.dispatch('setOffsetY', 0)
       this.firstOffsetX = 0
       this.firstOffsetY = 0
+      const offsetX = e.changedTouches[0].clientX - this.touchStartX
+      const time = e.timeStamp - this.touchStartTime
+      console.log('touchend', e)
+      console.log(offsetX)
+      if (time < 500 && offsetX > 40) {
+        this.prevPage()
+      } else if (time < 500 && offsetX < -40) {
+        this.nextPage()
+      } else {
+        // this.toggleMenuVisible()
+      }
     },
+
+    // 定义鼠标状态mouseMove：
+    // 1- 鼠标进入
+    // 2- 鼠标进入后移动
+    // 3- 鼠标从移动状态松手
+    // 4- 鼠标还原
     onMouseEnter (e) {
-      console.log('onMouseEnter', e)
+      console.log('onMouseEnter')
       this.mouseMove = 1
       this.mouseStartTime = e.timeStamp
+      this.touchStartX = e.clientX
       e.preventDefault()
       e.stopPropagation()
     },
     onMouseMove (e) {
-      console.log('onMouseMove', e)
+      // console.log('onMouseMove')
       if (this.mouseMove === 1) {
         this.mouseMove = 2
       } else if (this.mouseMove === 2) {
@@ -98,7 +124,7 @@ export default {
       e.stopPropagation()
     },
     onMouseEnd (e) {
-      console.log('onMouseEnd', e)
+      // console.log('onMouseEnd')
       if (this.mouseMove === 2) {
         this.$store.dispatch('setOffsetX', 0)
         this.$store.dispatch('setOffsetY', 0)
@@ -111,11 +137,21 @@ export default {
       if (time < 200) {
         this.mouseMove = 1
       }
+      const offsetX = e.clientX - this.touchStartX
+      console.log('touchend', e)
+      console.log('offsetx', offsetX)
+      if (time < 500 && offsetX > 40) {
+        this.prevPage()
+      } else if (time < 500 && offsetX < -40) {
+        this.nextPage()
+      } else {
+        // this.toggleMenuVisible()
+      }
       e.preventDefault()
       e.stopPropagation()
     },
     onMaskClick (e) {
-      console.log('onMaskClick', e)
+      // console.log('onMaskClick')
       if (this.mouseMove === 2) {
       } else if (this.mouseMove === 1 || this.mouseMove === 4) {
         const offsetX = e.offsetX
@@ -200,6 +236,7 @@ export default {
         width: window.innerWidth,
         height: window.innerHeight,
         method: 'default'
+        // flow: 'scrolled' //todo 上下滑动有兼容性问题
       })
       // 初始化
       Promise.all([

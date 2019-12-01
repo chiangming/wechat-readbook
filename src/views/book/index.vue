@@ -1,11 +1,13 @@
 <template>
 <div class="ebook" ref="ebookView">
   <ebook-bookmark></ebook-bookmark>
+  <ebook-header></ebook-header>
   <ebook-title></ebook-title>
   <ebook-reader>
     <div id = "read"></div>
   </ebook-reader>
   <ebook-menu></ebook-menu>
+  <ebook-footer></ebook-footer>
 </div>
 </template>
 
@@ -15,6 +17,8 @@ import { getReadTime, saveReadTime } from '../../utils/localStorage'
 import EbookReader from '../../components/ebook/EbookReader'
 import EbookTitle from '../../components/ebook/EbookTitle'
 import EbookMenu from '../../components/ebook/EbookMenu'
+import EbookHeader from '../../components/ebook/EbookHeader'
+import EbookFooter from '../../components/ebook/EbookFooter'
 import EbookBookmark from '../../components/ebook/EbookBookmark'
 
 export default {
@@ -24,6 +28,8 @@ export default {
     EbookBookmark,
     EbookReader,
     EbookTitle,
+    EbookHeader,
+    EbookFooter,
     EbookMenu
   },
   methods: {

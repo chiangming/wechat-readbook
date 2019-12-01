@@ -105,24 +105,28 @@ export default {
     left: 0;
     z-index: 190;
     width: 100%;
-    height: px2rem(90);
+    /*height: px2rem(90);*/
     box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, .15);
     .setting-progress {
       position: relative;
       width: 100%;
       height: 100%;
       .read-time-wrapper {
-        position: absolute;
-        left: 0;
-        top: 0;
+        /*position: absolute;*/
+        /*left: 0;*/
+        /*top: 0;*/
         width: 100%;
-        height: px2rem(40);
+        height: px2rem(20);
         @include center;
         font-size: px2rem(12);
+        line-height: px2rem(12);
+        margin-top: px2rem(8);
+        box-sizing: border-box;
       }
       .progress-wrapper {
         width: 100%;
         height: 100%;
+        min-height: px2rem(30);
         @include center;
         padding: 0 px2rem(15);
         box-sizing: border-box;
@@ -154,11 +158,12 @@ export default {
         }
       }
       .text-wrapper {
-        position: absolute;
-        left: 0;
-        bottom: px2rem(5);
+        /*position: absolute;*/
+        /*left: 0;*/
+        /*bottom: px2rem(5);*/
         width: 100%;
-        font-size: px2rem(12);
+        height: px2rem(15);
+        font-size: px2rem(15);
         text-align: center;
         padding: 0 px2rem(15);
         box-sizing: border-box;

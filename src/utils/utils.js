@@ -1,10 +1,12 @@
 export function px2rem (px) {
   const ratio = 375 / 10
-  return px / ratio
+  return realPx(px) / ratio
 }
 
 export function realPx (px) {
+  console.log(window.innerWidth)
   const maxWidth = window.innerWidth > 500 ? 500 : window.innerWidth
+  console.log(px * (maxWidth / 375))
   return px * (maxWidth / 375)
 }
 
