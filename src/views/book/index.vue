@@ -19,7 +19,7 @@ import EbookTitle from '../../components/ebook/EbookTitle'
 import EbookMenu from '../../components/ebook/EbookMenu'
 import EbookHeader from '../../components/ebook/EbookHeader'
 import EbookFooter from '../../components/ebook/EbookFooter'
-import EbookBookmark from '../../components/ebook/EbookBookmark'
+import EbookBookmark from '../../components/ebook/bookmark/EbookBookmark'
 
 export default {
   name: 'book',

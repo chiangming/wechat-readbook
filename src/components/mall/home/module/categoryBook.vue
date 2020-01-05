@@ -16,37 +16,37 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import TitleView from '@/components/home/title'
-  import { categoryText, getCategoryName } from '@/utils/book'
-  import { ebookHome } from '../../utils/mixin'
+import TitleView from '@/components/mall/home/layout/title'
+import { categoryText, getCategoryName } from '@/utils/book'
+import { detailMixin } from '@/utils/mixin'
 
-  export default {
-    mixins: [ebookHome],
-    components: {
-      TitleView
+export default {
+  mixins: [detailMixin],
+  components: {
+    TitleView
+  },
+  props: {
+    data: Object
+  },
+  methods: {
+    showBookCategory () {
+      this.$router.push({
+        path: '/book-store/list',
+        query: {
+          category: getCategoryName(this.data.category),
+          categoryText: this.categoryText(this.data.category)
+        }
+      })
     },
-    props: {
-      data: Object
-    },
-    methods: {
-      showBookCategory() {
-        this.$router.push({
-          path: '/book-store/list',
-          query: {
-            category: getCategoryName(this.data.category),
-            categoryText: this.categoryText(this.data.category)
-          }
-        })
-      },
-      categoryText(category) {
-        return categoryText(category, this)
-      }
+    categoryText (category) {
+      return categoryText(category, this)
     }
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../../assets/styles/global";
 
   .category-book {
     .category-book-list {

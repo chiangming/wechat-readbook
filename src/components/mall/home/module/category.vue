@@ -8,12 +8,6 @@
             <div class="title title-medium">{{categoryText(item.category)}}</div>
             <div class="num sub-title-tiny">{{item.num + ' ' + $t('home.books')}}</div>
           </div>
-          <div class="img-wrapper">
-            <div class="img-group">
-              <img class="img" v-lazy="item.img1">
-              <img class="img2" v-lazy="item.img2">
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -21,38 +15,38 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import TitleView from '@/components/home/title'
-  import { categoryText, getCategoryName } from '@/utils/book'
+import TitleView from '@/components/mall/home/layout/title'
+import { categoryText, getCategoryName } from '@/utils/book'
 
-  export default {
-    components: {
-      TitleView
+export default {
+  components: {
+    TitleView
+  },
+  props: {
+    data: Array
+  },
+  methods: {
+    showBookCategory (item) {
+      this.$router.push({
+        path: '/mall/list',
+        query: {
+          category: getCategoryName(item.category),
+          categoryText: this.categoryText(item.category)
+        }
+      })
     },
-    props: {
-      data: Array
+    categoryText (category) {
+      return categoryText(category, this)
     },
-    methods: {
-      showBookCategory(item) {
-        this.$router.push({
-          path: '/book-store/list',
-          query: {
-            category: getCategoryName(item.category),
-            categoryText: this.categoryText(item.category)
-          }
-        })
-      },
-      categoryText(category) {
-        return categoryText(category, this)
-      },
-      showBookList() {
-        this.$router.push('/book-store/list')
-      }
+    showBookList () {
+      this.$router.push('/book-store/list')
     }
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../../assets/styles/global";
 
   .category {
     .category-list {

@@ -21,7 +21,7 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../../assets/styles/global";
+  @import "../../../../assets/styles/global";
 
   .hot-search-list {
     width: 100%;

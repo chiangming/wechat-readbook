@@ -1,4 +1,5 @@
 const getters = {
+  // book模块
   fileName: state => state.book.fileName,
   menuVisible: state => state.book.menuVisible,
   settingVisible: state => state.book.settingVisible,
@@ -20,7 +21,14 @@ const getters = {
   offsetX: state => state.book.offsetX,
   offsetY: state => state.book.offsetY,
   isBookmark: state => state.book.isBookmark,
-  locationLength: state => state.book.locationLength
+  locationLength: state => state.book.locationLength,
+  // detail模块
+  detailData: state => state.detail.detailData,
+  detailMetadata: state => state.detail.detailMetadata,
+  detailNavigation: state => state.detail.detailNavigation,
+  detailDescription: state => state.detail.detailDescription,
+  detailCategoryText: state => state.detail.categoryText,
+  detailTitleText: state => state.detail.titleText
 }
 
 export default getters

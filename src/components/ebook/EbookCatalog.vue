@@ -31,9 +31,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-import EbookLoading from './EbookLoading'
-import EbookContent from './EbookSlideContent'
-import EbookBookmark from './EbookSlideBookmark'
+import EbookLoading from './slide/EbookLoading'
+import EbookContent from './slide/EbookSlideContent'
+import EbookBookmark from './slide/EbookSlideBookmark'
 import { ebookMixin } from '../../utils/mixin'
 
 export default {

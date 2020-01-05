@@ -12,16 +12,16 @@
 </template>
 
 <script type="text/ecmascript-6">
-  export default {
-    props: {
-      data: Object,
-      isEditMode: Boolean
-    }
+export default {
+  props: {
+    data: Object,
+    isEditMode: Boolean
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
   .shelf-category-wrapper {
     width: 100%;
     height: 100%;

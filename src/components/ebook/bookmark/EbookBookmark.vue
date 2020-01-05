@@ -15,10 +15,10 @@
 </template>
 
 <script type="text/ecmascript-6">
-import BookMark from '@/components/ebook/Bookmark'
+import BookMark from '@/components/ebook/bookmark/Bookmark'
 import { realPx } from '@/utils/utils'
-import { ebookMixin } from '../../utils/mixin'
-import { saveBookmark, getBookmark } from '../../utils/localStorage'
+import { ebookMixin } from '../../../utils/mixin'
+import { saveBookmark, getBookmark } from '../../../utils/localStorage'
 
 const BLUE = '#346cbc'
 const WHITE = '#fff'
@@ -168,7 +168,7 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
 
   .ebook-bookmark {
     position: absolute;

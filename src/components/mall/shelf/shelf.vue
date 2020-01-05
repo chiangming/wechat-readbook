@@ -5,9 +5,9 @@
                       id="book-shelf-list"
                       v-if="showType === 0 || showType === 1">
       <div class="book-shelf-item" v-for="(item, index) in bookData" :key="item.id" @click="onBookClick(item, index)">
-        <div class="book-img-wrapper" :class="{'add-book': item.type === 3, 'category-book': item.type ===2}"
+        <div class="book-img-wrapper" :style="{height:itemHeight}" :class="{'add-book': item.type === 3, 'category-book': item.type ===2}"
              ref="bookImg">
-          <shelf-image :data="item" :isEditMode="isEditMode" v-if="item.type === 1"></shelf-image>
+          <shelf-image :data="item"  :isEditMode="isEditMode" v-if="item.type === 1"></shelf-image>
           <shelf-category :data="item" :isEditMode="isEditMode" v-else-if="item.type === 2"></shelf-category>
           <span class="icon-add icon" v-else></span>
         </div>
@@ -18,13 +18,13 @@
     </transition-group>
     <div class="book-shelf-label-list-wrapper" v-if="showType === 2 || showType === 3">
       <div class="book-shelf-list-wrapper" v-for="(item, index) in purchaseData" :key="index" ref="bookShelfList">
-        <div class="book-shelf-label-item" :class="{'is-fixed': item.isFixed}">
+        <div class="book-shelf-label-item" :class="{'is-fixed': item.isFixed}" v-if="item.bookList && item.bookList.length>0">
           <span class="book-shelf-label-text">{{item.label}}</span>
         </div>
-        <div class="book-shelf-item-wrapper">
+        <div class="book-shelf-item-wrapper" v-if="item.bookList && item.bookList.length>0">
           <div class="book-shelf-item" v-for="(subItem, subIndex) in item.bookList" :key="subItem.id"
                @click="onBookClick(subItem, subIndex)">
-            <div class="book-img-wrapper" :class="{'add-book': subItem.type === 3, 'category-book': subItem.type ===2}"
+            <div class="book-img-wrapper" :style="{height:itemHeight}" :class="{'add-book': subItem.type === 3, 'category-book': subItem.type ===2}"
                  ref="bookImg">
               <shelf-image :data="subItem" :isEditMode="isEditMode" v-if="subItem.type === 1"></shelf-image>
               <shelf-category :data="subItem" :isEditMode="isEditMode" v-else-if="subItem.type === 2"></shelf-category>
@@ -43,134 +43,150 @@
 </template>
 
 <script>
-  import ShelfCategory from '@/components/shelf/shelfCategory'
-  import ShelfImage from '@/components/shelf/shelfImage'
-  import { realPx } from '@/utils/utils'
-  import { flatBookList } from '@/utils/book'
+import ShelfCategory from '@/components/mall/shelf/shelfCategory'
+import ShelfImage from '@/components/mall/shelf/shelfImage'
+import { realPx } from '@/utils/utils'
+import { flatBookList } from '@/utils/book'
 
-  export default {
-    props: {
-      data: Array,
-      isEditMode: Boolean,
-      showType: {
-        type: Number,
-        default: 0
+export default {
+  props: {
+    data: Array,
+    isEditMode: Boolean,
+    showType: {
+      type: Number,
+      default: 0
+    }
+  },
+  components: {
+    ShelfCategory,
+    ShelfImage
+  },
+  computed: {
+    itemHeight () {
+      return (window.innerWidth - realPx(120)) / 3 * 350 / 250 + 'px'
+    },
+    // eslint-disable-next-line vue/return-in-computed-property
+    bookData () {
+      if (this.showType === 0) {
+        // console.log(this.data)
+        return this.data
+      } else if (this.showType === 1) {
+        return flatBookList(this.data)
       }
     },
-    components: {
-      ShelfCategory,
-      ShelfImage
-    },
-    computed: {
-      bookData() {
-        if (this.showType === 0) {
-          return this.data
-        } else if (this.showType === 1) {
-          return flatBookList(this.data)
-        }
-      },
-      publicNumber() {
-        if (this.data) {
-          let number = 0
-          this.data.filter(item => {
-            if (!item.private && item.type === 1) {
-              number++
-            } else if (item.type === 2 && item.itemList.length > 0) {
-              number += item.itemList.filter(subItem => {
-                return !subItem.private && subItem.type === 1
-              }).length
-            }
-          })
-          return number
-        } else {
-          return 0
-        }
-      },
-      privateNumber() {
-        if (this.data) {
-          let number = 0
-          this.data.filter(item => {
-            if (item.private && item.type === 1) {
-              number++
-            } else if (item.type === 2 && item.itemList.length > 0) {
-              number += item.itemList.filter(subItem => {
-                return subItem.private && subItem.type === 1
-              }).length
-            }
-          })
-          return number
-        } else {
-          return 0
-        }
-      },
-      purchaseData() {
-        const bought = {
-          label: this.$t('shelf.bought'),
-          bookList: this.flatData.filter(item => item.cache),
-          isFixed: false
-        }
-        const notPurchased = {
-          label: this.$t('shelf.notPurchased'),
-          bookList: this.flatData.filter(item => !item.cache),
-          isFixed: false
-        }
-        return [bought, notPurchased]
-      },
-      bookShelfList() {
-        return this.$refs.bookShelfList[0].getBoundingClientRect().height
-      },
-      bookShelfList2() {
-        return this.$refs.bookShelfList[1].getBoundingClientRect().height
+    publicNumber () {
+      if (this.data) {
+        let number = 0
+        this.data.filter(item => {
+          if (!item.private && item.type === 1) {
+            number++
+          } else if (item.type === 2 && item.itemList.length > 0) {
+            number += item.itemList.filter(subItem => {
+              return !subItem.private && subItem.type === 1
+            }).length
+          }
+        })
+        return number
+      } else {
+        return 0
       }
     },
-    methods: {
-      fixTitle(offsetY) {
-        if (this.showType === 2 || this.showType === 3) {
-          if (offsetY > realPx(10) && offsetY < this.bookShelfList) {
-            if (this.purchaseData[0].isFixed === false) {
-              this.purchaseData[0].isFixed = true
-              this.purchaseData[1].isFixed = false
-              this.$forceUpdate()
-            }
-          } else if (offsetY >= this.bookShelfList - realPx(42)) {
-            if (this.purchaseData[1].isFixed === false) {
-              this.purchaseData[0].isFixed = false
-              this.purchaseData[1].isFixed = true
-              this.$forceUpdate()
-            }
-          } else {
-            this.purchaseData[0].isFixed = false
+    privateNumber () {
+      if (this.data) {
+        let number = 0
+        this.data.filter(item => {
+          if (item.private && item.type === 1) {
+            number++
+          } else if (item.type === 2 && item.itemList.length > 0) {
+            number += item.itemList.filter(subItem => {
+              return subItem.private && subItem.type === 1
+            }).length
+          }
+        })
+        return number
+      } else {
+        return 0
+      }
+    },
+    purchaseData () {
+      const bought = {
+        label: this.$t('shelf.bought'),
+        bookList: this.data.filter(item => item.cache),
+        isFixed: false
+      }
+      const notPurchased = {
+        label: this.$t('shelf.notPurchased'),
+        bookList: this.data.filter(item => !item.cache),
+        isFixed: false
+      }
+      return [bought, notPurchased]
+    },
+    bookShelfList () {
+      return this.$refs.bookShelfList[0].getBoundingClientRect().height
+    },
+    bookShelfList2 () {
+      return this.$refs.bookShelfList[1].getBoundingClientRect().height
+    }
+  },
+  methods: {
+    fixTitle (offsetY) {
+      if (this.showType === 2 || this.showType === 3) {
+        if (offsetY > realPx(10) && offsetY < this.bookShelfList) {
+          if (this.purchaseData[0].isFixed === false) {
+            this.purchaseData[0].isFixed = true
             this.purchaseData[1].isFixed = false
             this.$forceUpdate()
           }
-        }
-      },
-      onBookClick(item, index) {
-        if (item.type === 3) {
-          this.$router.push('/book-store/home')
-        } else if (item.type === 1) {
-          if (this.isEditMode) {
-            item.selected = !item.selected
-          } else {
-            this.$emit('onBookClick', item, index)
+        } else if (offsetY >= this.bookShelfList - realPx(42)) {
+          if (this.purchaseData[1].isFixed === false) {
+            this.purchaseData[0].isFixed = false
+            this.purchaseData[1].isFixed = true
+            this.$forceUpdate()
           }
-        } else if (item.type === 2) {
-          if (!this.isEditMode) {
-            this.$router.push({
-              path: '/book-store/category',
-              query: {
-                index: index
-              }
-            })
-          }
+        } else {
+          this.purchaseData[0].isFixed = false
+          this.purchaseData[1].isFixed = false
+          this.$forceUpdate()
         }
+      }
+    },
+    onBookClick (item, index) {
+      if (item.type === 3) {
+        this.$router.push('/mall/home')
+      } else if (item.type === 1) {
+        if (this.isEditMode) {
+          item.selected = !item.selected
+        } else {
+          this.$emit('onBookClick', item, index)
+        }
+      } else if (item.type === 2) {
+        if (!this.isEditMode) {
+          this.$router.push({
+            path: '/mall/category',
+            query: {
+              index: index
+            }
+          })
+        }
+      }
+    },
+    fullSelect () {
+      // console.log('1!!S', this.data)
+      for (let index in this.data) {
+        this.data[index].selected = true
+      }
+    },
+    cancelFullSelect () {
+      for (let index in this.data) {
+        this.data[index].selected = false
       }
     }
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
 
   .book-shelf-wrapper {
     width: 100%;
@@ -309,6 +325,12 @@
                 margin-top: px2rem(10);
               }
             }
+          }
+          .book-purchase-text{
+            width: 100%;
+            font-size: px2rem(16);
+            flex:1;
+            @include center;
           }
         }
       }

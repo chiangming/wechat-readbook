@@ -1,24 +1,25 @@
 <template>
   <div class="search-bar-wrapper">
     <div class="title-search-wrapper" :class="{'show-search': ifShowSearchPage, 'hide-shadow': ifHideShadow}" ref="titleSearchWrapper">
-      <transition name="title">
-        <div class="title-search-page-wrapper" v-show="!ifShowSearchPage">
-          <span class="title-text">{{$t('home.title')}}</span>
-          <div class="icon-shake-wrapper" @click="showFlapCard">
-            <span class="icon-shake icon"></span>
-          </div>
-        </div>
-      </transition>
-      <div class="icon-back-wrapper" :class="{'show-search': ifShowSearchPage}" @click="back">
-        <span class="icon-back icon"></span>
-      </div>
       <div class="search-wrapper" :class="{'show-search': ifShowSearchPage}">
-        <div class="search-back-wrapper" :class="{'show-search': ifShowSearchPage}">
+        <div class="search-back-wrapper" :class="{'show-search': ifShowSearchPage}" @click="back">
           <span class="icon-back icon" :class="{'show-search': ifShowSearchPage}"></span>
         </div>
         <div class="search-bg">
           <span class="icon-search icon"></span>
-          <input type="text" class="search" :placeholder="$t('home.hint')" v-model="searchText" @click="showSearchPageAndHotSearch" @keyup.13.exact="search">
+          <input type="text" class="search"
+                 :placeholder="$t('home.hint')"
+                 v-model="searchText"
+                 @input="checkSearchText"
+                 @click="onSearchClick"
+                 @keyup.13.exact="search"
+                 ref="searchInput">|
+          <div class="btn-edit-wrapper" @click="onEdit" v-if="!ifShowClear && !ifShowSearchPage && !isDataEmpty">
+            <span class="btn-edit-text">{{$t('shelf.edit')}}</span>
+          </div>
+          <div class="icon-clear-wrapper" @click="clearSearchText" v-if="ifShowClear">
+            <span class="icon-close-circle-fill icon"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -28,7 +29,8 @@
         <div class="line"></div>
         <history-search :label="$t('home.historySearch')"
                         :btn="$t('home.clear')"
-                        :historySearch="searchList.historySearch"></history-search>
+                        :historySearch="searchList.historySearch"
+                        @clearHistory="clearHistorySearch"></history-search>
       </div>
     </transition>
   </div>
@@ -38,6 +40,7 @@
 import { realPx } from '@/utils/utils'
 import HotSearch from '@/components/mall/home/search/hotSearch'
 import HistorySearch from '@/components/mall/home/search/historySearch'
+import { setHistorySearchList, getHistorySearchList } from '@/utils/book'
 
 export default {
   components: {
@@ -47,16 +50,20 @@ export default {
   props: {
     ifShowSearchPage: {
       type: Boolean,
-      default: false
+      default: true
     },
     ifShowHotSearch: {
       type: Boolean,
       default: true
     },
-    bookListOffsetY: Number
+    isDataEmpty: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
+      ifShowClear: false,
       searchList: {
         hotSearch: [
           {
@@ -89,28 +96,49 @@ export default {
           }
         ],
         historySearch: [
-          {
-            type: 2,
-            text: 'Computer Science'
-          }
+          '呐喊'
         ]
       },
       ifHideShadow: true,
-      searchText: null
+      searchText: ''
     }
   },
   methods: {
+    onEdit () {
+      this.$emit('onEditClick', true)
+      this.$emit('showTitle')
+    },
+    onSearchClick () {
+      this.$emit('onSearchClick')
+      this.ifShowCancel = true
+      this.showSearchPageAndHotSearch()
+    },
+    clearSearchText () {
+      this.searchText = ''
+      this.checkSearchText()
+      this.$refs.searchInput.focus()
+    },
+    checkSearchText () {
+      if (this.searchText && this.searchText.length > 0) {
+        this.ifShowClear = true
+      } else {
+        this.ifShowClear = false
+      }
+    },
     setKeyword (keyword) {
-      this.searchText = keyword
       this.searchList.historySearch.push(keyword)
     },
     search () {
+      this.setKeyword(this.searchText)
       this.$router.push({
         path: '/mall/list',
         query: {
           keyword: this.searchText
         }
       })
+    },
+    clearHistorySearch () {
+      this.searchList.historySearch = []
     },
     hideHotSearch () {
       this.$emit('update:ifShowHotSearch', false)
@@ -131,21 +159,10 @@ export default {
     },
     back () {
       this.searchText = ''
+      this.ifShowClear = false
       if (this.ifShowSearchPage) {
-        if (this.bookListOffsetY <= 0) {
-          this.hideSearchPage()
-        } else {
-          if (this.ifShowHotSearch) {
-            this.hideHotSearch()
-            this.showShadow()
-          } else {
-            this.$router.push('/mall/shelf')
-          }
-        }
-      } else {
-        this.$router.push('/mall/shelf')
+        this.hideSearchPage()
       }
-      this.$emit('back')
     },
     hideSearchPage () {
       this.$emit('update:ifShowSearchPage', false)
@@ -153,9 +170,6 @@ export default {
     },
     showSearchPage () {
       this.$emit('update:ifShowSearchPage', true)
-    },
-    showFlapCard () {
-      this.$emit('showFlapCard')
     },
     handleScroll (e) {
       const target = e.target
@@ -174,7 +188,14 @@ export default {
         this.$refs.searchMaskWrapper.scrollTo(0, 0)
       }
     }
+  },
+  mounted () {
+    this.searchList.historySearch = getHistorySearchList() || this.searchList.historySearch
+  },
+  beforeDestroy () {
+    setHistorySearchList(this.searchList.historySearch)
   }
+
 }
 </script>
 
@@ -182,11 +203,13 @@ export default {
   @import "../../../assets/styles/global";
 
   .search-bar-wrapper {
+    position: relative;
+    z-index: 110;
     .title-search-wrapper {
       position: relative;
       z-index: 110;
       width: 100%;
-      height: px2rem(94);
+      height: px2rem(52);
       background: white;
       box-shadow: 0 px2rem(2) px2rem(2) 0 rgba(0, 0, 0, .1);
       &.show-search {
@@ -195,33 +218,12 @@ export default {
       &.hide-shadow {
         box-shadow: none;
       }
-      .title-search-page-wrapper {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 105;
-        width: 100%;
-        height: px2rem(42);
-        @include center;
-        .title-text {
-          font-weight: bold;
-        }
-        .icon-shake-wrapper {
-          position: absolute;
-          right: 0;
-          top: 0;
-          z-index: 110;
-          padding-right: px2rem(10);
-          height: 100%;
-          @include center;
-        }
-      }
       .icon-back-wrapper {
         position: absolute;
         left: px2rem(10);
         top: 0;
         z-index: 110;
-        height: px2rem(42);
+        height: px2rem(52);
         @include center;
         transition: all $homeAnimationTime linear;
         &.show-search {
@@ -230,7 +232,7 @@ export default {
       }
       .search-wrapper {
         position: absolute;
-        top: px2rem(42);
+        top: 0;
         left: 0;
         z-index: 100;
         display: flex;
@@ -246,7 +248,6 @@ export default {
           width: 0;
           @include center;
           transition: all $homeAnimationTime linear;
-          visibility: hidden;
           &.show-search {
             margin-right: px2rem(10);
             flex: 0 0 px2rem(20);
@@ -287,12 +288,32 @@ export default {
               color: #ccc;
             }
           }
+          .btn-edit-wrapper{
+            @include right;
+            width: px2rem(50);
+            height: px2rem(16);
+            border-left: 1px solid #c1c1c1;
+            font-size: px2rem(14);
+            line-height: px2rem(14);
+            color: #555;
+            .btn-edit-text{
+              font-weight:bold;
+            }
+          }
+          .icon-clear-wrapper {
+            @include left;
+            .icon-close-circle-fill {
+              font-size: px2rem(14);
+              color: #ccc;
+            }
+          }
         }
       }
     }
     .hot-search-wrapper {
       width: 100%;
       height: 100%;
+      z-index: 110;
       background: white;
       overflow-x: hidden;
       overflow-y: scroll;

@@ -42,12 +42,12 @@ export default {
     moveStart (e) {
       // e.preventDefault()
       e.stopPropagation()
-      console.log('moveStart')
+      // console.log('moveStart')
       this.touchStartX = e.changedTouches[0].clientX
       this.touchStartTime = e.timeStamp
     },
     move (e) {
-      console.log('move')
+      // console.log('move')
       // console.log('fosy', this.firstOffsetY)
       // console.log('fosx', this.firstOffsetX)
       let offsetY = 0
@@ -69,15 +69,15 @@ export default {
       e.stopPropagation()
     },
     moveEnd (e) {
-      console.log('moveEnd')
+      // console.log('moveEnd')
       this.$store.dispatch('setOffsetX', 0)
       this.$store.dispatch('setOffsetY', 0)
       this.firstOffsetX = 0
       this.firstOffsetY = 0
       const offsetX = e.changedTouches[0].clientX - this.touchStartX
       const time = e.timeStamp - this.touchStartTime
-      console.log('touchend', e)
-      console.log(offsetX)
+      // console.log('touchend', e)
+      // console.log(offsetX)
       if (time < 500 && offsetX > 40) {
         this.prevPage()
       } else if (time < 500 && offsetX < -40) {
@@ -93,7 +93,7 @@ export default {
     // 3- 鼠标从移动状态松手
     // 4- 鼠标还原
     onMouseEnter (e) {
-      console.log('onMouseEnter')
+      // console.log('onMouseEnter')
       this.mouseMove = 1
       this.mouseStartTime = e.timeStamp
       this.touchStartX = e.clientX
@@ -138,8 +138,8 @@ export default {
         this.mouseMove = 1
       }
       const offsetX = e.clientX - this.touchStartX
-      console.log('touchend', e)
-      console.log('offsetx', offsetX)
+      // console.log('touchend', e)
+      // console.log('offsetx', offsetX)
       if (time < 500 && offsetX > 40) {
         this.prevPage()
       } else if (time < 500 && offsetX < -40) {
@@ -183,15 +183,15 @@ export default {
     // 手势初始化
     initGuest () {
       this.rendition.on('touchstart', event => {
-        console.log('touchstart', event)
+        // console.log('touchstart', event)
         this.touchStartX = event.changedTouches[0].clientX
         this.touchStartTime = event.timeStamp
       })
       this.rendition.on('touchend', event => {
         const offsetX = event.changedTouches[0].clientX - this.touchStartX
         const time = event.timeStamp - this.touchStartTime
-        console.log('touchend', event)
-        console.log(offsetX)
+        // console.log('touchend', event)
+        // console.log(offsetX)
         if (time < 500 && offsetX > 40) {
           this.prevPage()
         } else if (time < 500 && offsetX < -40) {
@@ -277,15 +277,18 @@ export default {
           this.setCover(url)
         })
       } else {
+        // console.log(this.book.loaded)
         this.book.loaded.cover.then(cover => {
-          this.book.archive.createUrl(cover).then(url => {
-            this.setCover(url)
-          })
+          if (cover) {
+            this.book.archive.createUrl(cover).then(url => {
+              this.setCover(url)
+            })
+          }
         })
       }
       // 拆解响应中的树状结构转换成一维数组
       this.book.loaded.navigation.then(nav => {
-        console.log(nav)
+        // console.log(nav)
         const navItem = (function flatten (arr) {
           return [].concat(...arr.map(v => [v, ...flatten(v.subitems)]))
         })(nav.toc)
@@ -314,7 +317,7 @@ export default {
         // 返回分页locations
         return this.book.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16))
       }).then(locations => {
-        console.log('sp', locations.length)
+        // console.log('sp', locations.length)
         if (locations) {
           this.setLocationLength(locations.length)
         }
@@ -344,6 +347,7 @@ export default {
     },
     initEpub (target) {
       this.book = new Epub(target)
+      // console.log(this.book)
       this.setCurrentBook(this.book)
       // this.setIsPaginating(true)
       // this.setPaginate(this.$t('book.paginating'))
@@ -358,6 +362,7 @@ export default {
         this.$route.params.fileName.split('|').join('/'))
         .then(() => {
           // 实时下载电子书
+          // console.log(`${process.env.VUE_APP_EPUB_URL}/${this.fileName}.epub`)
           this.initEpub(`${process.env.VUE_APP_EPUB_URL}/${this.fileName}.epub`)
           this.isOnline = false
         })

@@ -36,8 +36,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { ebookMixin } from '../../utils/mixin'
-import { saveProgress } from '../../utils/localStorage'
+import { ebookMixin } from '../../../utils/mixin'
+import { saveProgress } from '../../../utils/localStorage'
 
 export default {
   mixins: [ebookMixin],
@@ -97,7 +97,7 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
 
   .setting-wrapper {
     position: absolute;

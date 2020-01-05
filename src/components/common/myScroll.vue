@@ -143,7 +143,7 @@ export default {
       }
     },
     onScroll (e) {
-      console.log('onScroll')
+      // console.log('onScroll')
       let listHeight = this.myScrollList.offsetHeight // 列表总高度
       let listScrollTop = e.target.scrollTop + this.myScroll.offsetHeight // 当前滚动条位置
 
@@ -166,7 +166,7 @@ export default {
   mounted () {
     this.myScroll = this.$refs.myScroll // 获取滑条dom
     this.myScrollList = this.myScroll.children[1] // 获取列表dom
-    console.log(this.myScrollList)
+    // console.log(this.myScrollList)
   }
 }
 </script>

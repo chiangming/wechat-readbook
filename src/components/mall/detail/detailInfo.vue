@@ -13,6 +13,12 @@
       <div class="detail-cover-description-wrapper">
         <div class="detail-cover-description-text">{{desc}}</div>
       </div>
+      <div class="detail-more-wrapper">
+        <div class="more-right-wrapper">
+          <span class="icon-cart icon-margin-right">&nbsp;<del>30.00</del>·无限卡</span>
+          <span class="icon-menu" @click="showMoreDetail()">&nbsp;更多</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -24,6 +30,13 @@ export default {
     title: String,
     author: String,
     desc: String
+  },
+  methods: {
+    showMoreDetail () {
+      this.$router.push({
+        path: '/mall/detail-more'
+      })
+    }
   }
 }
 </script>
@@ -69,14 +82,23 @@ export default {
       .detail-cover-description-wrapper {
         margin-top: px2rem(10);
         .detail-cover-description-text {
+          float: left;
           font-size: px2rem(14);
           line-height: px2rem(16);
           color: #666;
-          word-break: keep-all;
-          white-space: normal;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          overflow-wrap: break-word;
+          @include ellipsis2(2);
+        }
+      }
+      .detail-more-wrapper {
+        margin-top: px2rem(10);
+        .more-right-wrapper {
+          float: right;
+          font-size: px2rem(12);
+          line-height: px2rem(16);
+          color: #5d6268;
+          .icon-margin-right{
+            margin-right: px2rem(12);;
+          }
         }
       }
     }

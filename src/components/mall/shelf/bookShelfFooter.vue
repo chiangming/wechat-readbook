@@ -32,183 +32,183 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Popup from '@/components/shelf/popup'
-  import ShelfGroupDialog from '@/components/shelf/shelfGroupDialog'
+import Popup from '@/components/mall/shelf/popup'
+import ShelfGroupDialog from '@/components/mall/shelf/shelfGroupDialog'
 
-  export default {
-    props: {
-      data: Array,
-      isInGroup: Boolean,
-      bookList: Array,
-      category: Object
+export default {
+  props: {
+    data: Array,
+    isInGroup: Boolean,
+    bookList: Array,
+    category: Object
+  },
+  components: {
+    ShelfGroupDialog,
+    Popup
+  },
+  computed: {
+    selectedBooks () {
+      const selectedBooks = []
+      this.data.forEach(item => {
+        if (item.selected) {
+          selectedBooks.push(item)
+        }
+      })
+      return selectedBooks
     },
-    components: {
-      ShelfGroupDialog,
-      Popup
+    isSelected () {
+      if (this.data) {
+        return this.data.some(item => item.selected)
+      } else {
+        return false
+      }
     },
-    computed: {
-      selectedBooks() {
-        const selectedBooks = []
-        this.data.forEach(item => {
+    isPrivate () {
+      if (!this.isSelected) {
+        return false
+      } else {
+        return this.data.every(item => {
           if (item.selected) {
-            selectedBooks.push(item)
+            return item.private
+          } else {
+            return true
           }
         })
-        return selectedBooks
-      },
-      isSelected() {
-        if (this.data) {
-          return this.data.some(item => item.selected)
-        } else {
-          return false
-        }
-      },
-      isPrivate() {
-        if (!this.isSelected) {
-          return false
-        } else {
-          return this.data.every(item => {
-            if (item.selected) {
-              return item.private
-            } else {
-              return true
-            }
-          })
-        }
-      },
-      isDownload() {
-        if (!this.isSelected) {
-          return false
-        } else {
-          return this.data.every(item => {
-            if (item.selected) {
-              return item.cache
-            } else {
-              return true
-            }
-          })
-        }
-      },
-      tabs() {
-        return [
-          {
-            label: this.$t('shelf.private'),
-            label2: this.$t('shelf.noPrivate'),
-            index: 1
-          },
-          {
-            label: this.$t('shelf.download'),
-            label2: this.$t('shelf.delete'),
-            index: 2
-          },
-          {
-            label: this.$t('shelf.move'),
-            index: 3
-          },
-          {
-            label: this.$t('shelf.remove'),
-            index: 4
-          }
-        ]
       }
     },
-    data() {
-      return {
-        popTitle: '',
-        confirmText: '',
-        isRemoveText: false,
-        ifShowPopup: false,
-        ifGroupDialogShow: false,
-        onConfirm: function() {}
+    isDownload () {
+      if (!this.isSelected) {
+        return false
+      } else {
+        return this.data.every(item => {
+          if (item.selected) {
+            return item.cache
+          } else {
+            return true
+          }
+        })
       }
     },
-    methods: {
-      label(item) {
-        switch (item.index) {
-          case 1:
-            return this.isPrivate ? item.label2 : item.label
-          case 2:
-            return this.isDownload ? item.label2 : item.label
-          default:
-            return item.label
+    tabs () {
+      return [
+        {
+          label: this.$t('shelf.private'),
+          label2: this.$t('shelf.noPrivate'),
+          index: 1
+        },
+        {
+          label: this.$t('shelf.download'),
+          label2: this.$t('shelf.delete'),
+          index: 2
+        },
+        {
+          label: this.$t('shelf.move'),
+          index: 3
+        },
+        {
+          label: this.$t('shelf.remove'),
+          index: 4
         }
-      },
-      removeBook() {
-        this.$emit('removeBook')
-      },
-      onSetDownload() {
-        this.$emit('setDownload', true)
-      },
-      onRemoveDownload() {
-        this.$emit('setDownload', false)
-      },
-      onSetPrivate() {
-        this.$emit('setPrivate', true)
-      },
-      onCancelPrivate() {
-        this.$emit('setPrivate', false)
-      },
-      onTabClick(item) {
-        if (item.index === 1) {
-          this.showPrivate()
-        } else if (item.index === 2) {
-          this.showDownload()
-        } else if (item.index === 3) {
-          this.showGroupDialog()
-        } else if (item.index === 4) {
-          this.showRemove()
-        }
-      },
-      showGroupDialog() {
-        if (this.isSelected) {
-          this.ifGroupDialogShow = true
-        }
-      },
-      showRemove() {
-        if (this.isSelected) {
-          let msg
-          if (this.selectedBooks.length === 1) {
-            msg = this.$t('shelf.removeBookTitle').replace('$1', '《' + this.selectedBooks[0].title + '》')
-          } else {
-            msg = this.$t('shelf.removeBookTitle').replace('$1', this.$t('shelf.selectedBooks'))
-          }
-          this.showPopup(msg, this.$t('shelf.removeBook'), this.removeBook, true)
-        }
-      },
-      showDownload() {
-        if (this.isSelected) {
-          if (!this.isDownload) {
-            this.showPopup(this.$t('shelf.setDownloadTitle'), this.$t('shelf.open'), this.onSetDownload)
-          } else {
-            this.showPopup(this.$t('shelf.removeDownloadTitle'), this.$t('shelf.delete'), this.onRemoveDownload, true)
-          }
-        }
-      },
-      showPrivate() {
-        if (this.isSelected) {
-          if (!this.isPrivate) {
-            this.showPopup(this.$t('shelf.setPrivateTitle'), this.$t('shelf.open'), this.onSetPrivate)
-          } else {
-            this.showPopup(this.$t('shelf.closePrivateTitle'), this.$t('shelf.close'), this.onCancelPrivate)
-          }
-        }
-      },
-      showPopup(title, confirmText, onConfirm, isRemoveText = false) {
-        this.popTitle = title
-        this.confirmText = confirmText
-        this.onConfirm = onConfirm
-        this.isRemoveText = isRemoveText
-        this.$refs.popup.show()
-      },
-      groupEdit(operation, group) {
-        this.$emit('groupEdit', operation, group)
+      ]
+    }
+  },
+  data () {
+    return {
+      popTitle: '',
+      confirmText: '',
+      isRemoveText: false,
+      ifShowPopup: false,
+      ifGroupDialogShow: false,
+      onConfirm: function () {}
+    }
+  },
+  methods: {
+    label (item) {
+      switch (item.index) {
+        case 1:
+          return this.isPrivate ? item.label2 : item.label
+        case 2:
+          return this.isDownload ? item.label2 : item.label
+        default:
+          return item.label
       }
+    },
+    removeBook () {
+      this.$emit('removeBook')
+    },
+    onSetDownload () {
+      this.$emit('setDownload', true)
+    },
+    onRemoveDownload () {
+      this.$emit('setDownload', false)
+    },
+    onSetPrivate () {
+      this.$emit('setPrivate', true)
+    },
+    onCancelPrivate () {
+      this.$emit('setPrivate', false)
+    },
+    onTabClick (item) {
+      if (item.index === 1) {
+        this.showPrivate()
+      } else if (item.index === 2) {
+        this.showDownload()
+      } else if (item.index === 3) {
+        this.showGroupDialog()
+      } else if (item.index === 4) {
+        this.showRemove()
+      }
+    },
+    showGroupDialog () {
+      if (this.isSelected) {
+        this.ifGroupDialogShow = true
+      }
+    },
+    showRemove () {
+      if (this.isSelected) {
+        let msg
+        if (this.selectedBooks.length === 1) {
+          msg = this.$t('shelf.removeBookTitle').replace('$1', '《' + this.selectedBooks[0].title + '》')
+        } else {
+          msg = this.$t('shelf.removeBookTitle').replace('$1', this.$t('shelf.selectedBooks'))
+        }
+        this.showPopup(msg, this.$t('shelf.removeBook'), this.removeBook, true)
+      }
+    },
+    showDownload () {
+      if (this.isSelected) {
+        if (!this.isDownload) {
+          this.showPopup(this.$t('shelf.setDownloadTitle'), this.$t('shelf.open'), this.onSetDownload)
+        } else {
+          this.showPopup(this.$t('shelf.removeDownloadTitle'), this.$t('shelf.delete'), this.onRemoveDownload, true)
+        }
+      }
+    },
+    showPrivate () {
+      if (this.isSelected) {
+        if (!this.isPrivate) {
+          this.showPopup(this.$t('shelf.setPrivateTitle'), this.$t('shelf.open'), this.onSetPrivate)
+        } else {
+          this.showPopup(this.$t('shelf.closePrivateTitle'), this.$t('shelf.close'), this.onCancelPrivate)
+        }
+      }
+    },
+    showPopup (title, confirmText, onConfirm, isRemoveText = false) {
+      this.popTitle = title
+      this.confirmText = confirmText
+      this.onConfirm = onConfirm
+      this.isRemoveText = isRemoveText
+      this.$refs.popup.show()
+    },
+    groupEdit (operation, group) {
+      this.$emit('groupEdit', operation, group)
     }
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
 
   .book-shelf-footer {
     position: fixed;

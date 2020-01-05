@@ -7,7 +7,7 @@
             <span class="dialog-title-text">{{$t('shelf.moveBook')}}</span>
           </div>
           <div class="dialog-list-wrapper">
-            <div class="dialog-list-item" :class="{'is-add': item.edit ? item.edit === 1 : false}" v-for="(item, index) in categoryList" :key="index" @click="onGroupClick(item)" v-if="(item.edit === 2 && isInGroup) || item.edit !== 2 || !item.edit">
+            <div class="dialog-list-item" :class="{'is-add': item.edit ? item.edit === 1 : false}" v-for="(item, index) in categoryList" :key="index" @click="onGroupClick(item)" v-show="(item.edit === 2 && isInGroup) || item.edit !== 2 || !item.edit">
               <div class="dialog-list-item-text">{{item.title}}</div>
               <div class="dialog-list-icon-wrapper" v-if="category && item.id ? category.id === item.id : false">
                 <span class="icon-check"></span>
@@ -46,108 +46,108 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      visible: Boolean,
-      data: Array,
-      bookList: Array,
-      isInGroup: Boolean,
-      category: Object,
-      isEditGroupName: {
-        type: Boolean,
-        default: false
-      }
-    },
-    computed: {
-      defaultCategory() {
-        return [
-          {
-            title: this.$t('shelf.newGroup'),
-            edit: 1
-          },
-          {
-            title: this.$t('shelf.groupOut'),
-            edit: 2
-          }
-        ]
-      },
-      categoryList() {
-        const list = this.bookList ? this.bookList.filter(item => item.type === 2) : []
-        return [...this.defaultCategory, ...list]
-      }
-    },
-    data() {
-      return {
-        newGroupDialogVisible: false,
-        selectGroupDialogVisible: true,
-        newGroupName: ''
-      }
-    },
-    methods: {
-      createNewGroup() {
-        if (this.isEditGroupName) {
-          this.$emit('editGroupName', this.category, this.newGroupName)
-          this.hide()
-        } else {
-          if (this.newGroupName.length > 0) {
-            this.$emit('group', 2, {
-              id: this.bookList[this.bookList.length - 2].id + 1,
-              itemList: [],
-              selected: false,
-              title: this.newGroupName,
-              type: 2
-            })
-          }
-          this.hide()
+export default {
+  props: {
+    visible: Boolean,
+    data: Array,
+    bookList: Array,
+    isInGroup: Boolean,
+    category: Object,
+    isEditGroupName: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    defaultCategory () {
+      return [
+        {
+          title: this.$t('shelf.newGroup'),
+          edit: 1
+        },
+        {
+          title: this.$t('shelf.groupOut'),
+          edit: 2
         }
-      },
-      clear() {
-        this.newGroupName = ''
-      },
-      onGroupClick(item) {
-        if (item.edit && item.edit === 1) {
-          // 新建分组
-          this.showCreateGroupDialog()
-        } else if (item.edit && item.edit === 2) {
-          // 移出分组
-          this.$emit('group', 3, item)
-          this.hide()
-        } else {
-          // 移入分组
-          this.$emit('group', 1, item)
-          this.hide()
+      ]
+    },
+    categoryList () {
+      const list = this.bookList ? this.bookList.filter(item => item.type === 2) : []
+      return [...this.defaultCategory, ...list]
+    }
+  },
+  data () {
+    return {
+      newGroupDialogVisible: false,
+      selectGroupDialogVisible: true,
+      newGroupName: ''
+    }
+  },
+  methods: {
+    createNewGroup () {
+      if (this.isEditGroupName) {
+        this.$emit('editGroupName', this.category, this.newGroupName)
+        this.hide()
+      } else {
+        if (this.newGroupName.length > 0) {
+          this.$emit('group', 2, {
+            id: this.bookList[this.bookList.length - 2].id + 1,
+            itemList: [],
+            selected: false,
+            title: this.newGroupName,
+            type: 2
+          })
         }
-      },
-      showCreateGroupDialog() {
-        this.newGroupDialogVisible = true
-        this.selectGroupDialogVisible = false
-        this.newGroupName = ''
-        this.$nextTick(() => {
-          this.$refs.dialogInput.focus()
-        })
-      },
-      showEditGroupDialog() {
-        this.newGroupDialogVisible = true
-        this.selectGroupDialogVisible = false
-        this.newGroupName = this.category.title
-        this.$nextTick(() => {
-          this.$refs.dialogInput.focus()
-        })
-      },
-      show() {
-        this.$emit('update:visible', true)
-      },
-      hide() {
-        this.$emit('update:visible', false)
-        this.newGroupDialogVisible = false
-        this.selectGroupDialogVisible = true
+        this.hide()
       }
+    },
+    clear () {
+      this.newGroupName = ''
+    },
+    onGroupClick (item) {
+      if (item.edit && item.edit === 1) {
+        // 新建分组
+        this.showCreateGroupDialog()
+      } else if (item.edit && item.edit === 2) {
+        // 移出分组
+        this.$emit('group', 3, item)
+        this.hide()
+      } else {
+        // 移入分组
+        this.$emit('group', 1, item)
+        this.hide()
+      }
+    },
+    showCreateGroupDialog () {
+      this.newGroupDialogVisible = true
+      this.selectGroupDialogVisible = false
+      this.newGroupName = ''
+      this.$nextTick(() => {
+        this.$refs.dialogInput.focus()
+      })
+    },
+    showEditGroupDialog () {
+      this.newGroupDialogVisible = true
+      this.selectGroupDialogVisible = false
+      this.newGroupName = this.category.title
+      this.$nextTick(() => {
+        this.$refs.dialogInput.focus()
+      })
+    },
+    show () {
+      this.$emit('update:visible', true)
+    },
+    hide () {
+      this.$emit('update:visible', false)
+      this.newGroupDialogVisible = false
+      this.selectGroupDialogVisible = true
     }
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
 
   .shelf-group-dialog-bg {
     position: fixed;

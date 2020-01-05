@@ -1,7 +1,13 @@
 const messages = {
+  footer: {
+    discover: '发现',
+    shelf: '书架',
+    story: '故事',
+    profile: '我'
+  },
   home: {
     title: '书城',
-    hint: '计算机科学和软件工程',
+    hint: '围城',
     guessYouLike: '猜你喜欢',
     change: '换一批',
     clear: '清空',
@@ -20,28 +26,16 @@ const messages = {
     allBook: '共 $1 本图书'
   },
   category: {
-    computerScience: '计算机科学',
-    socialSciences: '社会科学',
-    economics: '经济学',
-    education: '教育学',
-    engineering: '工程学',
-    environment: '环境学',
-    geography: '地理学',
-    history: '历史学',
-    laws: '法学',
-    lifeSciences: '生命科学',
-    literature: '文学',
-    biomedicine: '生物医学',
-    businessandManagement: '工商管理',
-    earthSciences: '地球科学',
-    materialsScience: '材料科学',
-    mathematics: '数学',
-    medicineAndPublicHealth: '公共卫生',
-    philosophy: '哲学',
-    physics: '物理',
-    politicalScienceAndInternationalRelations: '国际关系',
-    psychology: '心理学',
-    statistics: '统计学'
+    contemporary: '当代文学',
+    humanities: '人文社科',
+    history: '历史烟云',
+    martial: '武侠小说',
+    suspense: '悬疑小说',
+    romance: '言情小说',
+    fantasy: '奇幻小说',
+    compound: '小说围地',
+    free: '免费好书',
+    recommend: '编辑推荐'
   },
   shelf: {
     title: '书架',
@@ -67,6 +61,8 @@ const messages = {
     delete: '删除',
     clearCache: '清除缓存',
     clearCacheSuccess: '缓存已清空',
+    fullSelect: '全选',
+    cancelFullSelect: '取消全选',
     removeBookTitle: '是否将$1移出书架？',
     removeBook: '移出',
     selectedBooks: '所选书籍',
@@ -94,12 +90,15 @@ const messages = {
     startDownload: '开始下载...',
     progressDownload: '正在下载：$1',
     downloadFirst: '请先缓存图书',
-    welcome: '欢迎访问慕课网<br>学习《实战微信读书——媲美原生APP的企业级Web书城》<br>--------  作者：Sam  --------',
     find: '去找书',
     changeLanguage: '切换语言',
-    studyNow: '去慕课网学习'
+    welcome: '重拾阅读的习惯',
+    welcomeSub: '为生活埋下微小的信仰'
   },
   detail: {
+    intro: '简介',
+    more: '更多',
+    expect: '开发中,敬请期待',
     copyright: '版权',
     navigation: '目录',
     publisher: '出版社',

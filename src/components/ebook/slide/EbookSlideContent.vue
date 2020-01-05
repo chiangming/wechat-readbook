@@ -3,7 +3,7 @@
     <div class="slide-contents-book-wrapper" v-show="!searchVisible">
       <div class="slide-contents-book-img-wrapper">
 <!--        <img v-lazy="cover" class="slide-contents-book-img">-->
-        <img :src="cover" class="slide-contents-book-img">
+        <img v-lazy="cover" class="slide-contents-book-img">
       </div>
       <div class="slide-contents-book-info-wrapper">
         <div class="slide-contents-book-title">
@@ -53,9 +53,9 @@
 </template>
 
 <script>
-import { ebookMixin } from '../../utils/mixin'
-import { px2rem } from '../../utils/utils'
-import Scroll from '../scroll/SimpleScroll'
+import { ebookMixin } from '../../../utils/mixin'
+import { px2rem } from '../../../utils/utils'
+import Scroll from '../../common/scroll'
 
 export default {
   mixins: [ebookMixin],
@@ -101,7 +101,7 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
   .ebook-slide-contents {
     width: 100%;
     font-size: 0;

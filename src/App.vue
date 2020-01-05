@@ -1,13 +1,10 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <main-tab-bar v-show="false"/>
   </div>
 </template>
 
 <script>
-import MainTabBar from './components/tabbar/MainTabBar'
-
 document.addEventListener('DOMContentLoaded', () => {
   let fontSize = window.innerWidth / 10
   fontSize = fontSize > 50 ? 50 : fontSize
@@ -19,17 +16,11 @@ export default {
   name: 'App',
   data () {
     return {
-      message: 'hello',
-      btn: '按钮'
     }
   },
   components: {
-    MainTabBar
   },
   methods: {
-    btnClick () {
-      console.log('btn click~')
-    }
   }
 }
 </script>

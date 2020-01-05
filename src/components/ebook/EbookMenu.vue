@@ -26,10 +26,10 @@
 </template>
 
 <script type="text/ecmascript-6">
-import EbookSettingFont from './EbookSettingFont'
-import EbookSettingFontPopup from './EbookSettingFontPopup'
-import EbookSettingTheme from './EbookSettingTheme'
-import EbookSettingProgress from './EbookSettingProgress'
+import EbookSettingFont from './settings/EbookSettingFont'
+import EbookSettingFontPopup from './settings/EbookSettingFontPopup'
+import EbookSettingTheme from './settings/EbookSettingTheme'
+import EbookSettingProgress from './settings/EbookSettingProgress'
 import EbookCatalog from './EbookCatalog'
 import { ebookMixin } from '@/utils/mixin'
 

@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade">
+<!--  <transition name="fade">-->
     <div class="shelf-title-wrapper" :class="{'hide-shadow': ifHideShadow}">
       <div class="title">
         <span class="title-text">{{title}}</span>
@@ -11,11 +11,8 @@
       <div class="btn-text-wrapper" @click="changeGroup" v-if="ifGroupEmpty && !isDataEmpty">
         <span class="btn-text">{{$t('shelf.editGroup')}}</span>
       </div>
-      <div class="btn-text-wrapper" @click="changeLanguage" v-if="isDataEmpty">
-        <span class="btn-text">{{$t('shelf.changeLanguage')}}</span>
-      </div>
-      <div class="btn-clear-wrapper" @click="clearCache" v-if="ifShowClear && !isDataEmpty">
-        <span class="btn-clear">{{$t('shelf.clearCache')}}</span>
+      <div class="btn-select-wrapper" @click="onFullSelect" v-if="ifShowClear && !isDataEmpty">
+        <span class="btn-clear">{{!fullSelect ? $t('shelf.fullSelect') : $t('shelf.cancelFullSelect') }}</span>
       </div>
       <div class="btn-back-wrapper" @click="back" v-if="ifShowBack && !isEditMode">
         <span class="icon-back"></span>
@@ -37,127 +34,137 @@
                           @editGroupName="editGroupName"
                           ref="groupDialog"></shelf-group-dialog>
     </div>
-  </transition>
+<!--  </transition>-->
 </template>
 
 <script>
-  import Popup from '@/components/shelf/popup'
-  import ShelfGroupDialog from '@/components/shelf/shelfGroupDialog'
-  import { switchLocale } from '@/utils/book'
+import Popup from '@/components/mall/shelf/popup'
+import ShelfGroupDialog from '@/components/mall/shelf/shelfGroupDialog'
+import { switchLocale } from '@/utils/book'
 
-  export default {
-    components: {
-      ShelfGroupDialog,
-      Popup
+export default {
+  components: {
+    ShelfGroupDialog,
+    Popup
+  },
+  props: {
+    isEditMode: Boolean,
+    ifShowBack: Boolean,
+    ifShowClear: Boolean,
+    ifGroupEmpty: Boolean,
+    ifFullSelect: {
+      type: Boolean,
+      default: false
     },
-    props: {
-      isEditMode: Boolean,
-      ifShowBack: Boolean,
-      ifShowClear: Boolean,
-      ifGroupEmpty: Boolean,
-      data: Array,
-      title: String,
-      category: Object
+    data: Array,
+    title: String,
+    category: Object
+  },
+  computed: {
+    isDataEmpty () {
+      return !this.data || this.data.filter(item => item.type !== 3).length === 0
     },
-    computed: {
-      isDataEmpty() {
-        return !this.data || this.data.filter(item => item.type !== 3).length === 0
-      },
-      selectedText() {
-        return this.selectedNumber === 0 ? this.$t('shelf.selectBook') : (this.selectedNumber === 1 ? this.$t('shelf.haveSelectedBook').replace('$1', this.selectedNumber) : this.$t('shelf.haveSelectedBooks').replace('$1', this.selectedNumber))
-      },
-      selectedNumber() {
-        if (this.category && this.category.itemList) {
-          return this.category.itemList.filter(item => item.selected).length
-        } else if (this.data) {
-          return this.data.filter(item => item.selected).length
-        } else {
-          return 0
-        }
-      },
-      thirdText() {
-        if (this.isDeleteGroup) {
-          return ''
-        } else {
-          return this.$t('shelf.editGroupName')
-        }
-      },
-      popupTitle() {
-        if (this.isDeleteGroup) {
-          return this.$t('shelf.deleteGroupTitle')
-        } else {
-          return ''
-        }
-      },
-      confirmText() {
-        if (this.isDeleteGroup) {
-          return this.$t('shelf.confirm')
-        } else {
-          return this.$t('shelf.deleteGroup')
-        }
+    selectedText () {
+      return this.selectedNumber === 0 ? this.$t('shelf.selectBook') : (this.selectedNumber === 1 ? this.$t('shelf.haveSelectedBook').replace('$1', this.selectedNumber) : this.$t('shelf.haveSelectedBooks').replace('$1', this.selectedNumber))
+    },
+    selectedNumber () {
+      if (this.category && this.category.itemList) {
+        return this.category.itemList.filter(item => item.selected).length
+      } else if (this.data) {
+        return this.data.filter(item => item.selected).length
+      } else {
+        return 0
       }
     },
-    data() {
-      return {
-        ifHideShadow: true,
-        ifGroupDialogShow: false,
-        isDeleteGroup: false
+    thirdText () {
+      if (this.isDeleteGroup) {
+        return ''
+      } else {
+        return this.$t('shelf.editGroupName')
       }
     },
-    methods: {
-      changeLanguage() {
-        switchLocale(this)
-      },
-      editGroupName(category, groupName) {
-        this.$emit('editGroupName', category, groupName)
-      },
-      showPopup() {
-        this.$refs.popup.show()
-      },
-      onPopupDelete() {
-        if (this.isDeleteGroup) {
-          this.$emit('deleteGroup', this.category)
-          this.isDeleteGroup = false
-        } else {
-          this.$refs.popup.hide()
-          setTimeout(() => {
-            this.isDeleteGroup = true
-            this.$refs.popup.show()
-          }, 200)
-        }
-      },
-      onPopupChange() {
-        this.ifGroupDialogShow = true
-        this.$refs.groupDialog.showEditGroupDialog()
-      },
-      changeGroup() {
-        this.showPopup()
-      },
-      back() {
-        this.$router.go(-1)
-      },
-      clearCache() {
-        this.$emit('clearCache')
-      },
-      showShadow() {
-        this.ifHideShadow = false
-      },
-      hideShadow() {
-        this.ifHideShadow = true
-      },
-      onEditClick() {
-        if (this.isEditMode) {
-          this.$emit('onEditClick', false)
-        } else {
-          this.$emit('onEditClick', true)
-        }
+    popupTitle () {
+      if (this.isDeleteGroup) {
+        return this.$t('shelf.deleteGroupTitle')
+      } else {
+        return ''
+      }
+    },
+    confirmText () {
+      if (this.isDeleteGroup) {
+        return this.$t('shelf.confirm')
+      } else {
+        return this.$t('shelf.deleteGroup')
+      }
+    }
+  },
+  data () {
+    return {
+      ifHideShadow: true,
+      ifGroupDialogShow: false,
+      isDeleteGroup: false,
+      fullSelect: this.ifFullSelect
+    }
+  },
+  methods: {
+    changeLanguage () {
+      switchLocale(this)
+    },
+    editGroupName (category, groupName) {
+      this.$emit('editGroupName', category, groupName)
+    },
+    showPopup () {
+      this.$refs.popup.show()
+    },
+    onPopupDelete () {
+      if (this.isDeleteGroup) {
+        this.$emit('deleteGroup', this.category)
+        this.isDeleteGroup = false
+      } else {
+        this.$refs.popup.hide()
+        setTimeout(() => {
+          this.isDeleteGroup = true
+          this.$refs.popup.show()
+        }, 200)
+      }
+    },
+    onPopupChange () {
+      this.ifGroupDialogShow = true
+      this.$refs.groupDialog.showEditGroupDialog()
+    },
+    changeGroup () {
+      this.showPopup()
+    },
+    back () {
+      this.$router.go(-1)
+    },
+    onFullSelect () {
+      if (this.fullSelect) {
+        this.$emit('onFullSelect', false)
+      } else {
+        this.$emit('onFullSelect', true)
+      }
+      this.fullSelect = !this.fullSelect
+    },
+    showShadow () {
+      this.ifHideShadow = false
+    },
+    hideShadow () {
+      this.ifHideShadow = true
+    },
+    onEditClick () {
+      if (this.isEditMode) {
+        this.$emit('onEditClick', false)
+      } else {
+        this.$emit('onEditClick', true)
       }
     }
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
 
   .shelf-title-wrapper {
     position: relative;
@@ -202,7 +209,7 @@
         color: #666;
       }
     }
-    .btn-clear-wrapper {
+    .btn-select-wrapper {
       position: absolute;
       left: 0;
       top: 0;

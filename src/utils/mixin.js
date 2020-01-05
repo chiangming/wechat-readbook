@@ -1,5 +1,5 @@
 import { mapGetters, mapActions } from 'vuex'
-import { FONT_SIZE_LIST, FONT_FAMILY, themeList, getReadTimeByMinute } from './book'
+import { FONT_SIZE_LIST, FONT_FAMILY, themeList, getReadTimeByMinute, showBookDetail } from './book'
 import * as Utils from './utils'
 import * as Storage from './localStorage'
 
@@ -155,7 +155,7 @@ export const ebookMixin = {
         this.currentBook.rendition.themes.font('Times New Roman')
       } else {
         this.currentBook.rendition.themes.font(font)
-        console.log('设置成功', font)
+        // console.log('设置成功', font)
       }
     },
     displaySection (cb) {
@@ -194,7 +194,7 @@ export const ebookMixin = {
     },
     refreshLocation () {
       const currentLocation = this.currentBook.rendition.currentLocation()
-      console.log(currentLocation)
+      // console.log(currentLocation)
       if (currentLocation.start && currentLocation.start.index && currentLocation.start.index >= 0) {
         this.setSection(currentLocation.start.index)
         const progress = this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)
@@ -224,6 +224,43 @@ export const ebookMixin = {
     },
     getReadTime () {
       return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
+    }
+  }
+}
+
+export const detailMixin = {
+  data () {
+    return {
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'detailData',
+      'detailMetadata',
+      'detailNavigation',
+      'detailDescription',
+      'detailCategoryText',
+      'detailTitleText'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'setDetailData',
+      'setDetailMetadata',
+      'setDetailNavigation',
+      'setDetailDescription',
+      'setCategoryText',
+      'setTitleText'
+    ]),
+    showBookDetail (item) {
+      showBookDetail(this, item)
+    },
+    coverUrl (item) {
+      if (item.categoryText && item.cover) {
+        return `${process.env.VUE_APP_IMGS_URL}/${item.categoryText}/${item.cover}`
+      } else {
+        // todo: 添加默认图片
+      }
     }
   }
 }

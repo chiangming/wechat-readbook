@@ -19,57 +19,57 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import TitleView from '@/components/home/title'
-  import { realPx } from '@/utils/utils'
-  import { categoryText } from '@/utils/book'
-  import { ebookHome } from '../../utils/mixin'
+import TitleView from '@/components/mall/home/layout/title'
+import { realPx } from '@/utils/utils'
+import { categoryText } from '@/utils/book'
+import { detailMixin } from '@/utils/mixin'
 
-  export default {
-    mixins: [ebookHome],
-    components: {
-      TitleView
+export default {
+  mixins: [detailMixin],
+  components: {
+    TitleView
+  },
+  props: {
+    data: Array,
+    titleVisible: {
+      type: Boolean,
+      default: true
     },
-    props: {
-      data: Array,
-      titleVisible: {
-        type: Boolean,
-        default: true
-      },
-      titleText: {
-        type: String
-      },
-      btnText: {
-        type: String
-      }
+    titleText: {
+      type: String
     },
-    computed: {
-      width() {
-        return window.innerWidth - realPx(20) - realPx(60) + 'px'
-      }
+    btnText: {
+      type: String
+    }
+  },
+  computed: {
+    width () {
+      return window.innerWidth - realPx(20) - realPx(60) + 'px'
+    }
+  },
+  methods: {
+    categoryText (category) {
+      return categoryText(category, this)
     },
-    methods: {
-      categoryText(category) {
-        return categoryText(category, this)
-      },
-      resize() {
-        this.$nextTick(() => {
-          this.$refs.title.forEach(item => {
-            item.style.width = this.width
-          })
-          this.$refs.author.forEach(item => {
-            item.style.width = this.width
-          })
-          this.$refs.category.forEach(item => {
-            item.style.width = this.width
-          })
+    resize () {
+      this.$nextTick(() => {
+        this.$refs.title.forEach(item => {
+          item.style.width = this.width
         })
-      }
+        this.$refs.author.forEach(item => {
+          item.style.width = this.width
+        })
+        this.$refs.category.forEach(item => {
+          item.style.width = this.width
+        })
+      })
     }
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../../assets/styles/global";
 
   .featured {
     .featured-list {

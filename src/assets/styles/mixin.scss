@@ -82,6 +82,14 @@ $ratio: 375 / 10;
   align-items: flex-start;
 }
 
+@mixin rowHistory{
+  display: flex;
+  flex-flow:row wrap;
+  justify-content:flex-start;
+  align-items:center;
+  align-content:center;
+}
+
 @mixin absCenter {
   position: absolute;
   left: 0;

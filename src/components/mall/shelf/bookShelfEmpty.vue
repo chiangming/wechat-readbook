@@ -1,46 +1,44 @@
 <template>
   <div class="book-shelf-empty-wrapper" ref="emptyView">
-    <div class="empty-img-wrapper">
-      <img class="empty-img" :src="img">
-    </div>
     <div class="empty-text-wrapper">
       <div class="empty-text" v-html="$t('shelf.welcome')"></div>
+      <div class="empty-text" v-html="$t('shelf.welcomeSub')"></div>
     </div>
     <div class="empty-btn-wrapper">
-      <div class="empty-btn" @click="gotoStudy">{{$t('shelf.studyNow')}}</div>
-      <div class="empty-btn" @click="gotoBookStore">{{$t('shelf.find')}}</div>
+      <div class="empty-btn" @click="gotoBookMall">{{$t('shelf.find')}}</div>
     </div>
   </div>
 </template>
 
 <script>
-  import { realPx } from '@/utils/utils'
+import { realPx } from '@/utils/utils'
 
-  export default {
-    data() {
-      return {
-        img: require('@/assets/images/imooc.jpeg')
-      }
-    },
-    methods: {
-      gotoBookStore() {
-        this.$router.push('/book-store/home')
-      },
-      gotoStudy() {
-        window.location.href = 'https://coding.imooc.com/class/285.html'
-      }
-    },
-    mounted() {
-      this.$refs.emptyView.style.height = window.innerHeight - realPx(42) + 'px'
+export default {
+  data () {
+    return {
+      img: require('@/assets/images/imooc.jpeg')
     }
+  },
+  methods: {
+    gotoBookMall () {
+      this.$router.push('/mall/home')
+    }
+  },
+  mounted () {
+    this.$refs.emptyView.style.height = window.innerHeight - realPx(42) + 'px'
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
 
   .book-shelf-empty-wrapper {
     width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content:center;
     .empty-img-wrapper {
       width: 100%;
       margin-top: px2rem(50);
@@ -64,7 +62,7 @@
     }
     .empty-btn-wrapper {
       width: 100%;
-      padding: px2rem(30) px2rem(15) px2rem(15) px2rem(15);
+      padding: px2rem(30) px2rem(30) px2rem(15) px2rem(30);
       box-sizing: border-box;
       @include center;
       .empty-btn {
@@ -77,11 +75,7 @@
         border-radius: px2rem(10);
         background: $color-blue;
         &:first-child {
-          margin-right: px2rem(7.5);
-          background: #C9394A;
-        }
-        &:last-child {
-          margin-left: px2rem(7.5);
+          background: $color-blue;
         }
         &:active {
           background: $color-blue-transparent;

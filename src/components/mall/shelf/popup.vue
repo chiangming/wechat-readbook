@@ -15,49 +15,49 @@
 </template>
 
 <script type="text/ecmascript-6">
-  export default {
-    props: {
-      title: String,
-      confirmText: String,
-      isRemoveText: Boolean,
-      cancelText: String,
-      thirdText: String
+export default {
+  props: {
+    title: String,
+    confirmText: String,
+    isRemoveText: Boolean,
+    cancelText: String,
+    thirdText: String
+  },
+  data () {
+    return {
+      popupVisible: false,
+      visible: false
+    }
+  },
+  methods: {
+    third () {
+      this.hide()
+      setTimeout(() => {
+        this.$emit('third')
+      }, 200)
     },
-    data() {
-      return {
-        popupVisible: false,
-        visible: false
-      }
+    confirm () {
+      this.hide()
+      setTimeout(() => {
+        this.$emit('confirm')
+      }, 200)
     },
-    methods: {
-      third() {
-        this.hide()
-        setTimeout(() => {
-          this.$emit('third')
-        }, 200)
-      },
-      confirm() {
-        this.hide()
-        setTimeout(() => {
-          this.$emit('confirm')
-        }, 200)
-      },
-      hide() {
-        this.popupVisible = false
-        setTimeout(() => {
-          this.visible = false
-        }, 200)
-      },
-      show() {
-        this.visible = true
-        this.popupVisible = true
-      }
+    hide () {
+      this.popupVisible = false
+      setTimeout(() => {
+        this.visible = false
+      }, 200)
+    },
+    show () {
+      this.visible = true
+      this.popupVisible = true
     }
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
 
   .popup {
     position: fixed;

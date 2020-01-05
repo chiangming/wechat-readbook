@@ -16,22 +16,22 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import TitleView from '@/components/home/title'
-  import { ebookHome } from '../../utils/mixin'
+import TitleView from '@/components/mall/home/layout/title'
+import { detailMixin } from '@/utils/mixin'
 
-  export default {
-    mixins: [ebookHome],
-    components: {
-      TitleView
-    },
-    props: {
-      data: Array
-    }
+export default {
+  mixins: [detailMixin],
+  components: {
+    TitleView
+  },
+  props: {
+    data: Array
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../../assets/styles/global";
 
   .recommend {
     .recommend-list {

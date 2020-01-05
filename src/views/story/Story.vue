@@ -2,7 +2,7 @@
 <!--<div class="story">-->
 <!--  <van-pull-refresh v-model="isLoading" @refresh="onRefresh">-->
 <!--    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">-->
-<!--      <van-cell v-for="item in list" :key="item" :title="item"/>-->
+<!--      <van-cell v-for="item in list" :key="item" :layout="item"/>-->
 <!--    </van-list>-->
 <!--  </van-pull-refresh>-->
 
@@ -63,7 +63,7 @@
 <!--.story {-->
 <!--  height: 100%;-->
 <!--  width: 100%;-->
-<!--  overflow: scroll;-->
+<!--  overflow: common;-->
 <!--  background: #17abe3;-->
 <!--}-->
 <!--</style>-->

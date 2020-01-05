@@ -64,8 +64,7 @@ $homeAnimationTime: .2s;
 .title-leave-active,
 .host-search-enter-active,
 .host-search-leave-active,
-.shelf-tab-slide-up-enter-active,
-.shelf-tab-slide-up-leave-active {
+.shelf-tab-slide-left-enter-active{
   transition: all $homeAnimationTime linear;
 }
 
@@ -79,21 +78,21 @@ $homeAnimationTime: .2s;
 .title-enter-to,
 .host-search-leave,
 .host-search-enter-to,
-.shelf-tab-slide-up-enter-to,
-.shelf-tab-slide-up-leave {
+.shelf-tab-slide-left-enter-to,
+.shelf-tab-slide-left-leave {
   transform: translate3d(0, 0, 0);
   opacity: 1;
 }
 
 .host-search-enter,
 .host-search-leave-to {
-  transform: translate3d(0, px2rem(50), 0);
+  transform: translate3d( px2rem(50),0, 0);
   opacity: 0;
 }
 
-.shelf-tab-slide-up-enter,
-.shelf-tab-slide-up-leave-to {
-  transform: translate3d(0, px2rem(30), 0);
+.shelf-tab-slide-left-enter,
+.shelf-tab-slide-left-leave-to {
+  transform: translate3d( px2rem(30),0, 0);
   opacity: 0;
 }
 

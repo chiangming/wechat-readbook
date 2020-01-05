@@ -15,80 +15,81 @@
 </template>
 
 <script>
-  import DetailTitle from '@/components/detail/detaiTitle'
-  import Scroll from '@/components/Scroll'
-  import Featured from '@/components/home/featured'
-  import { realPx } from '@/utils/utils'
-  import { list } from '@/api/book'
-  import { categoryList, categoryText } from '@/utils/book'
+import DetailTitle from '@/components/mall/detail/detailTitle'
+import Scroll from '@/components/common/scroll'
+import Featured from '@/components/mall/home/module/featured'
+import { realPx } from '@/utils/utils'
+import { list } from '@/api/mall'
+import { categoryList, categoryText } from '@/utils/book'
 
-  export default {
-    components: {
-      DetailTitle,
-      Scroll,
-      Featured
-    },
-    computed: {
-      title() {
-        if (this.list) {
-          return this.total && this.$t('home.allBook').replace('$1', this.totalNumber)
-        } else {
-          return null
-        }
-      },
-      totalNumber() {
-        let num = 0
-        Object.keys(this.list).forEach(key => {
-          num += this.list[key].length
-        })
-        return num
+export default {
+  components: {
+    DetailTitle,
+    Scroll,
+    Featured
+  },
+  computed: {
+    title () {
+      if (this.list) {
+        return this.total && this.$t('home.allBook').replace('$1', this.totalNumber)
+      } else {
+        return null
       }
     },
-    data() {
-      return {
-        list: null,
-        total: null
-      }
-    },
-    methods: {
-      getCategoryText(key) {
-        return `${categoryText(categoryList[key], this)}(${this.list[key].length})`
-      },
-      back() {
-        this.$router.go(-1)
-      },
-      onScroll(offsetY) {
-        if (offsetY > realPx(42)) {
-          this.$refs.title.showShadow()
-        } else {
-          this.$refs.title.hideShadow()
-        }
-      },
-      getList() {
-        list().then(response => {
-          this.list = response.data.data
-          this.total = response.data.total
-          const category = this.$route.query.category
-          const keyword = this.$route.query.keyword
-          if (category) {
-            const key = Object.keys(this.list).filter(item => item === category)[0]
-            const data = this.list[key]
-            this.list = {}
-            this.list[key] = data
-          } else if (keyword) {
-            Object.keys(this.list).filter(key => {
-              this.list[key] = this.list[key].filter(book => book.fileName.indexOf(keyword) >= 0)
-              return this.list[key].length > 0
-            })
-          }
-        })
-      }
-    },
-    created() {
-      this.getList()
-      this.titleText = this.$route.query.categoryText
+    totalNumber () {
+      let num = 0
+      Object.keys(this.list).forEach(key => {
+        num += this.list[key].length
+      })
+      return num
     }
+  },
+  data () {
+    return {
+      list: null,
+      total: null
+    }
+  },
+  methods: {
+    getCategoryText (key) {
+      return `${categoryText(categoryList[key], this)}(${this.list[key].length})`
+    },
+    back () {
+      this.$router.go(-1)
+    },
+    onScroll (offsetY) {
+      if (offsetY > realPx(42)) {
+        this.$refs.title.showShadow()
+      } else {
+        this.$refs.title.hideShadow()
+      }
+    },
+    getList () {
+      list().then(response => {
+        this.list = response.data.data
+        this.total = response.data.total
+        const category = this.$route.query.category
+        const keyword = this.$route.query.keyword
+        if (category) {
+          const key = Object.keys(this.list).filter(item => item === category)[0]
+          const data = this.list[key]
+          this.list = {}
+          this.list[key] = data
+        } else if (keyword) {
+          Object.keys(this.list).filter(key => {
+            this.list[key] = this.list[key].filter(book => book.fileName.indexOf(keyword) >= 0)
+            return this.list[key].length > 0
+          })
+          // console.log(this.list)
+        }
+      })
+    }
+  },
+  created () {
+    this.getList()
+    this.titleText = this.$route.query.categoryText
   }
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>

@@ -13,7 +13,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import Scroll from '@/components/scroll/SimpleScroll'
+import Scroll from '@/components/common/scroll'
 import { getBookmark } from '@/utils/localStorage'
 import { ebookMixin } from '@/utils/mixin'
 
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
 
   .ebook-slide-bookmark {
     width: 100%;

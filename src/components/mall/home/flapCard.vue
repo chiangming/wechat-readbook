@@ -15,14 +15,14 @@
     <div class="book-card" :class="{'animation': runBookCardAnimation}" v-if="ifShowBookCard">
       <div class="book-card-wrapper">
         <div class="img-wrapper">
-          <img class="img" v-lazy="data.cover">
+          <img class="img" v-lazy="coverUrl">
         </div>
         <div class="content-wrapper">
           <div class="title">{{data.title}}</div>
           <div class="author sub-title-medium">{{data.author}}</div>
           <div class="category">{{categoryText()}}</div>
         </div>
-        <div class="read-btn" @click.stop="showBookDetail">{{$t('home.readNow')}}</div>
+        <div class="read-btn" :class="{'read-btn-disable': ifReadDisable}" @click.stop="showBookDetail">{{$t('home.readNow')}}</div>
       </div>
     </div>
     <div class="close-btn-wrapper" @click="close">
@@ -36,7 +36,9 @@ import { categoryText, showBookDetail } from '@/utils/book'
 
 export default {
   props: {
-    data: Object
+    data: {
+      type: Object
+    }
   },
   data () {
     return {
@@ -106,14 +108,20 @@ export default {
       runBookCardAnimation: false,
       ifShowBookCard: false,
       ifShowFlapCard: true,
-      ifShowPoint: true
+      ifShowPoint: true,
+      ifReadDisable: false,
+      coverUrl: ''
     }
   },
   methods: {
     showBookDetail () {
-      if (this.data) {
+      if (this.data && this.data.category > 0) {
         showBookDetail(this, this.data)
       }
+    },
+    getCoverUrl () {
+      // console.log(`${process.env.VUE_APP_IMGS_URL}/` + this.data.categoryText + '/' + this.data.cover)
+      return `${process.env.VUE_APP_IMGS_URL}/` + this.data.categoryText + '/' + this.data.cover
     },
     categoryText () {
       return categoryText(this.data.category, this)
@@ -230,12 +238,20 @@ export default {
   },
   mounted () {
     // this.startAnimation()
+    if (this.data && this.data.category > 0) {
+      this.ifReadDisable = false
+      if (this.data.cover && this.data.categoryText) {
+        this.coverUrl = this.getCoverUrl()
+      }
+    } else {
+      this.ifReadDisable = true
+    }
   }
 }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+  @import "../../../assets/styles/global";
 
   .flap-card-wrapper {
     position: absolute;
@@ -354,7 +370,7 @@ export default {
       .book-card-wrapper {
         width: 100%;
         height: 100%;
-        margin-bottom: px2rem(30);
+        margin-bottom: px2rem(60);
         @include columnTop;
         .img-wrapper {
           width: 100%;
@@ -372,7 +388,7 @@ export default {
             color: #333;
             font-weight: bold;
             font-size: px2rem(18);
-            line-height: px2rem(20);
+            line-height: px2rem(22);
             max-height: px2rem(40);
             text-align: center;
             @include ellipsis2(2)
@@ -400,6 +416,9 @@ export default {
           color: white;
           font-size: px2rem(14);
           background: $color-blue;
+          &.read-btn-disable {
+            display: none;
+          }
         }
       }
     }

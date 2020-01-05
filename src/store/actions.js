@@ -1,4 +1,5 @@
 const actions = {
+  // book模块
   setMenuVisible: ({ commit }, visible) => {
     return commit('SET_MENU_VISIBLE', visible)
   },
@@ -62,8 +63,24 @@ const actions = {
   setOffsetY ({ commit }, offsetY) {
     return commit('SET_OFFSETY', offsetY)
   },
-  setSpeakingIconBottom ({ commit }, speakingIconBottom) {
-    commit('SET_SPEAKING_ICON_BOTTOM', speakingIconBottom)
+  // detail模块
+  setDetailData ({ commit }, detailData) {
+    return commit('SET_DETAIL_DATA', detailData)
+  },
+  setDetailMetadata ({ commit }, metadata) {
+    return commit('SET_DETAIL_METADATA', metadata)
+  },
+  setDetailNavigation ({ commit }, navigation) {
+    return commit('SET_DETAIL_NAVIGATION', navigation)
+  },
+  setDetailDescription ({ commit }, description) {
+    return commit('SET_DETAIL_DESCRIPTION', description)
+  },
+  setCategoryText ({ commit }, categoryText) {
+    return commit('SET_CATEGORY_TEXT', categoryText)
+  },
+  setTitleText ({ commit }, title) {
+    return commit('SET_TITLE_TEXT', title)
   }
 }
 

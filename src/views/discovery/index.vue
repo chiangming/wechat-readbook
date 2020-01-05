@@ -1,30 +1,36 @@
 <template>
-<div>
-<h3 class="tilte">{{$store.state.message}}</h3>
-<button @click="btnClick(5)">{{btn}}</button>
-</div>
+  <div class="view-profile">
+    <div class="footer-wrapper">
+      <common-footer :selectIndex="1"></common-footer>
+    </div>
+  </div>
 </template>
 
-<script>
-
+<script type="text/ecmascript-6">
+import commonFooter from '../../components/common/footer'
 export default {
-  name: 'Discovery',
+  name: 'profile',
+  components: {
+    commonFooter
+  },
   data () {
     return {
-      message: 'Discovery',
-      btn: '按钮'
     }
   },
   methods: {
-    btnClick (num) {
-
-    }
   }
 }
 </script>
 
-<style scoped>
-.title {
-  color: cadetblue;
-}
+<style lang="scss" rel="stylesheet/scss" scoped>
+  .view-profile{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .footer-wrapper{
+      position: absolute;
+      bottom: 0;
+      height: px2rem(42);
+    }
+  }
 </style>

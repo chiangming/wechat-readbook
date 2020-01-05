@@ -1,74 +1,55 @@
 <template>
-  <div class="index">
-    <my-scroll  ref="myScroll" :page="page" :on-refresh="onRefresh" :on-pull="onPull"  :get-scroll-top="getTop" :scroll-state="scrollState">
-      <div slot="scrollList">
-        <ul>
-          <li v-for="(x,index) in list" :key="index">
-            <h3>列表 {{index}}</h3>
-          </li>
-        </ul>
+  <div class="view-profile">
+    <div v-for="(items, index) in list" :key="index">
+      <span>-- 类别：{{index}}</span>
+      <div v-for="(item, i) in items" :key="i">
+        <span>INSERT INTO `book` VALUES (NULL, '{{item.fileName}}', '{{item.cover}}', '{{item.title}}', '{{item.author}}', '{{item.publisher}}', '{{item.bookId}}', '{{item.category}}', '{{item.categoryText}}', '{{item.language}}', '/OEBPS/package.opf');</span>
       </div>
-    </my-scroll>
+    </div>
+    <div class="footer-wrapper">
+      <!-- <common-footer :selectIndex="3"></common-footer> -->
+    </div>
   </div>
 </template>
-<script type="text/javascript">
-import myScroll from '../../components/scroll/Scroll.vue'
+
+<script type="text/ecmascript-6">
+// import commonFooter from '../../components/common/footer'
+import { categoryList } from '@/api/mall.js'
 export default {
+  name: 'profile',
+  components: {
+    // commonFooter
+  },
   data () {
     return {
-      scrollState: true, // 是否可以滑动
-      indexScrollTop: 0,
-      list: [],
-      page: {
-        counter: 1,
-        pageStart: 1,
-        pageEnd: 1,
-        total: 10
-      }
+      list: Object
     }
   },
   methods: {
-    onRefresh (mun) { // 刷新回调
-      setTimeout(() => {
-        this.$refs.myScroll.setState(3)
-      }, 500)
-    },
-    onPull (mun) { // 加载回调
-      if (this.page.counter <= this.page.total) {
-        setTimeout(() => {
-          this.page.counter++
-          this.$refs.myScroll.setState(5)
-          for (let i = 0; i < 10; i++) {
-            this.list.push({ 'index': i })
-          }
-        }, 500)
-      } else {
-        this.$refs.myScroll.setState(7)
-      }
-    },
-    getTop (y) { // 滚动条位置
-
+    getList () {
+      categoryList().then(response => {
+        this.list = response.data.data
+        console.log(this.list)
+      })
+      console.log('!!!!!!!!!!!!!!!!')
     }
-
-  },
-  components: {
-    myScroll
-  },
-  created () {
-
   },
   mounted () {
-    for (let i = 0; i < 1 * 50; i++) {
-      this.list.push({})
-    }
+    this.getList()
   }
-
 }
 </script>
-<style lang="scss" scoped>
-  .index{
-  width: 100%;
+
+<style lang="scss" rel="stylesheet/scss" scoped>
+  .view-profile{
+    position: relative;
+    width: 100%;
     height: 100%;
-    overflow: scroll;
+    overflow:scroll;
+    .footer-wrapper{
+      position: absolute;
+      bottom: 0;
+      height: px2rem(42);
+    }
   }
 </style>

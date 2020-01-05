@@ -209,6 +209,9 @@ book.rendition.annotations.highlight()
 ### 书签下拉
 1. 通过offsetY的watch监听重置vue组件位置
 
+# 书架模块
+
+
 
 # 故事模块
 ## Scroll组件
@@ -239,3 +242,58 @@ book.rendition.annotations.highlight()
 4. 定义变量到vue data中或者vuex module模块下的state
 5. 组件解偶配置
 6. 在父vue中引入集成vue
+
+# 离线存储
+* web-storage-cache
+    * 支持localStorage
+* localForage
+    * 支持回调的异步 API；
+    * 支持 IndexedDB，WebSQL 和 localStorage 三种存储模式；
+    * 支持 BLOB 和任意类型的数据，让您可以存储图片，文件等。
+    * 支持 ES6 Promises
+
+# 服务端开发
+## 数据库
+```sql
+-- 数据库名：book
+-- 字符集：utf8
+-- 排序规则： uft8_general_ci
+CREATE DATABASE `book` CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';
+```
+
+```sql
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Table structure for book
+DROP TABLE IF EXISTS `book`;
+CREATE TABLE `book` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fileName` varchar(255) DEFAULT NULL,
+  `cover` varchar(1024) DEFAULT NULL,
+  `title` varchar(1024) DEFAULT NULL,
+  `author` varchar(1024) DEFAULT NULL,
+  `publisher` varchar(255) DEFAULT NULL,
+  `bookId` varchar(255) DEFAULT NULL,
+  `category` int(3) DEFAULT NULL,
+  `categoryText` varchar(255) DEFAULT NULL,
+  `language` varchar(10) DEFAULT NULL,
+  `rootFile` varchar(255) DEFAULT NULL,
+  `totalReaders` INT(11) NOT NULL DEFAULT '0',
+  `lastMonthReaders` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `fileName` (`fileName`)
+) ENGINE = InnoDB AUTO_INCREMENT=466 DEFAULT CHARSET=utf8
+
+
+-- Record of book
+INSERT INTO `book` VALUES ()
+COMMIT;
+
+SET FOREIGN_KEY_CHECKS = 1;
+```
+
+## node
+* npm init //创建npm项目
+* cnpm i -S express  //使用express作为开发框架
+* cnpm i -S cors     //解决跨域问题

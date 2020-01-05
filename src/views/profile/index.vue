@@ -18,9 +18,6 @@ export default {
     }
   },
   methods: {
-    // btnClick () {
-    //   console.log('btn click~')
-    // }
   }
 }
 </script>

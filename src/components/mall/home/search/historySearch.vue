@@ -2,16 +2,15 @@
   <div>
     <div class="history-search-title">
       <span class="label">{{label}}</span>
-      <span class="btn">{{btn}}</span>
+      <span class="btn" @click="clearHistory">{{btn}}</span>
     </div>
     <div class="history-search-list">
       <div class="history-search-item" v-for="(item, index) in historySearch" :key="index">
         <div class="icon-wrapper">
-          <span class="icon-book icon" v-if="item.type === 1"></span>
-          <span class="icon-search icon" v-if="item.type === 2"></span>
+          <span class="icon-search icon"></span>
         </div>
         <div class="history-search-text-wrapper">
-          <div class="text" ref="searchText">{{item.text}}</div>
+          <div class="text" ref="searchText" @click="search(item)">{{item}}</div>
         </div>
       </div>
     </div>
@@ -19,7 +18,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { realPx } from '@/utils/utils'
+// import { realPx } from '@/utils/utils'
 
 export default {
   props: {
@@ -28,15 +27,28 @@ export default {
     historySearch: Array
   },
   mounted () {
-    this.$refs.searchText.forEach(item => {
-      item.style.width = window.innerWidth - realPx(20) - realPx(40) + 'px'
-    })
+    // this.$refs.searchText.forEach(item => {
+    //   item.style.width = window.innerWidth - realPx(20) - realPx(40) + 'px'
+    // })
+  },
+  methods: {
+    clearHistory () {
+      this.$emit('clearHistory')
+    },
+    search (keyword) {
+      this.$router.push({
+        path: '/mall/list',
+        query: {
+          keyword: keyword
+        }
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../../assets/styles/global";
+  @import "../../../../assets/styles/global";
 
   .history-search-title {
     display: flex;
