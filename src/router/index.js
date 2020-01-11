@@ -2,96 +2,95 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 const Login = () =>
-  import('../views/login.vue')
+  import ('../views/login.vue')
 const Discovery = () =>
-  import('../views/discovery/index.vue')
+  import ('../views/discovery/index.vue')
 const Book = () =>
-  import('../views/book/index.vue')
+  import ('../views/book/index.vue')
 const Story = () =>
-  import('../views/story/index.vue')
+  import ('../views/story/index.vue')
 const Profile = () =>
-  import('../views/profile/index.vue')
+  import ('../views/profile/index.vue')
 
 Vue.use(VueRouter)
 
 const routes = [{
-  base: '/',
-  path: '',
-  redirect: '/mall'
-},
-{
-  path: '/login',
-  name: 'login',
-  component: Login
-},
-{
-  path: '/discovery',
-  name: 'discovery',
-  component: Discovery
-},
-{
-  path: '/book',
-  name: 'book',
-  component: Book,
-  children: [{
-    path: ':fileName',
-    component: () =>
-        import('@components/ebook/EbookReader.vue')
-  }]
-},
-{
-  path: '/mall',
-  name: 'mall',
-  redirect: '/mall/shelf',
-  component: () =>
-      import('../views/mall/index.vue'),
-  children: [{
-    path: 'shelf',
-    component: () =>
-          import('../views/mall/bookShelf.vue')
+    path: '',
+    redirect: '/mall'
   },
   {
-    path: 'category',
-    component: () =>
-          import('../views/mall/bookCategory.vue')
+    path: '/login',
+    name: 'login',
+    component: Login
   },
   {
-    path: 'home',
-    component: () =>
-          import('../views/mall/mallHome.vue')
+    path: '/discovery',
+    name: 'discovery',
+    component: Discovery
   },
   {
-    path: 'list',
-    component: () =>
-          import('../views/mall/bookList.vue')
+    path: '/book',
+    name: 'book',
+    component: Book,
+    children: [{
+      path: ':fileName',
+      component: () =>
+        import ('@components/ebook/EbookReader.vue')
+    }]
   },
   {
-    path: 'detail',
+    path: '/mall',
+    name: 'mall',
+    redirect: '/mall/shelf',
     component: () =>
-          import('../views/mall/bookDetail.vue')
+      import ('../views/mall/index.vue'),
+    children: [{
+        path: 'shelf',
+        component: () =>
+          import ('../views/mall/bookShelf.vue')
+      },
+      {
+        path: 'category',
+        component: () =>
+          import ('../views/mall/bookCategory.vue')
+      },
+      {
+        path: 'home',
+        component: () =>
+          import ('../views/mall/mallHome.vue')
+      },
+      {
+        path: 'list',
+        component: () =>
+          import ('../views/mall/bookList.vue')
+      },
+      {
+        path: 'detail',
+        component: () =>
+          import ('../views/mall/bookDetail.vue')
+      },
+      {
+        path: 'detail-more',
+        component: () =>
+          import ('../views/mall/bookDetailMore.vue')
+      }
+    ]
   },
   {
-    path: 'detail-more',
-    component: () =>
-          import('../views/mall/bookDetailMore.vue')
+    path: '/story',
+    name: 'story',
+    component: Story
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: Profile
   }
-  ]
-},
-{
-  path: '/story',
-  name: 'story',
-  component: Story
-},
-{
-  path: '/profile',
-  name: 'profile',
-  component: Profile
-}
 ]
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: process.env.VUE_APP_BASE_URL,
   routes
 })
 
