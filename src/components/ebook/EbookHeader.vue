@@ -1,6 +1,6 @@
 <template>
   <div class="ebook-header">
-    <span class="ebook-header-text">{{getSectionName}}</span>
+    <span class="ebook-header-text">{{getHeaderName}}</span>
   </div>
 </template>
 
@@ -8,7 +8,18 @@
 import { ebookMixin } from '../../utils/mixin'
 
 export default {
-  mixins: [ebookMixin]
+  mixins: [ebookMixin],
+  computed: {
+    getHeaderName () {
+      if (this.section && this.navigation) {
+        if (this.navigation[this.section] && this.navigation[this.section].label) {
+          return this.navigation[this.section].label
+        }
+        return `第${this.section + 1}章`
+      }
+      return '章节名 '
+    }
+  }
 }
 </script>
 

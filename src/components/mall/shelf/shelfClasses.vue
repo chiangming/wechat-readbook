@@ -56,6 +56,7 @@ export default {
     },
     hideCategory () {
       this.ifShowCategory = false
+      this.$emit('onTabClick', 0)
     },
     onTabClick (item) {
       this.tabs.forEach(tab => {

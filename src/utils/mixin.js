@@ -38,7 +38,7 @@ export const ebookMixin = {
       return themeList(this)
     },
     getSectionName () {
-      // if (this.section !== null || this.section !== undefined) {
+      // if (this.section) {
       //   const sectionInfo = this.currentBook.section(this.section)
       //   if (sectionInfo && sectionInfo.href && this.currentBook && this.currentBook.navigation) {
       //     // return this.currentBook.navigation.get(sectionInfo.href).label
@@ -46,9 +46,14 @@ export const ebookMixin = {
       //   }
       // }
       // return '章节名'
-      return this.section ? this.navigation[this.section].label : '章节名'
+      if (this.section && this.navigation) {
+        if (this.navigation[this.section] && this.navigation[this.section].label) {
+          return this.navigation[this.section].label
+        }
+        return `第${this.section + 1}章`
+      }
+      return '章节名 '
     }
-
   },
   methods: {
     ...mapActions([
@@ -230,8 +235,7 @@ export const ebookMixin = {
 
 export const detailMixin = {
   data () {
-    return {
-    }
+    return {}
   },
   computed: {
     ...mapGetters([

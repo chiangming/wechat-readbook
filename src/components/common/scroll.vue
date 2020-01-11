@@ -63,7 +63,7 @@ export default {
   @import "../../assets/styles/global";
 
   .scroll-wrapper {
-    position: relative;
+    position: absolute;
     z-index: 100;
     width: 100%;
     @include scroll;

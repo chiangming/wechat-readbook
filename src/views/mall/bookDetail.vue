@@ -8,13 +8,12 @@
             :bottom="52"
             @onScroll="onScroll"
             ref="scroll">
-      <detail-info :cover="cover"
-                 :title="title"
+      <read-book-info :title="title"
                  :author="author"
-                 :desc="desc"></detail-info>
-      <!--试读-->
+                 :desc="desc"></read-book-info>
+      <reader-top-review></reader-top-review>
       <div class="book-detail-content-wrapper">
-        <div id="preview" v-show="this.displayed" ref="preview"></div>
+        <div id="preview" ref="preview"></div>
       </div>
     </scroll>
     <div class="bottom-wrapper">
@@ -31,7 +30,8 @@
 
 <script type="text/ecmascript-6">
 import DetailTitle from '@/components/mall/detail/detailTitle'
-import DetailInfo from '@/components/mall/detail/detailInfo'
+import ReadBookInfo from '@/components/mall/detail/readBookInfo'
+import ReaderTopReview from '@/components/mall/detail/readerTopReview'
 import Scroll from '@/components/common/scroll'
 import Toast from '@/components/common/toast'
 import { removeFromBookShelf, addToShelf } from '@/utils/book'
@@ -40,16 +40,17 @@ import { px2rem, realPx } from '@/utils/utils'
 import { getLocalForage } from '@/utils/localForage'
 import { getLocalStorage } from '@/utils/localStorage'
 import Epub from 'epubjs'
-import { detailMixin } from '@/utils/mixin'
+import { ebookMixin, detailMixin } from '@/utils/mixin'
 
 global.ePub = Epub
 
 export default {
-  mixins: [detailMixin],
+  mixins: [ebookMixin, detailMixin],
   components: {
     DetailTitle,
     Scroll,
-    DetailInfo,
+    ReadBookInfo,
+    ReaderTopReview,
     Toast
   },
   computed: {
@@ -57,7 +58,7 @@ export default {
       if (this.description) {
         return this.description.substring(0, 300)
       } else {
-        return ''
+        return '暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介'
       }
     },
     flatNavigation () {
@@ -101,11 +102,11 @@ export default {
       bookShelf: null,
       bookItem: null,
       book: null,
-      metadata: null,
+      // metadata: null,
       trialRead: null,
-      cover: null,
-      navigation: null,
-      displayed: false,
+      // cover: null,
+      // navigation: null,
+      displayed: true,
       audio: null,
       randomLocation: null,
       description: null,
@@ -181,30 +182,33 @@ export default {
     //   }
     // },
     downloadBook () {
-      const opf = `${process.env.VUE_APP_EPUB_URL}/${this.bookItem.categoryText}/${this.bookItem.fileName}/OEBPS/package.opf`
+      const opf = `${process.env.VUE_APP_EPUB_URL}/${this.bookItem.categoryText}/${this.bookItem.fileName}${this.bookItem.rootFile}`
       this.parseBook(opf)
     },
     parseBook (blob) {
       this.book = new Epub(blob)
+      this.book.loaded.cover.then(cover => {
+        if (cover) {
+          this.setCover(cover)
+        }
+      })
       this.book.loaded.metadata.then(metadata => {
-        this.metadata = metadata
-        this.setDetailMetadata(metadata)
+        this.setMetadata(metadata)
       })
       this.book.loaded.navigation.then(nav => {
-        this.navigation = nav
-        this.setDetailNavigation(nav)
-        if (this.navigation.toc && this.navigation.toc.length > 1) {
+        this.setNavigation(nav)
+        if (nav.toc && nav.toc.length > 1) {
           this.display(this.navigation.toc[1].href)
           // todo: 通过section的内容获取描述，考虑换成metadata中的description
             .then(section => {
               if (this.$refs.scroll) {
                 this.$refs.scroll.refresh()
               }
-              this.displayed = false
-              const reg = new RegExp('<.+?>', 'g')
-              const text = section.output.replace(reg, '').replace(/\s\s/g, '')
-              this.description = text
-              this.setDetailDescription(text.substring(0, 200))
+              this.displayed = true
+              // const reg = new RegExp('<.+?>', 'g')
+              // const text = section.output.replace(reg, '').replace(/\s\s/g, '')
+              // this.description = text
+              // this.setDetailDescription(text.substring(0, 200) + '...')
             })
         }
       })
@@ -232,7 +236,8 @@ export default {
           if (response.status === 200 && response.data.error_code === 0 && response.data.data) {
             const data = response.data.data
             this.bookItem = data
-            this.cover = this.bookItem.cover
+            let thisCover = `${process.env.VUE_APP_IMGS_URL}/${this.categoryText}/${this.bookItem.cover}`
+            this.setCover(thisCover)
             let rootFile = data.rootFile
             if (rootFile.startsWith('/')) {
               rootFile = rootFile.substring(1, rootFile.length)

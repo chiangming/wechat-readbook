@@ -38,13 +38,13 @@
            @click="hideSearchPage()">{{$t('book.cancel')}}
       </div>
     </div>
-    <scroll class="slide-contents-list" :top="156" :bottom="48" ref="scroll" v-show="!searchVisible">
+    <scroll class="slide-contents-list" :top="0" :bottom="48" ref="scroll" v-show="!searchVisible">
       <div class="slide-contents-item" v-for="(item, index) in navigation" :key="index" @click="display(item.href)">
         <span class="slide-contents-item-label" :class="{'selected': section === index}" :style="contentItemStyle(item)">{{item.label.trim()}}</span>
         <span class="slide-contents-item-page">{{item.page}}</span>
       </div>
     </scroll>
-    <scroll class="slide-search-list" :top="66" :bottom="48" ref="scroll" v-show="searchVisible">
+    <scroll class="slide-search-list" :top="0" :bottom="48" ref="scroll" v-show="searchVisible">
       <div class="slide-search-item" v-for="(item, index) in searchList"
            :key="index" v-html="item.excerpt" @click="display(item.cfi, true)">
       </div>

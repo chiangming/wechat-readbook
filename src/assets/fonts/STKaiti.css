@@ -1,0 +1,7 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "STKaiti";
+  src: url("STKaiti.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}

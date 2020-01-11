@@ -111,12 +111,12 @@ export default {
     purchaseData () {
       const bought = {
         label: this.$t('shelf.bought'),
-        bookList: this.data.filter(item => item.cache),
+        bookList: this.data.filter(item => item.cache && item.type !== 3),
         isFixed: false
       }
       const notPurchased = {
         label: this.$t('shelf.notPurchased'),
-        bookList: this.data.filter(item => !item.cache),
+        bookList: this.data.filter(item => !item.cache && item.type !== 3),
         isFixed: false
       }
       return [bought, notPurchased]

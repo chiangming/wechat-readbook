@@ -5,7 +5,7 @@
                   :title="titleText"
                   ref="title"></detail-title>
     <scroll class="content-wrapper"
-            :top="42"
+            :top="0"
             :bottom="52"
             @onScroll="onScroll"
             ref="scroll">

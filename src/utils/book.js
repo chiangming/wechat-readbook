@@ -141,7 +141,7 @@ export function getCategoryName (id) {
     case 9:
       return 'free'
     case 10:
-      return 'en'
+      return 'recommend'
   }
 }
 
@@ -188,28 +188,7 @@ export function arrayTrans (num, arr) { // 一维数组转换为二维数组
 
 // todo: 改写list
 export const categoryList = {
-  'ComputerScience': 1,
-  'SocialSciences': 2,
-  'Economics': 3,
-  'Education': 4,
-  'Engineering': 5,
-  'Environment': 6,
-  'Geography': 7,
-  'History': 8,
-  'Laws': 9,
-  'LifeSciences': 10,
-  'Literature': 11,
-  'Biomedicine': 12,
-  'BusinessandManagement': 13,
-  'EarthSciences': 14,
-  'MaterialsScience': 15,
-  'Mathematics': 16,
-  'MedicineAndPublicHealth': 17,
-  'Philosophy': 18,
-  'Physics': 19,
-  'PoliticalScienceAndInternationalRelations': 20,
-  'Psychology': 21,
-  'Statistics': 22
+
 }
 
 const BOOK_SHELF_KEY = 'bookShelf'
@@ -218,6 +197,7 @@ export function addToShelf (book) {
   let bookList = getLocalStorage(BOOK_SHELF_KEY) || []
   bookList = clearAddFromBookList(bookList)
   book.type = 1
+  book.cover = `${process.env.VUE_APP_IMGS_URL}/${book.categoryText}/${book.cover}`
   bookList.push(book)
   bookList.forEach((item, index) => {
     item.id = index + 1
@@ -273,7 +253,7 @@ export function flatBookList (bookList) {
     orgBookList.forEach((item, index) => {
       item.id = index + 1
     })
-    orgBookList = orgBookList.filter(item => item.type !== 2)
+    orgBookList = orgBookList.filter(item => { return item.type !== 2 })
     return orgBookList
   } else {
     return []

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+const Login = () =>
+  import('../views/login.vue')
 const Discovery = () =>
   import('../views/discovery/index.vue')
 const Book = () =>
@@ -16,6 +18,11 @@ const routes = [{
   base: '/',
   path: '',
   redirect: '/mall'
+},
+{
+  path: '/login',
+  name: 'login',
+  component: Login
 },
 {
   path: '/discovery',
@@ -83,7 +90,7 @@ const routes = [{
 ]
 
 const router = new VueRouter({
-  // mode: 'history',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes
 })

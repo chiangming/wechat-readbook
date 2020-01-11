@@ -20,7 +20,7 @@ const messages = {
     seeAll: '查看全部',
     readers: '$1人同时在读',
     featured: '精选',
-    category: '分类',
+    category: '榜单推荐',
     books: '本书',
     readNow: '立即阅读',
     allBook: '共 $1 本图书'

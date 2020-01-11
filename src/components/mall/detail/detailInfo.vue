@@ -24,7 +24,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { ebookMixin } from '@/utils/mixin'
 export default {
+  mixins: [ebookMixin],
   props: {
     cover: String,
     title: String,

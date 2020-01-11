@@ -9,6 +9,20 @@ export function home () {
   })
 }
 
+export function rankListAll () {
+  return axios({
+    method: 'get',
+    url: `${process.env.VUE_APP_LOCAL_API_URL}/mall/rank-list-all`
+  })
+}
+
+export function rankListRising () {
+  return axios({
+    method: 'get',
+    url: `${process.env.VUE_APP_LOCAL_API_URL}/mall/rank-list-rising`
+  })
+}
+
 export function categoryList () {
   return axios({
     method: 'get',

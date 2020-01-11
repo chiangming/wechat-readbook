@@ -43,6 +43,14 @@ export function saveHome (home) {
   return setLocalStorage('home', home, 1800)
 }
 
+export function getRankList () {
+  return getLocalStorage('rankList')
+}
+
+export function saveRankList (rankList) {
+  return setLocalStorage('rankList', rankList, 1800)
+}
+
 export function getLocation (fileName) {
   return getBookObject(fileName, 'location')
 }

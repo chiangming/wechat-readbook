@@ -29,9 +29,9 @@ export default {
     getList () {
       categoryList().then(response => {
         this.list = response.data.data
-        console.log(this.list)
+        // console.log(this.list)
       })
-      console.log('!!!!!!!!!!!!!!!!')
+      // console.log('!!!!!!!!!!!!!!!!')
     }
   },
   mounted () {

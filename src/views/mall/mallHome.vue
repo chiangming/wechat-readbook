@@ -7,18 +7,8 @@
                 @back="onBack"
                 ref="searchBar"></search-bar>
     <div class="book-list-wrapper" v-show="!ifShowSearchPage || !ifShowHotSearch" ref="bookListWrapper">
-      <!-- <guess-you-like :data="guessYouLike" ref="guessYouLike"></guess-you-like> -->
-      <!-- <rank :data="guessYouLike" ref="rank"></rank> -->
-      <!-- <recommend class="recommend" :data="recommend" ref="recommend"></recommend> -->
-      <!-- <featured class="featured" :data="featured" :titleText="$t('home.featured')" :btnText="$t('home.seeAll')"
-                ref="featured"></featured> -->
-      <!-- <div class="category-list-wrapper" v-for="(item, index) in categoryList" :key="index">
-        <category-book :data="item"></category-book>
-      </div> -->
-      <category class="category" :data="categories"></category>
-      <div>
-      <p v-for="n in 100" :key="n"> {{n}}1111111111111111111111111111111111111</p>
-      </div>
+      <top-category :rankLists="rankLists" ></top-category>
+      <all-category :data="categories"></all-category>
     </div>
     <flap-card v-if="ifFlapCardShow"
                @close="closeFlapCard"
@@ -29,26 +19,18 @@
 <script type="text/javascript">
 import FlapCard from '@/components/mall/home/flapCard'
 import SearchBar from '@/components/mall/home/searchBar'
-// import Rank from '@/components/mall/home/module/rank'
-// import GuessYouLike from '@/components/mall/home/module/guessYouLike'
-// import Recommend from '@/components/mall/home/module/recommend'
-// import Featured from '@/components/mall/home/module/featured'
-import CategoryBook from '@/components/mall/home/module/categoryBook'
-import Category from '@/components/mall/home/module/category'
-import { home, categoryList } from '@/api/mall'
+import TopCategory from '@/components/mall/home/module/topCategory'
+import AllCategory from '@/components/mall/home/module/allCategory'
+import { home, rankListAll, rankListRising } from '@/api/mall'
 import { realPx } from '@/utils/utils'
-import { getLocalStorage, setLocalStorage } from '@/utils/localStorage'
+import { getLocalStorage, setLocalStorage, getRankList, saveRankList, getHome, saveHome } from '@/utils/localStorage'
 
 export default {
   components: {
-    Category,
-    CategoryBook,
-    // Featured,
+    AllCategory,
+    TopCategory,
     FlapCard,
     SearchBar
-    // GuessYouLike,
-    // Recommend,
-    // Rank
   },
   computed: {
     defaultRandom () {
@@ -74,7 +56,12 @@ export default {
       categories: null,
       random: null,
       randomList: null,
-      bookListOffsetY: 0
+      bookListOffsetY: 0,
+      rankListAll: [],
+      rankListRising: [],
+      rankListNewBook: [],
+      rankListNovel: [],
+      rankLists: []
     }
   },
   methods: {
@@ -117,36 +104,83 @@ export default {
     },
     parseHomeData (data) {
       this.data = data
-      // this.guessYouLike = data.guessYouLike
-      // this.recommend = data.recommend
-      // this.featured = data.featured
       this.categoryList = data.categoryList
       this.categories = data.categories
       this.randomList = data.random
-      this.$nextTick(() => {
-        if (this.bookListOffsetY) {
-          this.$refs.bookListWrapper.scrollTo(0, this.bookListOffsetY)
+      this.rankListNewBook = data.rankListNewBook
+      this.rankListNovel = data.rankListNovel
+    },
+    parseAllData (data) {
+      this.rankListAll = data.rankListAll
+    },
+    parseRisingData (data) {
+      this.rankListRising = data.rankListRising
+    },
+    arrTrans (num, arr) { // 一维数组转换为二维数组
+      const iconsArr = []
+      arr.forEach((item, index) => {
+        const page = Math.floor(index / num)
+        if (!iconsArr[page]) {
+          iconsArr[page] = []
         }
+        iconsArr[page].push(item)
       })
+      return iconsArr
+    },
+    parseRankList () {
+      this.rankLists.push({
+        title: '总榜',
+        cover: `${process.env.VUE_APP_IMGS_URL}/pictures/ranklist.all.chart_title.png`,
+        list: this.arrTrans(3, this.rankListAll)
+      })
+      this.rankLists.push({
+        title: '飙升',
+        cover: `${process.env.VUE_APP_IMGS_URL}/pictures/ranklist.rising.chart_title.png`,
+        list: this.arrTrans(3, this.rankListRising)
+      })
+      this.rankLists.push({
+        title: '新书',
+        cover: `${process.env.VUE_APP_IMGS_URL}/pictures/ranklist.newbook.chart_title.png`,
+        list: this.arrTrans(3, this.rankListNewBook)
+      })
+      this.rankLists.push({
+        title: '小说',
+        cover: `${process.env.VUE_APP_IMGS_URL}/pictures/ranklist.novel.chart_title.png`,
+        list: this.arrTrans(3, this.rankListNovel)
+      })
+      return this.rankLists
     }
   },
   mounted () {
-    home().then(response => {
-      // console.log(response)
-      if (response.status === 200 && response.data) {
-        this.parseHomeData(response.data)
-        // saveHome(response.data)
-      }
-    })
-
-    categoryList().then(response => {
-      // console.log(response)
-      if (response.status === 200 && response.data) {
-        // console.log(response.data)
-        // this.parseHomeData(response.data)
-        // // saveHome(response.data)
-      }
-    })
+    let rankList = getRankList()
+    let homeData = getHome()
+    if (rankList && homeData) {
+      this.rankLists = rankList
+      this.parseHomeData(homeData)
+    } else {
+      Promise.all([home(), rankListAll(), rankListRising()]).then(responses => {
+        console.log(responses)
+        let homeResponse = responses[0]
+        let allResponse = responses[1]
+        let risingResponse = responses[2]
+        if (homeResponse.status === 200 && homeResponse.data) {
+          this.parseHomeData(homeResponse.data)
+          saveHome(homeResponse.data)
+        }
+        if (allResponse.status === 200 && allResponse.data) {
+          this.parseAllData(allResponse.data)
+        }
+        if (risingResponse.status === 200 && risingResponse.data) {
+          this.parseRisingData(risingResponse.data)
+        }
+        this.$nextTick(() => {
+          if (this.bookListOffsetY) {
+            this.$refs.bookListWrapper.scrollTo(0, this.bookListOffsetY)
+          }
+        })
+        saveRankList(this.parseRankList())
+      })
+    }
     // const home = getHome()
     // if (home) {
     //   this.parseHomeData(home)
@@ -211,7 +245,7 @@ export default {
         margin-top: px2rem(20);
       }
       .category {
-        margin-top: px2rem(20);
+        display: block;
       }
     }
   }
