@@ -13,15 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 export default {
-  name: 'App',
-  data () {
-    return {
-    }
-  },
-  components: {
-  },
-  methods: {
-  }
+  name: 'App'
 }
 </script>
 

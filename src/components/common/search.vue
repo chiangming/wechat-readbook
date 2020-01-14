@@ -13,10 +13,8 @@
                  @input="checkSearchText"
                  @click="onSearchClick"
                  @keyup.13.exact="search"
-                 ref="searchInput">|
-          <div class="btn-edit-wrapper" @click="onEdit" v-if="!ifShowClear && !ifShowSearchPage && !isDataEmpty">
-            <span class="btn-edit-text">{{$t('shelf.edit')}}</span>
-          </div>
+                 ref="searchInput">
+          <slot name="button" :ifShow="ifShow"></slot>
           <div class="icon-clear-wrapper" @click="clearSearchText" v-if="ifShowClear">
             <span class="icon-close-circle-fill icon"></span>
           </div>
@@ -25,12 +23,10 @@
     </div>
     <transition name="host-search">
       <div class="hot-search-wrapper" v-if="ifShowSearchPage && ifShowHotSearch" ref="searchMaskWrapper">
-        <hot-search :hotSearch="searchList.hotSearch"></hot-search>
+        <hot-search></hot-search>
         <div class="line"></div>
         <history-search :label="$t('home.historySearch')"
-                        :btn="$t('home.clear')"
-                        :historySearch="searchList.historySearch"
-                        @clearHistory="clearHistorySearch"></history-search>
+                        :btn="$t('home.clear')"></history-search>
       </div>
     </transition>
   </div>
@@ -40,9 +36,10 @@
 import { realPx } from '@/utils/utils'
 import HotSearch from '@/components/mall/home/search/hotSearch'
 import HistorySearch from '@/components/mall/home/search/historySearch'
-import { setHistorySearchList, getHistorySearchList } from '@/utils/book'
+import { mallMixin } from '@/utils/mixin'
 
 export default {
+  mixins: [mallMixin],
   components: {
     HotSearch,
     HistorySearch
@@ -64,43 +61,16 @@ export default {
   data () {
     return {
       ifShowClear: false,
-      searchList: {
-        hotSearch: [
-          {
-            type: 2,
-            text: '全网首发：守夜者套装3册'
-          },
-          {
-            type: 1,
-            text: '庆余年'
-          },
-          {
-            type: 1,
-            text: '东野圭吾'
-          },
-          {
-            type: 1,
-            text: '沥川往事'
-          },
-          {
-            type: 1,
-            text: '从前有座灵剑山'
-          },
-          {
-            type: 1,
-            text: '丰乳肥臀'
-          },
-          {
-            type: 1,
-            text: '全网首发：让你爆笑的传统节日'
-          }
-        ],
-        historySearch: [
-          '呐喊'
-        ]
-      },
+      // searchList: {
+      //   hotSearch: []
+      // },
       ifHideShadow: true,
       searchText: ''
+    }
+  },
+  computed: {
+    ifShow: function () {
+      return !this.ifShowClear && !this.ifShowSearchPage && !this.isDataEmpty
     }
   },
   methods: {
@@ -125,11 +95,10 @@ export default {
         this.ifShowClear = false
       }
     },
-    setKeyword (keyword) {
-      this.searchList.historySearch.push(keyword)
-    },
     search () {
-      this.setKeyword(this.searchText)
+      let currSearchList = this.searchList || []
+      currSearchList.push(this.searchText)
+      this.setSearchList(currSearchList)
       this.$router.push({
         path: '/mall/list',
         query: {
@@ -189,18 +158,15 @@ export default {
       }
     }
   },
-  mounted () {
-    this.searchList.historySearch = getHistorySearchList() || this.searchList.historySearch
-  },
   beforeDestroy () {
-    setHistorySearchList(this.searchList.historySearch)
+    // setHistorySearchList(this.searchList.historySearch)
   }
 
 }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../../assets/styles/global";
+  @import "../../assets/styles/global";
 
   .search-bar-wrapper {
     position: relative;

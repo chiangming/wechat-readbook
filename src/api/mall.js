@@ -5,35 +5,39 @@ import { getCategoryName } from '@/utils/book'
 export function home () {
   return axios({
     method: 'get',
-    url: `${process.env.VUE_APP_LOCAL_API_URL}/mall`
+    url: `${process.env.VUE_APP_API_URL}/mall`
   })
+}
+
+export function githubOAuth (code) {
+  return axios.get(`${process.env.VUE_APP_API_URL}/github/github_oauth?code=${code}`)
 }
 
 export function rankListAll () {
   return axios({
     method: 'get',
-    url: `${process.env.VUE_APP_LOCAL_API_URL}/mall/rank-list-all`
+    url: `${process.env.VUE_APP_API_URL}/mall/rank-list-all`
   })
 }
 
 export function rankListRising () {
   return axios({
     method: 'get',
-    url: `${process.env.VUE_APP_LOCAL_API_URL}/mall/rank-list-rising`
+    url: `${process.env.VUE_APP_API_URL}/mall/rank-list-rising`
   })
 }
 
-export function categoryList () {
-  return axios({
-    method: 'get',
-    url: `${process.env.VUE_APP_API_URL}/categoryList`
-  })
-}
+// export function categoryList () {
+//   return axios({
+//     method: 'get',
+//     url: `${process.env.VUE_APP_API_URL}/categoryList`
+//   })
+// }
 
 export function detail (book) {
   return axios({
     method: 'get',
-    url: `${process.env.VUE_APP_LOCAL_API_URL}/book/detail`,
+    url: `${process.env.VUE_APP_API_URL}/book/detail`,
     params: {
       fileName: book.fileName
     }
@@ -44,14 +48,14 @@ export function list () {
   // console.log('list', `${process.env.VUE_APP_LOCAL_API_URL}/book/list`)
   return axios({
     method: 'get',
-    url: `${process.env.VUE_APP_LOCAL_API_URL}/book/list`
+    url: `${process.env.VUE_APP_API_URL}/book/list`
   })
 }
 
 export function shelf () {
   return axios({
     method: 'get',
-    url: `${process.env.VUE_APP_LOCAL_API_URL}/book/shelf`
+    url: `${process.env.VUE_APP_API_URL}/book/shelf`
   })
 }
 
@@ -76,4 +80,24 @@ export function download (item, onSuccess, onFailed, onError, onProgress) {
     .catch(err => {
       if (onError) onError(err)
     })
+}
+
+export function comment (param) {
+  return axios({
+    method: 'post',
+    url: `${process.env.VUE_APP_API_URL}/comment`,
+    data: param
+  })
+}
+
+export function getComments (fileName, beforeSize, pageSize) {
+  return axios({
+    method: 'get',
+    url: `${process.env.VUE_APP_API_URL}/comment`,
+    params: {
+      fileName,
+      beforeSize,
+      pageSize
+    }
+  })
 }

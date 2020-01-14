@@ -1,24 +1,18 @@
 <template>
   <div class="view-profile">
-    <div v-for="(items, index) in list" :key="index">
-      <span>-- 类别：{{index}}</span>
-      <div v-for="(item, i) in items" :key="i">
-        <span>INSERT INTO `book` VALUES (NULL, '{{item.fileName}}', '{{item.cover}}', '{{item.title}}', '{{item.author}}', '{{item.publisher}}', '{{item.bookId}}', '{{item.category}}', '{{item.categoryText}}', '{{item.language}}', '/OEBPS/package.opf');</span>
-      </div>
-    </div>
     <div class="footer-wrapper">
-      <!-- <common-footer :selectIndex="3"></common-footer> -->
+      <common-footer :selectIndex="3"></common-footer>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-// import commonFooter from '../../components/common/footer'
-import { categoryList } from '@/api/mall.js'
+import commonFooter from '../../components/common/footer'
+
 export default {
   name: 'profile',
   components: {
-    // commonFooter
+    commonFooter
   },
   data () {
     return {
@@ -26,16 +20,8 @@ export default {
     }
   },
   methods: {
-    getList () {
-      categoryList().then(response => {
-        this.list = response.data.data
-        // console.log(this.list)
-      })
-      // console.log('!!!!!!!!!!!!!!!!')
-    }
   },
   mounted () {
-    this.getList()
   }
 }
 </script>

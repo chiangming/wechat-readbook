@@ -28,7 +28,10 @@ const getters = {
   detailNavigation: state => state.detail.detailNavigation,
   detailDescription: state => state.detail.detailDescription,
   detailCategoryText: state => state.detail.categoryText,
-  detailTitleText: state => state.detail.titleText
+  detailTitleText: state => state.detail.titleText,
+  // mall模块
+  searchList: state => state.mall.searchList,
+  hotSearch: state => state.mall.hotSearch
 }
 
 export default getters

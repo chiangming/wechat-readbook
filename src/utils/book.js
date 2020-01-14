@@ -188,7 +188,18 @@ export function arrayTrans (num, arr) { // 一维数组转换为二维数组
 
 // todo: 改写list
 export const categoryList = {
-
+  contemporary: 1,
+  humanities: 2,
+  history: 3,
+  martial: 4,
+  suspense: 5,
+  romance: 6,
+  fantasy: 7,
+  compound: 8,
+  free: 9,
+  recommend: 10,
+  'ranklist-all': 11,
+  'ranklist-rising': 12
 }
 
 const BOOK_SHELF_KEY = 'bookShelf'
@@ -197,7 +208,6 @@ export function addToShelf (book) {
   let bookList = getLocalStorage(BOOK_SHELF_KEY) || []
   bookList = clearAddFromBookList(bookList)
   book.type = 1
-  book.cover = `${process.env.VUE_APP_IMGS_URL}/${book.categoryText}/${book.cover}`
   bookList.push(book)
   bookList.forEach((item, index) => {
     item.id = index + 1

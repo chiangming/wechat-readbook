@@ -15,7 +15,6 @@ const Profile = () =>
 Vue.use(VueRouter)
 
 const routes = [{
-  base: '/',
   path: '',
   redirect: '/mall'
 },
@@ -47,33 +46,39 @@ const routes = [{
       import('../views/mall/index.vue'),
   children: [{
     path: 'shelf',
+    name: 'shelf',
     component: () =>
           import('../views/mall/bookShelf.vue')
   },
   {
     path: 'category',
+    name: 'category',
     component: () =>
           import('../views/mall/bookCategory.vue')
   },
   {
     path: 'home',
+    name: 'home',
     component: () =>
           import('../views/mall/mallHome.vue')
   },
   {
     path: 'list',
+    name: 'list',
     component: () =>
           import('../views/mall/bookList.vue')
   },
   {
-    path: 'detail',
+    path: 'total',
+    name: 'total',
     component: () =>
-          import('../views/mall/bookDetail.vue')
+          import('../views/mall/bookTotal.vue')
   },
   {
-    path: 'detail-more',
+    path: 'detail',
+    name: 'detail',
     component: () =>
-          import('../views/mall/bookDetailMore.vue')
+          import('../views/mall/bookDetail.vue')
   }
   ]
 },
@@ -91,7 +96,7 @@ const routes = [{
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: '',
   routes
 })
 

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import book from './modules/book'
 import detail from './modules/detail'
+import mall from './modules/mall'
 import getters from './getters'
 import actions from './actions'
 
@@ -18,7 +19,8 @@ const store = new Vuex.Store({
   getters,
   modules: {
     book,
-    detail
+    detail,
+    mall
   }
 })
 

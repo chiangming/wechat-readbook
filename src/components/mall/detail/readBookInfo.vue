@@ -1,73 +1,75 @@
 <template>
 <div class="readerBookInfo">
-  <div class="readerBookInfo_head">
-    <a href="javascript:" class="wr_bookCover bookInfo_cover">
-      <img v-lazy="cover" alt="书籍封面" class="wr_bookCover_img">
-      <div class="wr_bookCover_border"></div>
-      <span class="wr_bookCover_decor wr_bookCover_gradientDecor wr_bookCover_borderDecor"></span>
+  <div class="readerBookInfo-head">
+    <a href="javascript:" class="wr-bookCover bookInfo-cover">
+      <img v-lazy="cover" :key="cover" alt="书籍封面" class="wr-bookCover-img">
+      <div class="wr-bookCover-border"></div>
+      <span class="wr-bookCover-decor wr-bookCover-gradientDecor wr-bookCover-borderDecor"></span>
     </a>
-    <div class="bookInfo_right">
-      <h2 class="bookInfo_title">{{title}}</h2>
-      <div class="bookInfo_author_container">
-        <span class="bookInfo_author link">{{author}}</span>
+    <div class="bookInfo-right">
+      <h2 class="bookInfo-title">{{title}}</h2>
+      <div class="bookInfo-author-container">
+        <span class="bookInfo-author link">{{author}}</span>
       </div>
-      <!-- <a href="/web/category/all" target="_blank" class="bookInfo_rankList rankList_all"></a> -->
-      <div class="bookInfo_intro hasMore">
+      <!-- <a href="/web/category/all" target="-blank" class="bookInfo-rankList rankList-all"></a> -->
+      <div class="bookInfo-intro hasMore">
         <span>{{desc}}</span>
-        <span class="bookInfo_intro_hasMore" @click="showDialog()">更多</span>
+        <span class="bookInfo-intro-hasMore" @click="showDialog()">更多</span>
       </div>
       <div class="detail-more-wrapper">
         <span class="icon-cart">&nbsp;<del>30.00</del> 无限卡</span>
         <span class="icon-menu" @click="showCatelog()">&nbsp;目录</span>
       </div>
-      <div class="bookInfo_more bookInfo_more_3children">
-        <div class="bookInfo_more_rating">
-          <div class="bookInfo_more_line1">
-            <span class="bookInfo_more_line1_number">9.3</span>
-            <span class="wr_rankBar wr_rankBar_Default wr_rankBar_9 bookInfo_score_rankBar"></span>
+      <div class="bookInfo-more bookInfo-more-3children">
+        <div class="bookInfo-more-rating">
+          <div class="bookInfo-more-line1">
+            <span class="bookInfo-more-line1-number">{{score}}</span>
+            <span class="wr-rankBar-Default">
+              <span class="wr-rankBar-Default-after" :style="{width:scoreWidth}"></span>
+            </span>
           </div>
-          <div class="bookInfo_more_line2">15.6万人点评</div>
+          <div class="bookInfo-more-line2">{{commentsCount}}{{commentsUnit}}人点评</div>
         </div>
-        <div class="bookInfo_more_reading">
-          <div class="bookInfo_more_line1">
-            <span class="bookInfo_more_line1_number">53.8</span>万人
+        <div class="bookInfo-more-reading">
+          <div class="bookInfo-more-line1">
+            <span class="bookInfo-more-line1-number">{{totalReadersCount}}</span>{{readersUnit}}人
           </div>
-          <div class="bookInfo_more_line2">阅读此书</div>
+          <div class="bookInfo-more-line2">阅读此书</div>
         </div>
-        <a href="javascript:" class="bookInfo_more_addShelf wr_btn wr_btn_Big">加入书架</a>
+        <a href="javascript:" class="bookInfo-more-addShelf wr-btn wr-btn-Big">加入书架</a>
       </div>
     </div>
   </div>
-  <div class="wr_dialog" v-show = "ifShowDialog">
-    <div class="wr_dialog_mask"></div>
-    <div class="wr_dialog_container introDialogWrap">
-      <span class="wr_dialog_closeButton" @click="hideDialog()">close</span>
-      <div class="introDialog_content">
-        <h3 class="introDialog_content_title">简介</h3>
+  <div class="wr-dialog" v-show = "ifShowDialog">
+    <div class="wr-dialog-mask"></div>
+    <div class="wr-dialog-container introDialogWrap">
+      <span class="wr-dialog-closeButton" @click="hideDialog()">close</span>
+      <div class="introDialog-content">
+        <h3 class="introDialog-content-title">简介</h3>
         <div>
-          <p class="introDialog_content_intro_para">{{desc}}</p>
+          <p class="introDialog-content-intro-para">{{desc}}</p>
         </div>
-        <h3 class="introDialog_content_title">版权</h3>
-        <div class="introDialog_content_pub_line">
-          <span class="introDialog_content_pub_title">{{$t('detail.publisher')}}</span><span>人民文学出版社</span>
+        <h3 class="introDialog-content-title">版权</h3>
+        <div class="introDialog-content-pub-line">
+          <span class="introDialog-content-pub-title">{{$t('detail.publisher')}}</span><span>人民文学出版社</span>
         </div>
-        <div class="introDialog_content_pub_line">
-          <span class="introDialog_content_pub_title">{{$t('detail.category')}}</span><span>2017年7月</span>
+        <div class="introDialog-content-pub-line">
+          <span class="introDialog-content-pub-title">{{$t('detail.category')}}</span><span>2017年7月</span>
         </div>
-        <div class="introDialog_content_pub_line">
-          <span class="introDialog_content_pub_title">{{$t('detail.lang')}}</span><span>238,470</span>
+        <div class="introDialog-content-pub-line">
+          <span class="introDialog-content-pub-title">{{$t('detail.lang')}}</span><span>238,470</span>
         </div>
-        <div class="introDialog_content_pub_line">
-          <span class="introDialog_content_pub_title">{{$t('detail.ISBN')}}</span><span>当代文学榜-社会</span>
+        <div class="introDialog-content-pub-line">
+          <span class="introDialog-content-pub-title">{{$t('detail.ISBN')}}</span><span>当代文学榜-社会</span>
         </div>
       </div>
     </div>
   </div>
-  <div class="wr_catelog" v-show = "ifShowCatelog">
-    <div class="wr_catelog_mask"></div>
-    <div class="wr_catelog_container">
-      <span class="wr_catelog_closeButton" @click="hideCatelog()">close</span>
-      <div class="introCatelog_content">
+  <div class="wr-catelog" v-show = "ifShowCatelog">
+    <div class="wr-catelog-mask"></div>
+    <div class="wr-catelog-container">
+      <span class="wr-catelog-closeButton" @click="hideCatelog()">close</span>
+      <div class="introCatelog-content">
         <div class="book-detail-content-wrapper">
           <div class="book-detail-content-title">{{$t('detail.navigation')}}</div>
           <div class="book-detail-content-list-wrapper">
@@ -95,14 +97,15 @@
 <script type="text/ecmascript-6">
 import { ebookMixin } from '@/utils/mixin'
 import { getLocalForage } from '@/utils/localForage'
-import { px2rem } from '@/utils/utils'
+import { px2rem, realPx } from '@/utils/utils'
 export default {
   mixins: [ebookMixin],
   props: {
     // cover: String,
     title: String,
     author: String,
-    desc: String
+    desc: String,
+    item: Object
   },
   data () {
     return {
@@ -161,9 +164,35 @@ export default {
       } else {
         return []
       }
+    },
+    commentsCount () {
+      if (!this.item) { return 0 }
+      return this.item.comments > 10000 ? (this.item.comments / 10000).toFixed(1) : this.item.comments
+    },
+    totalReadersCount () {
+      if (!this.item) { return 0 }
+      return this.item.totalReaders > 10000 ? (this.item.totalReaders / 10000).toFixed(1) : this.item.totalReaders
+    },
+    commentsUnit () {
+      if (!this.item) { return '' }
+      return this.item.comments > 10000 ? '万' : ''
+    },
+    readersUnit () {
+      if (!this.item) { return '' }
+      return this.item.totalReaders > 10000 ? '万' : ''
+    },
+    score () {
+      if (!this.item) { return 5.0 }
+      return (this.item.score / 10).toFixed(1)
+    },
+    scoreWidth (item) {
+      return realPx(item.score * 10) + 'px'
     }
   },
   mounted () {
+  },
+  beforeDestroy () {
+    console.log('beforeDestroy')
   }
 }
 </script>
@@ -171,12 +200,13 @@ export default {
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../../assets/styles/global";
   .readerBookInfo{
-    margin-left: px2rem(24);
-    margin-right: px2rem(24);
-    margin-bottom: px2rem(24);
-    padding-bottom: px2rem(40);
+    padding-left: px2rem(24);
+    padding-right: px2rem(24);
+    padding-bottom: px2rem(24);
+    margin-bottom: px2rem(10);
     box-sizing: border-box;
-    .readerBookInfo_head {
+    background: #fff;
+    .readerBookInfo-head {
         display: flex;
         padding-top: px2rem(60);
         @media (max-width: 1365px){
@@ -186,7 +216,7 @@ export default {
         @media (max-width: 460px){
             padding-top: px2rem(30);
         }
-        .wr_bookCover {
+        .wr-bookCover {
             display: block;
             flex: none;
             width: px2rem(120);
@@ -202,38 +232,38 @@ export default {
                 -o-object-fit: cover;
                 object-fit: cover;
             }
-            .wr_bookCover_decor {
+            .wr-bookCover-decor {
                 position: absolute;
                 top: 0;
                 right: 0;
                 bottom: 0;
                 left: 0;
-                &.wr_bookCover_gradientDecor {
+                &.wr-bookCover-gradientDecor {
                     background-image: linear-gradient(90deg,hsla(0,0%,63.1%,.25),rgba(21,21,20,.1) 1%,hsla(0,0%,100%,.15) 4%,hsla(0,0%,58%,.1) 8%,hsla(0,0%,89%,0) 57%,rgba(223,218,218,.03) 91%,rgba(223,218,218,.05) 98%,hsla(0,0%,100%,.1));
                     box-shadow: inset 0 0 0 0 rgba(0,0,0,.1);
                 }
             }
         }
-        .bookInfo_right {
+        .bookInfo-right {
             flex: auto;
             margin-left: px2rem(20);
-            .bookInfo_title {
+            .bookInfo-title {
                 margin-top: px2rem(4);
                 color: #221014;
                 font-family: "SourceHanSerifCN-Bold",PingFang SC,-apple-system,SF UI Text,Lucida Grande,STheiti,Microsoft YaHei,sans-serif,STZhongsong;
                 font-size: px2rem(24);
             }
-            .bookInfo_author_container {
+            .bookInfo-author-container {
                 margin-top: px2rem(9);
                 line-height: px2rem(15);
-                .bookInfo_author {
+                .bookInfo-author {
                     color: #4aabff;
                     font-family: "SourceHanSerifCN-Bold",PingFang SC,-apple-system,SF UI Text,Lucida Grande,STheiti,Microsoft YaHei,sans-serif,STZhongsong;
                     font-size: px2rem(15);
                     line-height: px2rem(15);
                 }
             }
-            .bookInfo_intro {
+            .bookInfo-intro {
                 position: relative;
                 cursor: pointer;
                 text-align: justify;
@@ -252,7 +282,7 @@ export default {
                 font-size: px2rem(13);
                 // height: px2rem(46);
                 line-height: px2rem(23);
-                .bookInfo_intro_hasMore {
+                .bookInfo-intro-hasMore {
                     position: absolute;
                     bottom: 0;
                     right: 0;
@@ -274,7 +304,7 @@ export default {
                   vertical-align: -1px;
               }
             }
-            .bookInfo_more {
+            .bookInfo-more {
                 margin-top: px2rem(20);
                 display: flex;
                 align-items: center;
@@ -285,23 +315,23 @@ export default {
                     left: 0;
                     bottom: 0;
                 }
-                .bookInfo_more_rating {
+                .bookInfo-more-rating {
                     cursor: pointer;
                     @media (max-width: 767px){
                         flex: 1;
                         margin-right: px2rem(10);
                     }
-                    .bookInfo_more_line1 {
+                    .bookInfo-more-line1 {
                         line-height: 1;
                         color: #b2b4b8;
                         font-size: px2rem(11);
-                        .bookInfo_more_line1_number {
+                        .bookInfo-more-line1-number {
                             font-size: px2rem(26);
                             font-family: 'DIN Medium';
                             vertical-align: - px2rem(5);
                             margin-right: px2rem(5);
                         }
-                        .wr_rankBar_Default {
+                        .wr-rankBar-Default {
                             display: inline-block;
                             width: 100px;
                             height: 16px;
@@ -309,8 +339,7 @@ export default {
                             background: url(https://weread-1253731777.file.myqcloud.com/wrwebnjlogic/image/star.09aced99.png) 0 0 no-repeat,url(https://weread-1253731777.file.myqcloud.com/wrwebnjlogic/image/star.09aced99.png) 21px 0 no-repeat,url(https://weread-1253731777.file.myqcloud.com/wrwebnjlogic/image/star.09aced99.png) 42px 0 no-repeat,url(https://weread-1253731777.file.myqcloud.com/wrwebnjlogic/image/star.09aced99.png) 63px 0 no-repeat,url(https://weread-1253731777.file.myqcloud.com/wrwebnjlogic/image/star.09aced99.png) 84px 0 no-repeat;
                             background-size: 16px 16px;
                         }
-                        .wr_rankBar_Default:after{
-                          content: "";
+                        .wr-rankBar-Default-after{
                           display: inline-block;
                           vertical-align: top;
                           height: 16px;
@@ -319,7 +348,7 @@ export default {
                           background-size: 16px 16px;
                         }
                     }
-                    .bookInfo_more_line2 {
+                    .bookInfo-more-line2 {
                         margin-top: px2rem(8);
                         font-size: px2rem(11);
                         word-break: break-all;
@@ -338,20 +367,20 @@ export default {
                         box-orient: vertical;
                     }
                 }
-                .bookInfo_more_reading {
+                .bookInfo-more-reading {
                     flex: 1;
-                    .bookInfo_more_line1 {
+                    .bookInfo-more-line1 {
                         line-height: 1;
                         color: #b2b4b8;
                         font-size: px2rem(11);
-                        .bookInfo_more_line1_number {
+                        .bookInfo-more-line1-number {
                             font-size: px2rem(26);
                             margin-right: px2rem(4);
                             font-family: DIN-Medium;
                             vertical-align: -2px;
                         }
                     }
-                    .bookInfo_more_line2 {
+                    .bookInfo-more-line2 {
                       margin-top: px2rem(8);
                       font-size: px2rem(11);
                       word-break: break-all;
@@ -368,9 +397,9 @@ export default {
                       box-orient: vertical;
                     }
                 }
-                .bookInfo_more_addShelf {
+                .bookInfo-more-addShelf {
                   align-self: center;
-                  &.wr_btn {
+                  &.wr-btn {
                       position: relative;
                       display: inline-block;
                       height: px2rem(28);
@@ -388,7 +417,7 @@ export default {
                       -ms-user-select: none;
                       user-select: none;
                   }
-                  &.wr_btn_Big {
+                  &.wr-btn-Big {
                       height: px2rem(40);
                       line-height: px2rem(40);
                       font-size: px2rem(15);
@@ -405,10 +434,10 @@ export default {
             }
         }
     }
-    .wr_dialog {
+    .wr-dialog {
         position: fixed;
         z-index: 90;
-        .wr_dialog_mask{
+        .wr-dialog-mask{
           position: fixed;
           z-index: 90;
           top: 0;
@@ -417,7 +446,7 @@ export default {
           right: 0;
           width: 100%;
           height: 100%;
-          background: rgba(0,0,0,.6);
+          background: rgba(0,0,0,.4);
         }
         .introDialogWrap {
             width: 80%;
@@ -425,8 +454,8 @@ export default {
             max-height: 80%;
             overflow: auto!important;
         }
-        .wr_dialog_container {
-            background-color: rgba(84,84,84,.8);
+        .wr-dialog-container {
+            background-color: #ffffff;
             -webkit-backdrop-filter: blur(40px);
             backdrop-filter: blur(40px);
             position: fixed;
@@ -437,7 +466,7 @@ export default {
             z-index: 100;
             border-radius: 12px;
             text-align: center;
-            .wr_dialog_closeButton {
+            .wr-dialog-closeButton {
                 position: absolute;
                 right: 16px;
                 top: 16px;
@@ -449,32 +478,32 @@ export default {
                 background: url(https://weread-1253731777.file.myqcloud.com/wrwebnjlogic/image/dialog_close.a5f40ec8.png) no-repeat;
                 background-size: 100%;
             }
-            .introDialog_content {
+            .introDialog-content {
               box-sizing: border-box;
                 padding: 40px 32px 32px;
                 text-align: left;
                 color: #b2b4b8;
                 font-size: 14px;
-                .introDialog_content_title {
+                .introDialog-content-title {
                     font-family: "SourceHanSerifCN-Bold",PingFang SC,-apple-system,SF UI Text,Lucida Grande,STheiti,Microsoft YaHei,sans-serif,STZhongsong;
                     font-size: 18px;
-                    color: #eef0f4;
+                    color: #000;
                     margin-bottom: 16px;
                     &:not(:first-child) {
                         margin-top: 32px;
                     }
                 }
-                .introDialog_content_intro_para {
+                .introDialog-content-intro-para {
                     line-height: 24px;
                     text-align: justify;
                 }
-                .introDialog_content_pub_line {
+                .introDialog-content-pub-line {
                     display: flex;
                     justify-content: space-between;
                     &:not(:last-child) {
                         margin-bottom: 12px;
                     }
-                    .introDialog_content_pub_title {
+                    .introDialog-content-pub-title {
                         color: #8a8c90;
                     }
                 }
@@ -482,10 +511,10 @@ export default {
 
         }
     }
-    .wr_catelog{
+    .wr-catelog{
       position: fixed;
       z-index: 90;
-      .wr_catelog_mask{
+      .wr-catelog-mask{
         position: fixed;
         z-index: 90;
         top: 0;
@@ -496,7 +525,7 @@ export default {
         height: 100%;
         background: rgba(0,0,0,.6);
       }
-      .wr_catelog_container{
+      .wr-catelog-container{
         width: 80%;
         max-width: 500px;
         max-height: 80%;
@@ -511,7 +540,7 @@ export default {
         z-index: 100;
         border-radius: 12px;
         text-align: center;
-        .wr_catelog_closeButton {
+        .wr-catelog-closeButton {
           position: absolute;
           right: 16px;
           top: 16px;
@@ -523,7 +552,7 @@ export default {
           background: url(https://weread-1253731777.file.myqcloud.com/wrwebnjlogic/image/dialog_close.a5f40ec8.png) no-repeat;
           background-size: 100%;
         }
-        .introCatelog_content {
+        .introCatelog-content {
           box-sizing: border-box;
           padding: 40px 32px 32px;
           text-align: left;

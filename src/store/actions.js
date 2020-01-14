@@ -81,7 +81,15 @@ const actions = {
   },
   setTitleText ({ commit }, title) {
     return commit('SET_TITLE_TEXT', title)
+  },
+  // mall模块
+  setSearchList ({ commit }, searchList) {
+    return commit('SET_SEARCH_LIST', searchList)
+  },
+  setHotSearch ({ commit }, hotSearch) {
+    return commit('SET_HOT_SEARCH', hotSearch)
   }
+
 }
 
 export default actions

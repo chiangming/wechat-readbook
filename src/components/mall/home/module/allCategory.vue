@@ -9,10 +9,10 @@
       </li>
     </ul>
     <div class="ranking-allCategory-footer">
-      <a href="/discovery" class="ranking-allCategory-footer-link">
+      <span class="ranking-allCategory-footer-link" @click="showBookList()">
         <span class="ranking-allCategory-footer-link-text">{{$t('home.seeAll')}}</span>
         <span class="ranking-allCategory-footer-link-icon icon-forward"></span>
-      </a>
+      </span>
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
       return categoryText(category, this)
     },
     showBookList () {
-      this.$router.push('/book-store/list')
+      this.$router.push('/mall/total')
     }
   }
 }

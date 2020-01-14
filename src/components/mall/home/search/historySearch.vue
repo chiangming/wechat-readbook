@@ -5,7 +5,7 @@
       <span class="btn" @click="clearHistory">{{btn}}</span>
     </div>
     <div class="history-search-list">
-      <div class="history-search-item" v-for="(item, index) in historySearch" :key="index">
+      <div class="history-search-item" v-for="(item, index) in searchList" :key="index">
         <div class="icon-wrapper">
           <span class="icon-search icon"></span>
         </div>
@@ -18,13 +18,16 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import { realPx } from '@/utils/utils'
+import { mallMixin } from '@/utils/mixin'
 
 export default {
+  mixins: [mallMixin],
   props: {
     label: String,
-    btn: String,
-    historySearch: Array
+    btn: String
+  },
+  data () {
+    return {}
   },
   mounted () {
     // this.$refs.searchText.forEach(item => {
@@ -33,6 +36,7 @@ export default {
   },
   methods: {
     clearHistory () {
+      this.setSearchList([])
       this.$emit('clearHistory')
     },
     search (keyword) {
