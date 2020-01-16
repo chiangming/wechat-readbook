@@ -109,7 +109,7 @@ export default {
           }
         }
       } else {
-        this.$router.push('/mall/shelf')
+        this.$router.go(-1)
       }
       this.$emit('back')
     },

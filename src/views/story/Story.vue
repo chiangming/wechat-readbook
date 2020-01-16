@@ -1,69 +1,50 @@
-<!--<template>-->
-<!--<div class="story">-->
-<!--  <van-pull-refresh v-model="isLoading" @refresh="onRefresh">-->
-<!--    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">-->
-<!--      <van-cell v-for="item in list" :key="item" :layout="item"/>-->
-<!--    </van-list>-->
-<!--  </van-pull-refresh>-->
+<template>
+  <div class="view-profile">
+    <div class="view-content-wrapper">
+      <my-test></my-test>
+    </div>
+    <div class="view-footer-wrapper">
+      <common-footer :selectIndex="3"></common-footer>
+    </div>
+  </div>
+</template>
 
-<!--</div>-->
-<!--</template>-->
+<script type="text/ecmascript-6">
+import myTest from '../../components/common/test'
+import commonFooter from '../../components/common/footer'
 
-<!--<script>-->
-<!--import Vue from 'vue'-->
-<!--import { Cell, CellGroup, List, PullRefresh } from 'vant'-->
+export default {
+  name: 'profile',
+  components: {
+    commonFooter,
+    myTest
+  },
+  data () {
+    return {
+      list: Object
+    }
+  },
+  methods: {
+  },
+  mounted () {
+  }
+}
+</script>
 
-<!--Vue.use(Cell)-->
-<!--  .use(CellGroup)-->
-<!--  .use(List)-->
-<!--  .use(PullRefresh)-->
-
-<!--export default {-->
-<!--  name: 'Story',-->
-<!--  data () {-->
-<!--    return {-->
-<!--      list: [],-->
-<!--      loading: false,-->
-<!--      finished: false,-->
-<!--      isLoading: false-->
-<!--    }-->
-<!--  },-->
-
-<!--  methods: {-->
-<!--    onRefresh () {-->
-<!--      setTimeout(() => {-->
-<!--        console.log('shuaxing')-->
-<!--        this.isLoading = false-->
-<!--        this.list = []-->
-<!--        for (let i = 0; i < 20; i++) {-->
-<!--          this.list.push(this.list.length + 1)-->
-<!--        }-->
-<!--      }, 500)-->
-<!--    },-->
-<!--    onLoad () {-->
-<!--      // 异步更新数据-->
-<!--      setTimeout(() => {-->
-<!--        for (let i = 0; i < 10; i++) {-->
-<!--          this.list.push(this.list.length + 1)-->
-<!--        }-->
-<!--        // 加载状态结束-->
-<!--        this.loading = false-->
-
-<!--        // 数据全部加载完成-->
-<!--        if (this.list.length >= 140) {-->
-<!--          this.finished = true-->
-<!--        }-->
-<!--      }, 500)-->
-<!--    }-->
-<!--  }-->
-<!--}-->
-<!--</script>-->
-
-<!--<style scoped>-->
-<!--.story {-->
-<!--  height: 100%;-->
-<!--  width: 100%;-->
-<!--  overflow: common;-->
-<!--  background: #17abe3;-->
-<!--}-->
-<!--</style>-->
+<style lang="scss" rel="stylesheet/scss" scoped>
+@import "../../assets/styles/global";
+  .view-profile{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .view-content-wrapper{
+      height: px2rem(400);
+      width:100%;
+    }
+    .view-footer-wrapper{
+      position: absolute;
+      bottom: 0;
+      height: px2rem(42);
+    }
+  }
+</style>

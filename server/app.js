@@ -30,9 +30,9 @@ function randomArray (n, l) {
   let rnd = []
   for (let i = 0; i < n; i++) {
     let index = Math.floor(Math.random() * l)
-    if (!rnd.includes(index)) {
-      rnd.push(index)
-    }
+    // if (!rnd.includes(index)) {
+    rnd.push(index)
+    // }
   }
   return rnd
 }
@@ -205,7 +205,7 @@ app.get('/api/mall/rank-list-rising', (req, res) => {
   })
 })
 
-app.get('/api/discovery', (req, res) => {
+app.get('/api/discovery/guess-your-like', (req, res) => {
   const conn = connect()
   conn.query('select * from book', (err, results) => {
     if (err) {
@@ -215,20 +215,39 @@ app.get('/api/discovery', (req, res) => {
       })
     } else {
       const guessYourLike = []
-      const recommend = []
       const length = results.length
 
       randomArray(9, length).forEach(key => {
         guessYourLike.push(formatGuessYouLike(createData(results, key)))
       })
 
-      randomArray(4, length).forEach(key => {
+      res.json({
+        error_code: 0,
+        guessYourLike
+      })
+    }
+    conn.end()
+  })
+})
+
+app.get('/api/discovery/recommend', (req, res) => {
+  const conn = connect()
+  conn.query('select * from book', (err, results) => {
+    if (err) {
+      res.json({
+        error_code: 10001,
+        msg: 'Fail to connect the database!' + err
+      })
+    } else {
+      const recommend = []
+      const length = results.length
+
+      randomArray(20, length).forEach(key => {
         recommend.push(createData(results, key))
       })
 
       res.json({
         error_code: 0,
-        guessYourLike,
         recommend
       })
     }
@@ -377,6 +396,35 @@ app.get('/api/github/github_oauth', async (req, res) => {
         success: 0,
         token: '',
         message: 'GitHub授权登录失败' + e
+      })
+    })
+})
+
+app.get('/api/tencent/news', async (req, res) => {
+  const page = req.query.page
+  const params = {
+    cid: config.newsConfig.cid,
+    token: config.newsConfig.token,
+    id: config.newsConfig.id,
+    ext: config.newsConfig.ext
+  }
+
+  let path = config.newsUrl + `?cid=${params.cid}&token=${params.token}&id=${params.id}&ext=${params.ext}&page=${page}`
+  console.log(path)
+  await fetch(path)
+    .then(result => {
+      return result.json()
+    })
+    .then(json => {
+      res.json(json)
+      console.log(json)
+    })
+    .catch(e => {
+      console.log(e)
+      res.json({
+        code: 1,
+        token: '',
+        msg: '获取新闻信息失败失败' + e
       })
     })
 })

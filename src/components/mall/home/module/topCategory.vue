@@ -79,9 +79,6 @@ export default {
     categoryText (category) {
       return categoryText(category, this)
     },
-    showBookList () {
-      this.$router.push('/book-store/list')
-    },
     coverUrl (item) {
       return `${item.cover}`
     }

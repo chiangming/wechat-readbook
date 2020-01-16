@@ -101,3 +101,27 @@ export function getComments (fileName, beforeSize, pageSize) {
     }
   })
 }
+
+export function guessYouLike () {
+  return axios({
+    method: 'get',
+    url: `${process.env.VUE_APP_API_URL}/discovery/guess-your-like`
+  })
+}
+
+export function recommend () {
+  return axios({
+    method: 'get',
+    url: `${process.env.VUE_APP_API_URL}/discovery/recommend`
+  })
+}
+
+export function getNews (page) {
+  return axios({
+    method: 'get',
+    url: `${process.env.VUE_APP_API_URL}/tencent/news`,
+    params: {
+      page
+    }
+  })
+}

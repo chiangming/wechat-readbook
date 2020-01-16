@@ -1,5 +1,7 @@
 const coverBaseUrl = 'http://103.14.34.148:9000/imgs'
 
+const newsUrl = 'https://pacaio.match.qq.com/irs/rcd'
+
 const category = [
   'contemporary',
   'humanities',
@@ -15,7 +17,7 @@ const category = [
 
 const relatedBookName = [
   '沉思录',
-  '吶喊',
+  '靈山',
   '在天堂裡遇見的五個人',
   '菊与剑',
   '失蹤之後',
@@ -31,6 +33,14 @@ const oAuth = {
     client_id: '8947582dbbed86c4d51f',
     client_secret: '76d4c70645ad4865347549a4fd032bee1714591e'
   }
+}
+
+const newsConfig = {
+  cid: 137,
+  token: 'd0f13d594edfc180f5bf6b845456f3ea',
+  id: '',
+  ext: 'top',
+  page: 0
 }
 
 const tokenSecret = 'test'
@@ -50,5 +60,7 @@ module.exports = {
   relatedBookName,
   oAuth,
   mysqlConfig,
-  tokenSecret
+  tokenSecret,
+  newsUrl,
+  newsConfig
 }
