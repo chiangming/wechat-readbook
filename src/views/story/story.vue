@@ -196,14 +196,14 @@ export default {
         freeMode: true,
         on: {
           reachBeginning: () => {
-            console.log('reachBeginning')
+          // console.log('reachBeginning')
             if (!this.ifLoading && this.ifMounted && !this.ifNoMoreNews) {
               this.ifLoading = true
               this.newsPageIndex++
               let res = []
               getNews(this.newsPageIndex).then(response => {
                 if (response.status === 200 && response.data) {
-                  console.log(response.data.data)
+                // console.log(response.data.data)
                   if (response.data.datanum === 0 || response.data.data.length === 0) {
                     this.ifNoMoreNews = true
                   }
@@ -224,14 +224,14 @@ export default {
             }
           },
           reachEnd: () => {
-            console.log('reachEnd')
+          // console.log('reachEnd')
             if (!this.ifTailLoading && this.ifMounted && !this.ifNoMoreNews) {
               this.ifTailLoading = true
               this.newsPageIndex++
               let res = []
               getNews(this.newsPageIndex).then(response => {
                 if (response.status === 200 && response.data) {
-                  console.log(response.data.data)
+                // console.log(response.data.data)
                   if (response.data.datanum === 0 || response.data.data.length === 0) {
                     this.ifNoMoreNews = true
                   }
@@ -272,7 +272,7 @@ export default {
       window.location.href = url
     },
     removeNewsItem (item) {
-      console.log('remove!!!!')
+    // console.log('remove!!!!')
       this.newsList.splice(this.newsList.indexOf(item), 1)
       for (let index in this.newsList) {
         this.$refs.mySwiper[index].swiper.slideTo(0, 500, true)

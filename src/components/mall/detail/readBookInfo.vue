@@ -192,7 +192,7 @@ export default {
   mounted () {
   },
   beforeDestroy () {
-    console.log('beforeDestroy')
+    // console.log('beforeDestroy')
   }
 }
 </script>

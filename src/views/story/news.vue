@@ -41,9 +41,9 @@ export default {
         let minHeight = this.iframeHeight
         this.iframeHeight = Math.max(bHeight, dHeight, minHeight)
         iframe.height = this.iframeHeight
-        console.log(iframe.height)
+      // console.log(iframe.height)
       } catch (ex) {
-        console.log(ex)
+      // console.log(ex)
       }
     },
     back () {
@@ -58,7 +58,7 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.query.url)
+  // console.log(this.$route.query.url)
     this.srcUrl = this.$route.query.url
     this.title = this.$route.query.title
     this.reinitIframe()
@@ -66,7 +66,7 @@ export default {
     let task = setInterval(() => {
       i++
       this.reinitIframe()
-      console.log(i)
+      // console.log(i)
       if (i === 10) {
         clearInterval(task)
       }

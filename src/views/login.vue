@@ -16,7 +16,7 @@ export default {
   mounted () {
     githubOAuth(this.$route.query.code).then(res => {
       if (res.data.success === 1) {
-        console.log(res.data)
+        // console.log(res.data)
         let guest = {
           userName: res.data.userName,
           avatar: res.data.avatar

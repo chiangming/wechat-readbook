@@ -163,7 +163,7 @@ export default {
       this.parseHomeData(homeData)
     } else {
       Promise.all([home(), rankListAll(), rankListRising()]).then(responses => {
-        console.log(responses)
+        // console.log(responses)
         let homeResponse = responses[0]
         let allResponse = responses[1]
         let risingResponse = responses[2]
@@ -190,7 +190,7 @@ export default {
     //   this.parseHomeData(home)
     // } else {
     //   home2().then(response => {
-    //     console.log(response)
+    //   // console.log(response)
     //     if (response.status === 200 && response.data) {
     //       this.parseHomeData(response.data)
     //       saveHome(response.data)
