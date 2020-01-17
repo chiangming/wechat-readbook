@@ -60,7 +60,7 @@
           </div>
           <div class="guess-you-like-item" v-if="!item.loading">
             <div class="item-top">
-              <div class="img-wrapper">
+              <div class="img-wrapper" @click="showBookDetail(item)">
                 <img class="img" v-lazy="item.cover" :key="item.cover">
               </div>
               <div class="title title-big" ref="title">{{item.title}}</div>
@@ -130,7 +130,7 @@ export default {
         navigation: {
           nextEl: '.swiper-button'
         },
-        debugger: true,
+        // debugger: true,
         on: {
           init: () => {
             // console.log('init')

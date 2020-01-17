@@ -193,7 +193,7 @@ export default {
       let fileName = this.fileName
       let beforeSize = (this.commentCurrentPage - 1) * this.commentPageSize
       let pageSize = this.commentPageSize
-      console.log(`select * from comment where fileName = ?  limit ?,?`, [fileName, beforeSize, pageSize])
+      // console.log(`select * from comment where fileName = ?  limit ?,?`, [fileName, beforeSize, pageSize])
       let that = this
       getComments(fileName, beforeSize, pageSize).then(function (response) {
         if (response.status === 200 && response.data.error_code === 0 && response.data.data) {
@@ -203,7 +203,7 @@ export default {
           }
           that.commentsList.push(...result)
         } else {
-          console.log(response.data.msg)
+          // console.log(response.data.msg)
         }
       })
     },
@@ -231,7 +231,7 @@ export default {
             const result = response.data.data
             that.commentsList.push(...result)
           } else {
-            console.log(response.data.msg)
+            // console.log(response.data.msg)
           }
           that.ifRandering = false
         })

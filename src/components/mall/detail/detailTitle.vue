@@ -79,9 +79,15 @@ export default {
       width: 80%;
       text-align: center;
       height: px2rem(42);
+      line-height:px2rem(42);
       font-size: px2rem(16);
+      overflow : hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      -webkit-line-clamp: 1; /* 限制在一个块元素显示的文本的行数 */
+      -webkit-box-orient: vertical; /* 垂直排列 */
+      word-break: break-all;  /* 内容自动换行 */
       color: #333;
-      @include center;
     }
   }
 </style>

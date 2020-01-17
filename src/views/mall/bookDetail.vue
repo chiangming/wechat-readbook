@@ -230,7 +230,7 @@ export default {
     //       const bookList = response.data.data.filter(item => item.fileName === fileName)
     //       if (bookList && bookList.length > 0) {
     //         this.bookItem = bookList[0]
-    //         console.log(this.bookItem)
+    //       // console.log(this.bookItem)
     //         this.initBook()
     //       }
     //     }

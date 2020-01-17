@@ -13,17 +13,20 @@
             ref="scroll">
              <iframe name="menuFrame" :src="srcUrl" id="mobsf" :onload="reinitIframe()" scrolling="no" height="100%" width="100%"></iframe>
     </Scroll>
+    <toast :text="toastText" ref="toast"></toast>
   </div>
 </template>
 
 <script>
 import NewsTitle from '@/components/mall/detail/detailTitle'
 import Scroll from '@/components/common/scroll'
+import Toast from '@/components/common/toast'
 import { realPx } from '@/utils/utils'
 export default {
   components: {
     NewsTitle,
-    Scroll
+    Scroll,
+    Toast
   },
   data () {
     return {
@@ -41,9 +44,17 @@ export default {
         let minHeight = this.iframeHeight
         this.iframeHeight = Math.max(bHeight, dHeight, minHeight)
         iframe.height = this.iframeHeight
-        console.log(iframe.height)
+        let headroom = iframe.contentWindow.document.getElementsByClassName('headroom-wrapper')[0]
+        if (headroom != null) {
+          headroom.setAttribute('style', 'display: none !important;')
+        }
+        let chnv = iframe.contentWindow.document.getElementsByClassName('ch-nav')[0]
+        if (chnv != null) {
+          chnv.setAttribute('style', 'display: none !important;')
+        }
+        // console.log(iframe.height)
       } catch (ex) {
-        console.log(ex)
+        // console.log(ex)
       }
     },
     back () {
@@ -55,35 +66,34 @@ export default {
       } else {
         this.$refs.title.hideShadow()
       }
+    },
+    showToast (text) {
+      this.toastText = text
+      this.$refs.toast.show()
     }
   },
   mounted () {
-    console.log(this.$route.query.url)
-    this.srcUrl = this.$route.query.url
-    this.title = this.$route.query.title
-    this.reinitIframe()
-    let i = 0
-    let task = setInterval(() => {
-      i++
+    let url = this.$route.query.url
+    if (url.startsWith('https://') || url.startsWith('http://') || url.startsWith('www')) {
+      this.showToast('访问域外网站')
+      this.srcUrl = this.$route.query.url
+      // console.log(this.srcUrl)
+    } else {
+      let proxyRootUrl = `${process.env.VUE_APP_REVERSE_PROXY_URL}`
+      this.srcUrl = proxyRootUrl + this.$route.query.url
+      // console.log(this.srcUrl)
       this.reinitIframe()
-      console.log(i)
-      if (i === 10) {
-        clearInterval(task)
-      }
-    }, 2000)
-    // function changeMobsfIframe () {
-    //   const mobsf = document.getElementById('mobsf')
-    //   const deviceWidth = document.body.clientWidth
-    //   const deviceHeight = document.body.scrollHeight
-    //   mobsf.style.width = deviceWidth + 'px' // 数字是页面布局宽度差值
-    //   mobsf.style.height = deviceHeight + 'px' // 数字是页面布局高度差
-    // }
-
-    // changeMobsfIframe()
-
-    // window.onresize = function () {
-    //   changeMobsfIframe()
-    // }
+      let i = 0
+      let task = setInterval(() => {
+        i++
+        this.reinitIframe()
+        // console.log(i)
+        if (i === 20) {
+          clearInterval(task)
+        }
+      }, 1000)
+    }
+    this.title = this.$route.query.title
   }
 }
 </script>

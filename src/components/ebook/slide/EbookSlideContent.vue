@@ -2,7 +2,6 @@
   <div class="ebook-slide-contents">
     <div class="slide-contents-book-wrapper" v-show="!searchVisible">
       <div class="slide-contents-book-img-wrapper">
-<!--        <img v-lazy="cover" class="slide-contents-book-img">-->
         <img v-lazy="cover" class="slide-contents-book-img">
       </div>
       <div class="slide-contents-book-info-wrapper">
@@ -38,13 +37,13 @@
            @click="hideSearchPage()">{{$t('book.cancel')}}
       </div>
     </div>
-    <scroll class="slide-contents-list" :top="0" :bottom="48" ref="scroll" v-show="!searchVisible">
+    <scroll class="slide-contents-list" :top="145" :bottom="48" ref="scroll" v-show="!searchVisible">
       <div class="slide-contents-item" v-for="(item, index) in navigation" :key="index" @click="display(item.href)">
         <span class="slide-contents-item-label" :class="{'selected': section === index}" :style="contentItemStyle(item)">{{item.label.trim()}}</span>
         <span class="slide-contents-item-page">{{item.page}}</span>
       </div>
     </scroll>
-    <scroll class="slide-search-list" :top="0" :bottom="48" ref="scroll" v-show="searchVisible">
+    <scroll class="slide-search-list" :top="48" :bottom="48" ref="scroll" v-show="searchVisible">
       <div class="slide-search-item" v-for="(item, index) in searchList"
            :key="index" v-html="item.excerpt" @click="display(item.cfi, true)">
       </div>

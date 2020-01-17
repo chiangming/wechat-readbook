@@ -32,36 +32,36 @@
             <swiper-slide class="h-slide">
               <div class="book-item-wrapper" @click="showBookDetail(bookList[0])">
                 <div class="book-cover">
-                  <img class="book-cover-img" v-lazy="bookList[0].cover">
+                  <img class="book-cover-img" v-lazy="cover0">
                 </div>
-                <div class="book-title">{{bookList[0].title}}</div>
+                <div class="book-title">{{title0}}</div>
                 <div class="book-sub-title">编辑推荐</div>
               </div>
             </swiper-slide>
             <swiper-slide class="h-slide">
               <div class="book-item-wrapper" @click="showBookDetail(bookList[1])">
                 <div class="book-cover">
-                  <img class="book-cover-img" v-lazy="bookList[1].cover">
+                  <img class="book-cover-img" v-lazy="cover1">
                 </div>
-                <div class="book-title">{{bookList[1].title}}</div>
+                <div class="book-title">{{title1}}</div>
                 <div class="book-sub-title">免费好书</div>
               </div>
             </swiper-slide>
             <swiper-slide class="h-slide">
               <div class="book-item-wrapper" @click="showBookDetail(bookList[2])">
                 <div class="book-cover">
-                  <img class="book-cover-img" v-lazy="bookList[2].cover">
+                  <img class="book-cover-img" v-lazy="cover2">
                 </div>
-                <div class="book-title">{{bookList[2].title}}</div>
+                <div class="book-title">{{title2}}</div>
                 <div class="book-sub-title">每日精选</div>
               </div>
             </swiper-slide>
             <swiper-slide class="h-slide">
               <div class="book-item-wrapper" @click="showBookDetail(bookList[3])">
                 <div class="book-cover">
-                  <img class="book-cover-img" v-lazy="bookList[3].cover">
+                  <img class="book-cover-img" v-lazy="cover3">
                 </div>
-                <div class="book-title">{{bookList[3].title}}</div>
+                <div class="book-title">{{title3}}</div>
                 <div class="book-sub-title">最近飙升</div>
               </div>
             </swiper-slide>
@@ -77,31 +77,31 @@
             <div class="swiper-pagination swiper-pagination-h" slot="pagination"></div>
           </swiper>
         </swiper-slide>
-        <swiper-slide class="v-slide" v-for="(item,index) in newsList" :key="newsKeyPrefix+index">
+        <swiper-slide class="v-slide" v-for="(item,index) in newsList" :key="newsKeyPrefix+item.app_id">
           <swiper :options="swiperOptionNews" class="news-slide-wrapper" ref="mySwiper">
             <swiper-slide class="new-slide-item" >
-              <span @click="relocated(item.url)" class="news-item-link"></span>
-              <div class="news-item-top2" v-if="item.multi_imgs.length>=3">
+              <span @click="relocated(item.title?item.title:'',item.url?item.url:'/')" class="news-item-link"></span>
+              <div class="news-item-top2" v-if="item.multi_imgs && item.multi_imgs.length>=3">
                 <div class ="news-title-wrapper">
-                  <div class="news-title">{{item.title}}</div>
+                  <div class="news-title">{{item.title?item.title:''}}</div>
                 </div>
                 <div class="news-img-wrapper">
-                  <img class="news-img" :src="item.multi_imgs[0]">
-                  <img class="news-img" :src="item.multi_imgs[1]">
-                  <img class="news-img" :src="item.multi_imgs[2]">
+                  <img class="news-img" :src="(item.multi_imgs && item.multi_imgs[0])?item.multi_imgs[0]:''">
+                  <img class="news-img" :src="(item.multi_imgs && item.multi_imgs[1])?item.multi_imgs[1]:''">
+                  <img class="news-img" :src="(item.multi_imgs && item.multi_imgs[2])?item.multi_imgs[2]:''">
                 </div>
               </div>
-              <div class="news-item-top" v-else>
+              <div class="news-item-top" v-if="item.multi_imgs && item.multi_imgs.length<3">
                 <div class ="news-title-wrapper">
-                  <div class="news-title">{{item.title}}</div>
+                  <div class="news-title">{{item.title?item.title:''}}</div>
                 </div>
                 <div class="news-img-wrapper">
-                  <img class="news-img" :src="item.img">
+                  <img class="news-img" :src="item.img?item.img:''">
                 </div>
               </div>
               <div class="news-item-bottom">
                 <div class ="news-tags-wrapper">
-                  <div class="news-tags">{{item.category2_chn}} &nbsp;&nbsp;#{{item.tag_label[0][0]}}</div>
+                  <div class="news-tags">{{item.category2_chn?item.category2_chn:''}} &nbsp;&nbsp;#{{(item.tag_label && item.tag_label[0]&& item.tag_label[0][0])?item.tag_label[0][0]:''}}</div>
                 </div>
               </div>
             </swiper-slide>
@@ -111,18 +111,6 @@
           </swiper>
         </swiper-slide>
          <swiper-slide class="v-slide slide-loader" v-if="true">
-            <!-- <div class="loader">
-            <div class="loader-inner line-spin-fade-loader">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div> -->
           <div class="loadEffect">
             <span></span>
             <span></span>
@@ -145,7 +133,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import MyTest from '../../components/common/test'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import CommonSearch from '@/components/common/search'
 import CommonFooter from '../../components/common/footer'
@@ -169,6 +156,74 @@ export default {
       if (newValue === true) {
         this.showToast('已经没有新内容了')
       }
+    },
+    tempUnshiftData (newValue, oldValue) {
+      if (newValue['status'] === 200 && newValue['data'] && newValue['data'].data) {
+        const res = newValue.data.data
+        if (res.length === 0) {
+          this.ifNoMoreNews = true
+        }
+        this.dataNumber = res.length
+        if (res instanceof Array) {
+          this.$nextTick(() => {
+            this.newsList.unshift(...res)
+          })
+        }
+        this.ifLoading = false
+        this.ifLoaded = true
+        let that = this
+        setTimeout(() => {
+          that.ifLoaded = false
+        }, 3000)
+      } else {
+        this.ifLoading = false
+        this.ifLoaded = false
+        this.ifNoMoreNews = true
+      }
+    },
+    tempPushData (newValue, oldValue) {
+    // console.log(newValue)
+      if (newValue['status'] === 200 && newValue['data'] && newValue['data'].data) {
+        const res = newValue.data.data
+        if (res.length === 0) {
+          this.ifNoMoreNews = true
+        }
+        this.dataNumber = res.length
+        this.$nextTick(() => {
+          this.newsList.push(...res)
+        })
+        this.ifTailLoading = false
+      } else {
+        this.ifLoading = false
+        this.ifLoaded = false
+        this.ifNoMoreNews = true
+      }
+    }
+  },
+  computed: {
+    cover0 () {
+      return (this.bookList[0] && this.bookList[0].cover) ? this.bookList[0].cover : ''
+    },
+    cover1 () {
+      return (this.bookList[1] && this.bookList[1].cover) ? this.bookList[1].cover : ''
+    },
+    cover2 () {
+      return (this.bookList[2] && this.bookList[2].cover) ? this.bookList[2].cover : ''
+    },
+    cover3 () {
+      return (this.bookList[3] && this.bookList[3].cover) ? this.bookList[3].cover : ''
+    },
+    title0 () {
+      return (this.bookList[0] && this.bookList[0].title) ? this.bookList[0].title : ''
+    },
+    title1 () {
+      return (this.bookList[1] && this.bookList[1].title) ? this.bookList[1].title : ''
+    },
+    title2 () {
+      return (this.bookList[2] && this.bookList[2].title) ? this.bookList[2].title : ''
+    },
+    title3 () {
+      return (this.bookList[3] && this.bookList[3].title) ? this.bookList[3].title : ''
     }
   },
   data () {
@@ -184,11 +239,15 @@ export default {
       ifTailLoading: false,
       ifLoaded: false,
       ifNoMoreNews: false,
+      defaultCover: `${process.env.VUE_APP_IMGS_URL}/pictures/book_cover.jpg`,
       toastText: '========',
       newsPageIndex: 0,
       dataNumber: 0,
       bookList: [],
       newsList: [],
+      tempUnshiftData: [],
+      tempPushData: [],
+      ifPush: false,
       swiperOptionv: {
         direction: 'vertical',
         slidesPerView: 'auto',
@@ -196,54 +255,26 @@ export default {
         freeMode: true,
         on: {
           reachBeginning: () => {
-            console.log('reachBeginning')
+          // console.log('reachBeginning')
             if (!this.ifLoading && this.ifMounted && !this.ifNoMoreNews) {
               this.ifLoading = true
               this.newsPageIndex++
-              let res = []
+              this.dataNumber = 0
               getNews(this.newsPageIndex).then(response => {
-                if (response.status === 200 && response.data) {
-                  console.log(response.data.data)
-                  if (response.data.datanum === 0 || response.data.data.length === 0) {
-                    this.ifNoMoreNews = true
-                  }
-                  res = response.data.data
-                  this.dataNumber = response.data.datanum
-                } else {
-                  this.ifNoMoreNews = true
-                }
-                setTimeout(() => {
-                  this.ifLoading = false
-                  this.ifLoaded = true
-                  this.newsList.unshift(...res)
-                }, 1500)
-                setTimeout(() => {
-                  this.ifLoaded = false
-                }, 3000)
+                let res = JSON.parse(JSON.stringify(response))
+                this.getUnshiftData(res)
               })
             }
           },
           reachEnd: () => {
-            console.log('reachEnd')
+          // console.log('reachEnd')
             if (!this.ifTailLoading && this.ifMounted && !this.ifNoMoreNews) {
               this.ifTailLoading = true
               this.newsPageIndex++
-              let res = []
               getNews(this.newsPageIndex).then(response => {
-                if (response.status === 200 && response.data) {
-                  console.log(response.data.data)
-                  if (response.data.datanum === 0 || response.data.data.length === 0) {
-                    this.ifNoMoreNews = true
-                  }
-                  res = response.data.data
-                } else {
-                  this.ifNoMoreNews = true
-                }
+                let res = JSON.parse(JSON.stringify(response))
+                this.getPushData(res)
               })
-              setTimeout(() => {
-                this.ifTailLoading = false
-                this.newsList.push(...res)
-              }, 2000)
             }
           }
         }
@@ -264,15 +295,32 @@ export default {
         path: '/mall/home'
       })
     },
+    getUnshiftData (data) {
+      this.tempUnshiftData = data
+    },
+    getPushData (data) {
+      this.tempPushData = data
+    },
+    getMountedData (data) {
+      this.newsList = data
+    },
     showToast (text) {
       this.toastText = text
       this.$refs.toast.show()
     },
-    relocated (url) {
-      window.location.href = url
+    relocated (title, url) {
+      let path = url.replace('https://xw.qq.com', '')
+      this.$router.push({
+        path: '/story/news',
+        query: {
+          title: title,
+          url: path
+        }
+      })
+      // window.location.href = url
     },
     removeNewsItem (item) {
-      console.log('remove!!!!')
+    // console.log('remove!!!!')
       this.newsList.splice(this.newsList.indexOf(item), 1)
       for (let index in this.newsList) {
         this.$refs.mySwiper[index].swiper.slideTo(0, 500, true)
@@ -283,7 +331,9 @@ export default {
     getNews(0).then(response => {
       if (response.status === 200 && response.data) {
         if (response.data && response.data.data) {
-          this.newsList.push(...response.data.data)
+        // console.log(response.data.data)
+          this.getMountedData(response.data.data)
+          // this.newsList.push(...response.data.data)
         }
       }
       this.ifMounted = true

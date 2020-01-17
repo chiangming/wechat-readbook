@@ -245,7 +245,7 @@ export default {
         this.setDefaultFontFamily(this.initFontFamily())
       ]).then(() => {
         this.switchTheme()
-        debugger
+        // debugger
         if (this.$route.query.navigation) {
           this.display(this.$route.query.navigation)
         } else {
@@ -289,7 +289,7 @@ export default {
       }
       // 拆解响应中的树状结构转换成一维数组
       this.book.loaded.navigation.then(nav => {
-        console.log(nav)
+        // console.log(nav)
         const navItem = (function flatten (arr) {
           return [].concat(...arr.map(v => [v, ...flatten(v.subitems)]))
         })(nav.toc)
@@ -348,7 +348,7 @@ export default {
     },
     initEpub (target) {
       this.book = new Epub(target)
-      console.log(this.book)
+      // console.log(this.book)
       this.setCurrentBook(this.book)
       // this.setIsPaginating(true)
       // this.setPaginate(this.$t('book.paginating'))
