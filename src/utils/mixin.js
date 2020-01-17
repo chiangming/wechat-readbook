@@ -260,11 +260,30 @@ export const detailMixin = {
       showBookDetail(this, item)
     },
     coverUrl (item) {
-      if (item.categoryText && item.cover) {
-        return `${process.env.VUE_APP_IMGS_URL}/${item.categoryText}/${item.cover}`
-      } else {
-        // todo: 添加默认图片
-      }
+      // if (item.categoryText && item.cover) {
+      //   return `${process.env.VUE_APP_IMGS_URL}/${item.categoryText}/${item.cover}`
+      // } else {
+      //   // todo: 添加默认图片
+      // }
+      return item.cover
     }
+  }
+}
+
+export const mallMixin = {
+  data () {
+    return {}
+  },
+  computed: {
+    ...mapGetters([
+      'searchList',
+      'hotSearch'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'setSearchList',
+      'setHotSearch'
+    ])
   }
 }

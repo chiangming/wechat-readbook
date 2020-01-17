@@ -3,7 +3,7 @@
     <div class="hot-search-list">
       <div class="hot-search-item" v-for="(item, index) in hotSearch" :key="index" :style="{background:((item.type === 1)?'#f4f4f4':'#eedddd')}">
         <div class="hot-search-text-wrapper">
-          <div class="text" ref="searchText" :style="{color:((item.type === 1)?'#444444':'red')}">{{item.text}}</div>
+          <div class="text" ref="searchText" :style="{color:((item.type === 1)?'#444444':'red')}" @click="search(item)">{{item.text}}</div>
         </div>
       </div>
     </div>
@@ -11,11 +11,33 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { mallMixin } from '@/utils/mixin'
 export default {
+  mixins: [mallMixin],
   props: {
     label: String,
-    btn: String,
-    hotSearch: Array
+    btn: String
+  },
+  methods: {
+    search (item) {
+      if (item.kind === 'book') {
+        this.$router.push({
+          path: '/mall/detail',
+          query: {
+            fileName: item.fileName,
+            category: item.category
+          }
+        })
+      }
+      if (item.kind === 'author') {
+        this.$router.push({
+          path: '/mall/list',
+          query: {
+            keyword: item.keyword
+          }
+        })
+      }
+    }
   }
 }
 </script>

@@ -3,9 +3,9 @@
     <div class="ranking-block-container" v-for="(items, index) in rankLists" :key="index">
       <div class="ranking-block-header">
         <h2 class="ranking-block-header-title">{{items.title}}</h2>
-        <a href="/web/category/all" class="ranking-block-header-link">
+        <span @click="showBookCategory(items.category, items.title)" class="ranking-block-header-link">
           <img :src="items.cover" alt="TOP200" class="ranking-block-header-cover">
-        </a>
+        </span>
       </div>
       <div class="ranking-block-body">
         <div class="ranking-block-body-left">
@@ -30,17 +30,17 @@
         </div>
       </div>
       <div class="ranking-block-footer">
-        <a href="/web/category/rising" class="ranking-block-footer-link">
+        <span @click="showBookCategory(items.category, items.title)" class="ranking-block-footer-link">
           <span class="ranking-block-footer-link-text">{{$t('home.seeAll')}}</span>
           <span class="ranking-block-footer-link-icon icon-forward"></span>
-        </a>
+        </span>
       </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import { categoryText, getCategoryName } from '@/utils/book'
+import { categoryText } from '@/utils/book'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import { detailMixin } from '@/utils/mixin'
 
@@ -67,23 +67,20 @@ export default {
     }
   },
   methods: {
-    showBookCategory (item) {
+    showBookCategory (category, text) {
       this.$router.push({
         path: '/mall/list',
         query: {
-          category: getCategoryName(item.category),
-          categoryText: this.categoryText(item.category)
+          category: category,
+          categoryText: text
         }
       })
     },
     categoryText (category) {
       return categoryText(category, this)
     },
-    showBookList () {
-      this.$router.push('/book-store/list')
-    },
     coverUrl (item) {
-      return `${process.env.VUE_APP_IMGS_URL}/${item.categoryText}/${item.cover}`
+      return `${item.cover}`
     }
   }
 }

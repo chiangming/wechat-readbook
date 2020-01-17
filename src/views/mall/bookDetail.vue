@@ -10,8 +10,13 @@
             ref="scroll">
       <read-book-info :title="title"
                  :author="author"
-                 :desc="desc"></read-book-info>
-      <reader-top-review></reader-top-review>
+                 :desc="desc"
+                 :item="bookItem"
+                 ></read-book-info>
+      <reader-top-review :fileName="fileName"
+                @showToast="showToast"
+                ref="readerTopReview"
+                v-if="isLogin"></reader-top-review>
       <div class="book-detail-content-wrapper">
         <div id="preview" ref="preview"></div>
       </div>
@@ -55,10 +60,10 @@ export default {
   },
   computed: {
     desc () {
-      if (this.description) {
-        return this.description.substring(0, 300)
+      if (this.bookItem) {
+        return this.bookItem.description
       } else {
-        return '暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介暂无简介'
+        return '暂无简介'
       }
     },
     flatNavigation () {
@@ -84,6 +89,9 @@ export default {
     },
     author () {
       return this.metadata ? this.metadata.creator : ''
+    },
+    fileName () {
+      return this.bookItem ? this.bookItem.fileName : ''
     },
     inBookShelf () {
       if (this.bookItem && this.bookShelf) {
@@ -113,7 +121,10 @@ export default {
       toastText: '',
       trialText: null,
       categoryText: null,
-      opf: null
+      opf: null,
+      guestAvatar: `${process.env.VUE_APP_IMGS_URL}/pictures/user.png`,
+      guestName: '游客',
+      isLogin: false
     }
   },
   methods: {
@@ -236,8 +247,7 @@ export default {
           if (response.status === 200 && response.data.error_code === 0 && response.data.data) {
             const data = response.data.data
             this.bookItem = data
-            let thisCover = `${process.env.VUE_APP_IMGS_URL}/${this.categoryText}/${this.bookItem.cover}`
-            this.setCover(thisCover)
+            this.setCover(this.bookItem.cover)
             let rootFile = data.rootFile
             if (rootFile.startsWith('/')) {
               rootFile = rootFile.substring(1, rootFile.length)
@@ -277,10 +287,22 @@ export default {
       } else {
         this.$refs.title.hideShadow()
       }
+    },
+    checkLogin () {
+      // 获取token和用户信息
+      let token = window.localStorage.getItem('GITHUB_LOGIN_TOKEN')
+      let guestStr = window.localStorage.getItem('GITHUB_LOGIN_GUEST')
+      let guest = guestStr !== '' ? JSON.parse(guestStr) : null
+      if (token && guest) {
+        this.guestAvatar = guest.avatar
+        this.guestName = guest.userName
+        this.isLogin = true
+      }
     }
   },
   mounted () {
     this.init()
+    this.checkLogin()
   }
 }
 </script>
@@ -293,62 +315,30 @@ export default {
     background: white;
     .content-wrapper {
       width: 100%;
+      background: #f0f5ff;
       .book-detail-content-wrapper {
         width: 100%;
+        margin-top:px2rem(10);
+        background: #fff;
         border-bottom: px2rem(1) solid #eee;
         box-sizing: border-box;
-        .book-detail-content-title {
-          font-size: px2rem(20);
-          font-weight: bold;
-          padding: px2rem(20) px2rem(15) px2rem(10) px2rem(15);
-          box-sizing: border-box;
-        }
-        .book-detail-content-list-wrapper {
-          padding: px2rem(10) px2rem(15);
-          box-sizing: border-box;
-          .loading-text-wrapper {
-            width: 100%;
-            .loading-text {
-              font-size: px2rem(14);
-              color: #666;
-            }
-          }
-          .book-detail-content-row {
-            display: flex;
-            box-sizing: border-box;
-            margin-bottom: px2rem(10);
-            .book-detail-content-label {
-              flex: 0 0 px2rem(70);
-              font-size: px2rem(14);
-              color: #666;
-            }
-            .book-detail-content-text {
-              flex: 1;
-              font-size: px2rem(14);
-              color: #333;
-            }
-          }
-          #preview {
-          }
-          .book-detail-content-item-wrapper {
-            .book-detail-content-item {
-              padding: px2rem(15) 0;
-              font-size: px2rem(14);
-              line-height: px2rem(16);
-              color: #666;
-              border-bottom: px2rem(1) solid #eee;
-              &:last-child {
-                border-bottom: none;
-              }
-              .book-detail-content-navigation-text {
-                width: 100%;
-                @include ellipsis;
-                &.is-sub {
-                  color: #666;
-                }
-              }
-            }
-          }
+        .button{
+          max-width: 100%;
+          height: 50px;
+          line-height: 50px;
+          display: block;
+          max-width: 400px;
+          height: 60px;
+          line-height: 60px;
+          margin: 0 auto 24px;
+          border-radius: 6px;
+          text-align: center;
+          font-size: 16px;
+          font-weight: 500;
+          background-color: #2a81b7;
+          margin: px2rem(10) px2rem(10);
+          color: #eef0f4;
+          transition: background-color .2s ease-in-out;
         }
       }
       .audio-wrapper {

@@ -5,9 +5,13 @@
                   :isDataEmpty="isDataEmpty"
                    ref="searchBar"
                    @back="onBack"
-                   @onEditClick="onEditClick"
-                   @showTitle="showTitle"
-                   v-show="!ifShowTitle"></shelf-search>
+                   v-show="!ifShowTitle">
+                    <template v-slot:button="slotProps">
+                      <div class="btn-edit-wrapper" @click="onEdit" v-if="slotProps.ifShow">
+                        <span class="btn-edit-text">{{$t('shelf.edit')}}</span>
+                      </div>
+                    </template>
+                   </shelf-search>
     <shelf-title class="shelf-title"
                  :title="$t('shelf.title')"
                  :isEditMode.sync="isEditMode"
@@ -56,7 +60,7 @@
 <script type="text/ecmascript-6">
 import ShelfTitle from '@/components/mall/shelf/shelfTitle'
 import ShelfClasses from '@/components/mall/shelf/shelfClasses'
-import ShelfSearch from '@/components/mall/shelf/shelfSearch'
+import ShelfSearch from '@/components/common/search'
 import BookShelf from '@/components/mall/shelf/shelf'
 import ScrollView from '@/components/common/scroll'
 import BookShelfFooter from '@/components/mall/shelf/bookShelfFooter'
@@ -111,6 +115,10 @@ export default {
     }
   },
   methods: {
+    onEdit () {
+      this.onEditClick(true)
+      this.showTitle()
+    },
     onBack () {
     },
     onSearchTabClick (id) {

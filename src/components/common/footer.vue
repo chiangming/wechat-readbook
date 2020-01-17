@@ -56,8 +56,12 @@ export default {
       this.$router.push('/profile')
     },
     onTabClick (item) {
-      if (item.index === 1 && this.selectIndex !== 1) {
-        this.gotoDiscovry()
+      if (item.index === 1) {
+        if (this.selectIndex !== 1) {
+          this.gotoDiscovry()
+        } else {
+          this.$emit('firstPage')
+        }
       } else if (item.index === 2 && this.selectIndex !== 2) {
         this.gotoShelf()
       } else if (item.index === 3 && this.selectIndex !== 3) {

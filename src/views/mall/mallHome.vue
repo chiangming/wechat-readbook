@@ -131,22 +131,26 @@ export default {
       this.rankLists.push({
         title: '总榜',
         cover: `${process.env.VUE_APP_IMGS_URL}/pictures/ranklist.all.chart_title.png`,
-        list: this.arrTrans(3, this.rankListAll)
+        list: this.arrTrans(3, this.rankListAll),
+        category: 'ranklist-all'
       })
       this.rankLists.push({
         title: '飙升',
         cover: `${process.env.VUE_APP_IMGS_URL}/pictures/ranklist.rising.chart_title.png`,
-        list: this.arrTrans(3, this.rankListRising)
+        list: this.arrTrans(3, this.rankListRising),
+        category: 'ranklist-rising'
       })
       this.rankLists.push({
         title: '新书',
         cover: `${process.env.VUE_APP_IMGS_URL}/pictures/ranklist.newbook.chart_title.png`,
-        list: this.arrTrans(3, this.rankListNewBook)
+        list: this.arrTrans(3, this.rankListNewBook),
+        category: 'free'
       })
       this.rankLists.push({
         title: '小说',
         cover: `${process.env.VUE_APP_IMGS_URL}/pictures/ranklist.novel.chart_title.png`,
-        list: this.arrTrans(3, this.rankListNovel)
+        list: this.arrTrans(3, this.rankListNovel),
+        category: 'fantasy'
       })
       return this.rankLists
     }

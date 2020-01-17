@@ -34,6 +34,7 @@ const routes = [{
   component: Book,
   children: [{
     path: ':fileName',
+    name: ':fileName',
     component: () =>
         import('@components/ebook/EbookReader.vue')
   }]
@@ -69,23 +70,37 @@ const routes = [{
           import('../views/mall/bookList.vue')
   },
   {
+    path: 'total',
+    name: 'total',
+    component: () =>
+          import('../views/mall/bookTotal.vue')
+  },
+  {
     path: 'detail',
     name: 'detail',
     component: () =>
           import('../views/mall/bookDetail.vue')
-  },
-  {
-    path: 'detail-more',
-    name: 'detail-more',
-    component: () =>
-          import('../views/mall/bookDetailMore.vue')
   }
   ]
 },
 {
   path: '/story',
   name: 'story',
-  component: Story
+  component: Story,
+  redirect: '/story/index',
+  children: [{
+    path: 'index',
+    name: 'index',
+    component: () =>
+          import('../views/story/story.vue')
+  },
+  {
+    path: 'news',
+    name: 'news',
+    component: () =>
+          import('../views/story/news.vue')
+  }
+  ]
 },
 {
   path: '/profile',
@@ -96,7 +111,7 @@ const routes = [{
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.VUE_APP_BASE_URL,
+  base: '',
   routes
 })
 

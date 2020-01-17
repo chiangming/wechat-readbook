@@ -11,10 +11,11 @@
             ref="scroll">
       <div class="profile-content-header">
         <div class="profile-user-img">
-          <img class="user-img" src="@/assets/images/user.png">
+          <img class="user-img" v-lazy="guestAvatar" :key="guestAvatar">
         </div>
-        <div class="profile-user-name">游客</div>
-        <div class="profile-logging-text" @click="githubLogin()">点击登录<span class="icon-forward"></span></div>
+        <div class="profile-user-name">{{guestName}}</div>
+        <div class="profile-logging-text" v-show="!isLogin" @click="githubLogIn()">点击登录<span class="icon-forward"></span></div>
+        <div class="profile-logging-text" v-show="isLogin" @click="githubLogOut()">退出登录<span class="icon-forward"></span></div>
       </div>
       <div class="profile-content-item-wrapper">
         <div class="profile-content-item">
@@ -90,12 +91,14 @@
     <div class="profile-footer-wrapper">
       <common-footer :selectIndex="4"></common-footer>
     </div>
+     <toast :text="toastText" ref="toast"></toast>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import Scroll from '@/components/common/scroll'
-import commonFooter from '../../components/common/footer'
+import Toast from '@/components/common/toast'
+import commonFooter from '@/components/common/footer'
 import { realPx } from '@/utils/utils'
 
 const clientId = '8947582dbbed86c4d51f'
@@ -106,10 +109,15 @@ export default {
   name: 'profile',
   components: {
     Scroll,
+    Toast,
     commonFooter
   },
   data () {
     return {
+      guestAvatar: `${process.env.VUE_APP_IMGS_URL}/pictures/user.png`,
+      guestName: '游客',
+      isLogin: false,
+      toastText: ''
     }
   },
   methods: {
@@ -120,9 +128,39 @@ export default {
         this.$refs.title.style.boxShadow = 'none'
       }
     },
-    githubLogin: function () {
+    showToast (text) {
+      this.toastText = text
+      this.$refs.toast.show()
+    },
+    githubLogIn: function () {
       window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${githubScope}`
       window.localStorage.setItem('GITHUB_LOGIN_REDIRECT_URL', `${this.$route.path}?profile=new`)
+    },
+    githubLogOut: function () {
+      window.localStorage.removeItem('GITHUB_LOGIN_TOKEN')
+      window.localStorage.removeItem('GITHUB_LOGIN_GUEST')
+      window.localStorage.removeItem('GITHUB_LOGIN_REDIRECT_URL')
+      this.guestAvatar = `${process.env.VUE_APP_IMGS_URL}/pictures/user.png`
+      this.guestName = '游客'
+      this.isLogin = false
+    }
+  },
+  mounted () {
+    // 登陆后跳转回当前页面
+    if (this.$route.query.profile && this.$route.query.profile === 'new') {
+      let message = window.localStorage.getItem('GITHUB_LOGIN_MESSAGE')
+      this.showToast(message)
+      window.localStorage.removeItem('GITHUB_LOGIN_REDIRECT_URL')
+      window.localStorage.removeItem('GITHUB_LOGIN_MESSAGE')
+    }
+    // 获取token和用户信息
+    let token = window.localStorage.getItem('GITHUB_LOGIN_TOKEN')
+    let guestStr = window.localStorage.getItem('GITHUB_LOGIN_GUEST')
+    let guest = guestStr !== '' ? JSON.parse(guestStr) : null
+    if (token && guest) {
+      this.guestAvatar = guest.avatar
+      this.guestName = guest.userName
+      this.isLogin = true
     }
   }
 }

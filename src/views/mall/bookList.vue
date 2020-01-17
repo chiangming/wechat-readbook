@@ -1,6 +1,6 @@
 <template>
   <div class="book-list-wrapper">
-    <detail-title :title="title"
+    <detail-title :title="titleText"
                   :showShelf="true"
                   @back="back"
                   ref="title"></detail-title>
@@ -21,7 +21,7 @@ import Featured from '@/components/mall/home/module/featured'
 import { realPx } from '@/utils/utils'
 import { list } from '@/api/mall'
 import { categoryList, categoryText } from '@/utils/book'
-
+import { getRankList } from '@/utils/localStorage'
 export default {
   components: {
     DetailTitle,
@@ -29,13 +29,6 @@ export default {
     Featured
   },
   computed: {
-    title () {
-      if (this.list) {
-        return this.total && this.$t('home.allBook').replace('$1', this.totalNumber)
-      } else {
-        return null
-      }
-    },
     totalNumber () {
       let num = 0
       Object.keys(this.list).forEach(key => {
@@ -47,11 +40,13 @@ export default {
   data () {
     return {
       list: null,
-      total: null
+      total: null,
+      allList: null
     }
   },
   methods: {
     getCategoryText (key) {
+      console.log('categotryTr:', key)
       return `${categoryText(categoryList[key], this)}(${this.list[key].length})`
     },
     back () {
@@ -71,16 +66,22 @@ export default {
         const category = this.$route.query.category
         const keyword = this.$route.query.keyword
         if (category) {
+          console.log('category', category)
+          let rankList = getRankList()
+          rankList.forEach(item => {
+            this.list[item.category] = [].concat.apply([], item.list)
+          })
           const key = Object.keys(this.list).filter(item => item === category)[0]
           const data = this.list[key]
           this.list = {}
           this.list[key] = data
         } else if (keyword) {
+          console.log('key', keyword)
+          console.log('list', this.list)
           Object.keys(this.list).filter(key => {
-            this.list[key] = this.list[key].filter(book => book.fileName.indexOf(keyword) >= 0)
+            this.list[key] = this.list[key].filter(book => (book.title.indexOf(keyword) >= 0 || book.author.indexOf(keyword) >= 0))
             return this.list[key].length > 0
           })
-          // console.log(this.list)
         }
       })
     }

@@ -24,11 +24,10 @@
     </div>
     <transition name="host-search">
       <div class="hot-search-wrapper" v-if="ifShowSearchPage && ifShowHotSearch" ref="searchMaskWrapper">
-        <hot-search :hotSearch="searchList.hotSearch"></hot-search>
+        <hot-search></hot-search>
         <div class="line"></div>
         <history-search :label="$t('home.historySearch')"
-                        :btn="$t('home.clear')"
-                        :historySearch="searchList.historySearch"></history-search>
+                        :btn="$t('home.clear')"></history-search>
       </div>
     </transition>
   </div>
@@ -38,8 +37,10 @@
 import { realPx } from '@/utils/utils'
 import HotSearch from '@/components/mall/home/search/hotSearch'
 import HistorySearch from '@/components/mall/home/search/historySearch'
+import { mallMixin } from '@/utils/mixin'
 
 export default {
+  mixins: [mallMixin],
   components: {
     HotSearch,
     HistorySearch
@@ -57,44 +58,6 @@ export default {
   },
   data () {
     return {
-      searchList: {
-        hotSearch: [
-          {
-            type: 2,
-            text: '全网首发：守夜者套装3册'
-          },
-          {
-            type: 1,
-            text: '庆余年'
-          },
-          {
-            type: 1,
-            text: '东野圭吾'
-          },
-          {
-            type: 1,
-            text: '沥川往事'
-          },
-          {
-            type: 1,
-            text: '从前有座灵剑山'
-          },
-          {
-            type: 1,
-            text: '丰乳肥臀'
-          },
-          {
-            type: 1,
-            text: '全网首发：让你爆笑的传统节日'
-          }
-        ],
-        historySearch: [
-          {
-            type: 2,
-            text: 'Computer Science'
-          }
-        ]
-      },
       ifHideShadow: true,
       searchText: null
     }
@@ -105,6 +68,9 @@ export default {
       this.searchList.historySearch.push(keyword)
     },
     search () {
+      let currSearchList = this.searchList || []
+      currSearchList.push(this.searchText)
+      this.setSearchList(currSearchList)
       this.$router.push({
         path: '/mall/list',
         query: {
@@ -143,7 +109,7 @@ export default {
           }
         }
       } else {
-        this.$router.push('/mall/shelf')
+        this.$router.go(-1)
       }
       this.$emit('back')
     },

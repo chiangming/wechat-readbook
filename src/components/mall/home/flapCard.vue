@@ -121,7 +121,7 @@ export default {
     },
     getCoverUrl () {
       // console.log(`${process.env.VUE_APP_IMGS_URL}/` + this.data.categoryText + '/' + this.data.cover)
-      return `${process.env.VUE_APP_IMGS_URL}/` + this.data.categoryText + '/' + this.data.cover
+      return this.data.cover
     },
     categoryText () {
       return categoryText(this.data.category, this)
