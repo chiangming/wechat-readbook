@@ -130,7 +130,7 @@ export default {
         navigation: {
           nextEl: '.swiper-button'
         },
-        debugger: true,
+        // debugger: true,
         on: {
           init: () => {
             // console.log('init')

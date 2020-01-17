@@ -245,7 +245,7 @@ export default {
         this.setDefaultFontFamily(this.initFontFamily())
       ]).then(() => {
         this.switchTheme()
-        debugger
+        // debugger
         if (this.$route.query.navigation) {
           this.display(this.$route.query.navigation)
         } else {
