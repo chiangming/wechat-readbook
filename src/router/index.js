@@ -34,6 +34,7 @@ const routes = [{
   component: Book,
   children: [{
     path: ':fileName',
+    name: ':fileName',
     component: () =>
         import('@components/ebook/EbookReader.vue')
   }]
@@ -85,7 +86,21 @@ const routes = [{
 {
   path: '/story',
   name: 'story',
-  component: Story
+  component: Story,
+  redirect: '/story/index',
+  children: [{
+    path: 'index',
+    name: 'index',
+    component: () =>
+          import('../views/story/story.vue')
+  },
+  {
+    path: 'news',
+    name: 'news',
+    component: () =>
+          import('../views/story/news.vue')
+  }
+  ]
 },
 {
   path: '/profile',
