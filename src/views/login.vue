@@ -16,7 +16,7 @@ export default {
   mounted () {
     githubOAuth(this.$route.query.code).then(res => {
       if (res.data.success === 1) {
-        // console.log(res.data)
+        console.log(res.data)
         let guest = {
           userName: res.data.userName,
           avatar: res.data.avatar
@@ -24,7 +24,8 @@ export default {
         window.localStorage.setItem('GITHUB_LOGIN_TOKEN', res.data.token)
         window.localStorage.setItem('GITHUB_LOGIN_GUEST', JSON.stringify(guest))
         window.localStorage.setItem('GITHUB_LOGIN_MESSAGE', res.data.message)
-        let redirectUrl = window.localStorage.getItem('GITHUB_LOGIN_REDIRECT_URL')
+        // let redirectUrl = window.localStorage.getItem('GITHUB_LOGIN_REDIRECT_URL')
+        let redirectUrl = `/profile?profile=new`
         this.$router.push({ path: redirectUrl })
       } else {
         let redirectUrl = window.localStorage.getItem('GITHUB_LOGIN_REDIRECT_URL')

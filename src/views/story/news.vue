@@ -41,9 +41,9 @@ export default {
         let minHeight = this.iframeHeight
         this.iframeHeight = Math.max(bHeight, dHeight, minHeight)
         iframe.height = this.iframeHeight
-      // console.log(iframe.height)
+        // console.log(iframe.height)
       } catch (ex) {
-      // console.log(ex)
+        // console.log(ex)
       }
     },
     back () {
