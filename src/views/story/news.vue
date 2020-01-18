@@ -44,10 +44,13 @@ export default {
         let minHeight = this.iframeHeight
         this.iframeHeight = Math.max(bHeight, dHeight, minHeight)
         iframe.height = this.iframeHeight
-        var deptObjs = iframe.contentWindow.document.getElementByClassName('headroom-wrapper')[0]
-        // 判断此元素是否存在
-        if (deptObjs != null) {
-          deptObjs.setAttribute('style', 'display: none !important;')
+        let headroom = iframe.contentWindow.document.getElementsByClassName('headroom-wrapper')[0]
+        if (headroom != null) {
+          headroom.setAttribute('style', 'display: none !important;')
+        }
+        let chnv = iframe.contentWindow.document.getElementsByClassName('ch-nav')[0]
+        if (chnv != null) {
+          chnv.setAttribute('style', 'display: none !important;')
         }
         // console.log(iframe.height)
       } catch (ex) {
@@ -85,10 +88,10 @@ export default {
         i++
         this.reinitIframe()
         // console.log(i)
-        if (i === 10) {
+        if (i === 20) {
           clearInterval(task)
         }
-      }, 2000)
+      }, 1000)
     }
     this.title = this.$route.query.title
   }

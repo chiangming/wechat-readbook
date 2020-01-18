@@ -101,8 +101,8 @@ import Toast from '@/components/common/toast'
 import commonFooter from '@/components/common/footer'
 import { realPx } from '@/utils/utils'
 
-const clientId = '8947582dbbed86c4d51f'
-const redirectUri = 'http://192.168.0.103:8081/login'
+const clientId = `${process.env.VUE_APP_CLIENT_ID}`
+const redirectUri = `${process.env.VUE_APP_REDIRECT_URI}`
 const githubScope = 'read:user'
 
 export default {
