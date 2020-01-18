@@ -309,11 +309,12 @@ export default {
       this.$refs.toast.show()
     },
     relocated (title, url) {
+      let path = url.replace('https://xw.qq.com', '')
       this.$router.push({
         path: '/story/news',
         query: {
           title: title,
-          url: url
+          url: path
         }
       })
       // window.location.href = url
