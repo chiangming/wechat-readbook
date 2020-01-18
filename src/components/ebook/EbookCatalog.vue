@@ -89,6 +89,7 @@ export default {
           flex: 1;
           width: 100%;
           overflow: hidden;
+          position: relative;
         }
         .content-page-tab {
           display: flex;
