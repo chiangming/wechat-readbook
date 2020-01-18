@@ -53,6 +53,9 @@ export default {
     }
   },
   watch: {
+    'text': function (newValue) {
+      this.introduce = newValue
+    },
     'introduce': function () {
       this.$nextTick(function () {
         // console.log('nextTick')

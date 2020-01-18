@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     getCategoryText (key) {
-      console.log('categotryTr:', key)
+      // console.log('categotryTr:', key)
       return `${categoryText(categoryList[key], this)}(${this.list[key].length})`
     },
     back () {
@@ -66,7 +66,7 @@ export default {
         const category = this.$route.query.category
         const keyword = this.$route.query.keyword
         if (category) {
-          console.log('category', category)
+          // console.log('category', category)
           let rankList = getRankList()
           rankList.forEach(item => {
             this.list[item.category] = [].concat.apply([], item.list)
@@ -76,8 +76,8 @@ export default {
           this.list = {}
           this.list[key] = data
         } else if (keyword) {
-          console.log('key', keyword)
-          console.log('list', this.list)
+          // console.log('key', keyword)
+          // console.log('list', this.list)
           Object.keys(this.list).filter(key => {
             this.list[key] = this.list[key].filter(book => (book.title.indexOf(keyword) >= 0 || book.author.indexOf(keyword) >= 0))
             return this.list[key].length > 0
