@@ -182,7 +182,7 @@ export default {
       }
     },
     tempPushData (newValue, oldValue) {
-      console.log(newValue)
+    // console.log(newValue)
       if (newValue['status'] === 200 && newValue['data'] && newValue['data'].data) {
         const res = newValue.data.data
         if (res.length === 0) {
@@ -255,7 +255,7 @@ export default {
         freeMode: true,
         on: {
           reachBeginning: () => {
-            console.log('reachBeginning')
+          // console.log('reachBeginning')
             if (!this.ifLoading && this.ifMounted && !this.ifNoMoreNews) {
               this.ifLoading = true
               this.newsPageIndex++
@@ -267,7 +267,7 @@ export default {
             }
           },
           reachEnd: () => {
-            console.log('reachEnd')
+          // console.log('reachEnd')
             if (!this.ifTailLoading && this.ifMounted && !this.ifNoMoreNews) {
               this.ifTailLoading = true
               this.newsPageIndex++
@@ -330,7 +330,7 @@ export default {
     getNews(0).then(response => {
       if (response.status === 200 && response.data) {
         if (response.data && response.data.data) {
-          console.log(response.data.data)
+        // console.log(response.data.data)
           this.getMountedData(response.data.data)
           // this.newsList.push(...response.data.data)
         }
