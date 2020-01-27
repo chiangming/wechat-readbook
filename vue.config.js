@@ -1,6 +1,6 @@
 const path = require('path')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
@@ -37,6 +37,14 @@ module.exports = {
       hints: 'warning',
       maxAssetSize: 524288,
       maxEntrypointSize: 524288
+    },
+    externals: {
+      // 'vue': 'Vue',
+      'vue-i18n': 'VueI18n',
+      'vue-router': 'VueRouter',
+      'vuex': 'Vuex',
+      'axios': 'axios',
+      'vue-lazyload': 'VueLazyload'
     }
   }
 }
