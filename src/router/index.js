@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Mall from '../views/mall/index.vue'
+import Shelf from '../views/mall/bookShelf.vue'
 
 const Login = () =>
   import('../views/login.vue')
@@ -43,13 +45,11 @@ const routes = [{
   path: '/mall',
   name: 'mall',
   redirect: '/mall/shelf',
-  component: () =>
-      import('../views/mall/index.vue'),
+  component: Mall,
   children: [{
     path: 'shelf',
     name: 'shelf',
-    component: () =>
-          import('../views/mall/bookShelf.vue')
+    component: Shelf
   },
   {
     path: 'category',
