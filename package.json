@@ -11,7 +11,7 @@
     "@better-scroll/core": "^2.0.0-beta.2",
     "@better-scroll/mouse-wheel": "^2.0.0-beta.2",
     "@better-scroll/slide": "^2.0.0-beta.2",
-    "ajv": "^6.10.2",
+    "ajv": "^6.12.3",
     "are-we-there-yet": "^1.1.5",
     "axios": "^0.18.1",
     "body-parser": "^1.19.0",
