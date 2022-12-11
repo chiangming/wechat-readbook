@@ -18,7 +18,7 @@
     "core-js": "^3.3.2",
     "cors": "^2.8.5",
     "epubjs": "^0.3.71",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.17.0",
     "js-md5": "^0.7.3",
     "jsonwebtoken": "^8.5.1",
